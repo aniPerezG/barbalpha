@@ -1,0 +1,16 @@
+D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer.exe.config
+D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer\obj\Debug\TgcViewer.csprojResolveAssemblyReference.cache
+D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer\obj\Debug\TgcViewer.MainForm.resources
+D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer\obj\Debug\TgcViewer.Properties.Resources.resources
+D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer\obj\Debug\TgcViewer.Utils.Modifiers.TgcMeshBrowser.resources
+D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer\obj\Debug\TgcViewer.Utils.Modifiers.TgcTextureBrowser.resources
+D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer\obj\Debug\TgcViewer.Utils.Networking.TgcNetworkingModifierClientsDialog.resources
+D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer\obj\Debug\TgcViewer.Utils.Networking.TgcNetworkingModifierControl.resources
+D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer\obj\Debug\TgcViewer.Utils.Networking.TgcNetworkingModifierServersDialog.resources
+D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer\obj\Debug\TgcViewer.Utils.Ui.AboutWindow.resources
+D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer\obj\Debug\TgcViewer.Utils.Ui.FullScreenPanel.resources
+D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer\obj\Debug\TgcViewer.csproj.GenerateResource.Cache
+D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer\obj\Debug\TgcViewer.exe
+D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer\obj\Debug\TgcViewer.pdb
+D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer.exe
+D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer.pdb
