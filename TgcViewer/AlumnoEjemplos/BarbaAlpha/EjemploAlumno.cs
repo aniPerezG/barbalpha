@@ -17,7 +17,6 @@ namespace AlumnoEjemplos.MiGrupo
     public class EjemploAlumno : TgcExample
     {
 
-        TgcBox caja;
 
         /// <summary>
         /// Categoría a la que pertenece el ejemplo.
@@ -25,7 +24,7 @@ namespace AlumnoEjemplos.MiGrupo
         /// </summary>
         public override string getCategory()
         {
-            return "AlumnoEjemplos";
+            return "Pirate Ship";
         }
 
         /// <summary>
@@ -59,14 +58,7 @@ namespace AlumnoEjemplos.MiGrupo
             //Carpeta de archivos Media del alumno
             string alumnoMediaFolder = GuiController.Instance.AlumnoEjemplosMediaDir;
 
-            TgcModifiers modifiers = GuiController.Instance.Modifiers;
-            GuiController.Instance.Modifiers.addColor("color", Color.AliceBlue);
-
-
-            Color color = (Color)GuiController.Instance.Modifiers["color"];
-            Vector3 tamanio = new Vector3(5, 5, 5);
-            Vector3 centro = new Vector3(0, 0, 0);
-            caja = TgcBox.fromSize(centro, tamanio, color);
+           
 
             ///////////////USER VARS//////////////////
 
@@ -150,10 +142,11 @@ namespace AlumnoEjemplos.MiGrupo
             //Device de DirectX para renderizar
             Device d3dDevice = GuiController.Instance.D3dDevice;
 
-            caja.render();
 
             //Obtener valor de UserVar (hay que castear)
             int valor = (int)GuiController.Instance.UserVars.getValue("variablePrueba");
+
+        
 
 
             //Obtener valores de Modifiers
