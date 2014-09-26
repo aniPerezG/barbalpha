@@ -14,3 +14,6 @@ D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer\obj\Debug\TgcViewer.exe
 D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer\obj\Debug\TgcViewer.pdb
 D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer.exe
 D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer.pdb
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\TgcViewer.exe.config
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\TgcViewer\obj\Debug\TgcViewer.exe
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\TgcViewer\obj\Debug\TgcViewer.pdb
