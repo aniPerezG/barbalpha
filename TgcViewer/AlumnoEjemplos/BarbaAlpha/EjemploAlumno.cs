@@ -8,6 +8,8 @@ using System.Drawing;
 using Microsoft.DirectX;
 using TgcViewer.Utils.Modifiers;
 using TgcViewer.Utils.TgcGeometry;
+using TgcViewer.Utils.TgcSceneLoader;
+using TgcViewer.Utils.Shaders;
 
 namespace AlumnoEjemplos.MiGrupo
 {
@@ -17,6 +19,10 @@ namespace AlumnoEjemplos.MiGrupo
     public class EjemploAlumno : TgcExample
     {
 
+        TgcMesh mesh;
+        Effect effect;
+        TgcScene scene;
+        float time;
 
         /// <summary>
         /// Categoría a la que pertenece el ejemplo.
@@ -55,10 +61,40 @@ namespace AlumnoEjemplos.MiGrupo
             //Device de DirectX para crear primitivas
             Device d3dDevice = GuiController.Instance.D3dDevice;
 
+            
             //Carpeta de archivos Media del alumno
             string alumnoMediaFolder = GuiController.Instance.AlumnoEjemplosMediaDir;
+            string alumnoShaderFolder = alumnoMediaFolder + "\\shaders";
+            string exampleShaderFolder = GuiController.Instance.ExamplesDir + "\\Shaders\\WorkshopShaders\\Shaders\\";
 
-           
+            //Cargar modelo estatico
+            TgcSceneLoader loader = new TgcSceneLoader();
+            TgcScene scene = loader.loadSceneFromFile(alumnoMediaFolder + "aguita-TgcScene.xml");
+            mesh = scene.Meshes[0];
+            mesh.Scale = new Vector3(0.5f, 0.5f, 0.5f);
+            mesh.Position = new Vector3(0f, 0f, 0f);
+
+
+            //Cargar Shader personalizado
+            effect = TgcShaders.loadEffect(alumnoShaderFolder + "\\shaderLoco.fx");
+
+            // le asigno el efecto a la malla 
+            mesh.Effect = effect;
+
+            //Configurar Technique dentro del shader
+            mesh.Technique = "RenderScene";
+            
+            
+            //Centrar camara rotacional respecto a este mesh
+            GuiController.Instance.RotCamera.Enable = true;
+            GuiController.Instance.RotCamera.targetObject(mesh.BoundingBox);
+
+            time = 0;
+
+            //Alejar camara rotacional segun tamaño del BoundingBox del objeto
+           // GuiController.Instance.RotCamera.targetObject(mesh.BoundingBox);
+
+
 
             ///////////////USER VARS//////////////////
 
@@ -86,9 +122,9 @@ namespace AlumnoEjemplos.MiGrupo
 
             ///////////////CONFIGURAR CAMARA ROTACIONAL//////////////////
             //Es la camara que viene por default, asi que no hace falta hacerlo siempre
-            GuiController.Instance.RotCamera.Enable = true;
+            //GuiController.Instance.RotCamera.Enable = true;
             //Configurar centro al que se mira y distancia desde la que se mira
-            GuiController.Instance.RotCamera.setCamera(new Vector3(0, 0, 0), 100);
+            //GuiController.Instance.RotCamera.setCamera(new Vector3(0, 0, 0), 100);
 
 
             /*
@@ -137,17 +173,28 @@ namespace AlumnoEjemplos.MiGrupo
         /// Borrar todo lo que no haga falta
         /// </summary>
         /// <param name="elapsedTime">Tiempo en segundos transcurridos desde el último frame</param>
+        /// 
+
+       
         public override void render(float elapsedTime)
         {
             //Device de DirectX para renderizar
-            Device d3dDevice = GuiController.Instance.D3dDevice;
+            Device device = GuiController.Instance.D3dDevice;
+            time += elapsedTime;
 
+            GuiController.Instance.RotCamera.targetObject(mesh.BoundingBox);
+            GuiController.Instance.CurrentCamera.updateCamera();
+            device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
 
+            // Cargar variables de shader, por ejemplo el tiempo transcurrido.
+            effect.SetValue("time", time);
+                   
+            //Renderizar modelo
+            mesh.render();
+
+           
             //Obtener valor de UserVar (hay que castear)
             int valor = (int)GuiController.Instance.UserVars.getValue("variablePrueba");
-
-        
-
 
             //Obtener valores de Modifiers
             float valorFloat = (float)GuiController.Instance.Modifiers["valorFloat"];
@@ -176,9 +223,13 @@ namespace AlumnoEjemplos.MiGrupo
         /// Método que se llama cuando termina la ejecución del ejemplo.
         /// Hacer dispose() de todos los objetos creados.
         /// </summary>
+        /// 
+
         public override void close()
         {
-
+            effect.Dispose();
+            scene.disposeAll();
+            
         }
 
     }

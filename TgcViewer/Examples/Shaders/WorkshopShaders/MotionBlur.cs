@@ -132,12 +132,12 @@ namespace Examples.Shaders.WorkshopShaders
             //mesh.rotateY(elapsedTime);
         }
 
+
         public void renderScene(String technique)
         {
             mesh.Technique = technique;
             mesh.render();
         }
-
 
         public override void render(float elapsedTime)
         {

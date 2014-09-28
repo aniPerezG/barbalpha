@@ -17,3 +17,16 @@ D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\TgcViewer.pdb
 C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\TgcViewer.exe.config
 C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\TgcViewer\obj\Debug\TgcViewer.exe
 C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\TgcViewer\obj\Debug\TgcViewer.pdb
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\TgcViewer\obj\Debug\TgcViewer.csprojResolveAssemblyReference.cache
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\TgcViewer\obj\Debug\TgcViewer.MainForm.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\TgcViewer\obj\Debug\TgcViewer.Properties.Resources.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\TgcViewer\obj\Debug\TgcViewer.Utils.Modifiers.TgcMeshBrowser.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\TgcViewer\obj\Debug\TgcViewer.Utils.Modifiers.TgcTextureBrowser.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\TgcViewer\obj\Debug\TgcViewer.Utils.Networking.TgcNetworkingModifierClientsDialog.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\TgcViewer\obj\Debug\TgcViewer.Utils.Networking.TgcNetworkingModifierControl.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\TgcViewer\obj\Debug\TgcViewer.Utils.Networking.TgcNetworkingModifierServersDialog.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\TgcViewer\obj\Debug\TgcViewer.Utils.Ui.AboutWindow.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\TgcViewer\obj\Debug\TgcViewer.Utils.Ui.FullScreenPanel.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\TgcViewer\obj\Debug\TgcViewer.csproj.GenerateResource.Cache
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\TgcViewer.exe
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\TgcViewer.pdb

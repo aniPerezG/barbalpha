@@ -18,3 +18,23 @@ D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\Examples\Examples.pdb
 D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\Examples\Ionic.Zip.dll
 D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\Examples\TgcViewer.exe
 D:\UTN\TGC\TgcViewer - 2014-1C\TgcViewer\Examples\TgcViewer.pdb
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\obj\Debug\Examples.csprojResolveAssemblyReference.cache
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\obj\Debug\Examples.MeshCreator.InputMessageBox.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\obj\Debug\Examples.MeshCreator.MeshCreatorControl.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\obj\Debug\Examples.MeshCreator.ObjectBrowser.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\obj\Debug\Examples.MeshCreator.ObjectBrowserSelectLayer.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\obj\Debug\Examples.Otros.EjemploDefaultHelpForm.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\obj\Debug\Examples.Properties.Resources.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\obj\Debug\Examples.RoomsEditor.RoomsEditorControl.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\obj\Debug\Examples.RoomsEditor.RoomsEditorHelpWindow.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\obj\Debug\Examples.RoomsEditor.RoomsEditorMapView.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\obj\Debug\Examples.RoomsEditor.RoomsEditorTexturesEdit.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\obj\Debug\Examples.TerrainEditor.Panel.TerrainEditorControl.resources
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\obj\Debug\Examples.csproj.GenerateResource.Cache
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\obj\Debug\Examples.dll
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\obj\Debug\Examples.pdb
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\Examples.dll
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\Examples.pdb
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\Ionic.Zip.dll
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\TgcViewer.exe
+C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\Examples\TgcViewer.pdb
