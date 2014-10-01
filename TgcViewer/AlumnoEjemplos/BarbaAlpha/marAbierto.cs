@@ -12,13 +12,15 @@ using TgcViewer.Utils.Shaders;
 using TgcViewer.Example;
 using System.Drawing;
 using TgcViewer.Utils.Terrain;
+using Microsoft.DirectX.DirectInput;
+using TgcViewer.Utils.Input;
 
 namespace AlumnoEjemplos.BarbaAlpha
 {
     public class marAbierto : TgcExample
     {
 
-        Effect effect;
+        Microsoft.DirectX.Direct3D.Effect effect;
         float time;
         TgcSimpleTerrain terreno;
         TgcMesh canoa;
@@ -27,13 +29,7 @@ namespace AlumnoEjemplos.BarbaAlpha
         float scaleXZ;
         float scaleY;
 
-        VertexBuffer bolsaDeVertices;
-
-
-        CustomVertex.PositionColored[] data;
-        CustomVertex.PositionColored[] data2;
-        CustomVertex.PositionColored[] data3;
-
+       
         public override string getCategory()
         {
             return "Pirate Ship";
@@ -53,7 +49,7 @@ namespace AlumnoEjemplos.BarbaAlpha
         {
 
             //Device de DirectX para crear primitivas
-            Device d3dDevice = GuiController.Instance.D3dDevice;
+            Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
             TgcSceneLoader loader = new TgcSceneLoader();
 
             canoa = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
@@ -73,28 +69,56 @@ namespace AlumnoEjemplos.BarbaAlpha
             
 
             terreno = new TgcSimpleTerrain();
-            terreno.loadHeightmap(heightmap, scaleXZ, scaleY, new Vector3(50, 0, 50));
+            terreno.loadHeightmap(heightmap, scaleXZ, scaleY, new Vector3(0, 0, 0));
             terreno.loadTexture(textura);
             terreno.Effect = effect;
             terreno.Technique = "RenderScene";
 
 
+            //Centrar camara rotacional respecto a la canoa
             GuiController.Instance.RotCamera.Enable = true;
             GuiController.Instance.RotCamera.targetObject(canoa.BoundingBox);
         }
 
         public override void render(float elapsedTime)
         {
-            Device d3dDevice = GuiController.Instance.D3dDevice;
+            Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
             time += elapsedTime;
 
+            // Cargar variables de shader, por ejemplo el tiempo transcurrido.
+            effect.SetValue("time", time);
+
+
+            //Capturar las teclas del teclado
+            TgcD3dInput input = GuiController.Instance.D3dInput;
+            Vector3 movement = new Vector3(0, 0, 0);
+            if (input.keyDown(Key.Left) || input.keyDown(Key.A))
+            {
+                movement.X = 1;
+            }
+            else if (input.keyDown(Key.Right) || input.keyDown(Key.D))
+            {
+                movement.X = -1;
+            }
+            if (input.keyDown(Key.Up) || input.keyDown(Key.W))
+            {
+                movement.Z = -1;
+            }
+            else if (input.keyDown(Key.Down) || input.keyDown(Key.S))
+            {
+                movement.Z = 1;
+            }
+
+            //Guardar la posicion anterior antes de cambiarla
+            Vector3 originalPos = canoa.Position;
+
+            //Aplicar movimiento
+            canoa.move(movement);
+
+            //Actualizar posicion de cámara
             GuiController.Instance.RotCamera.targetObject(canoa.BoundingBox);
             GuiController.Instance.CurrentCamera.updateCamera();
 
-
-            // Cargar variables de shader, por ejemplo el tiempo transcurrido.
-            
-            effect.SetValue("time", time);
             terreno.render();
             canoa.render();
 
