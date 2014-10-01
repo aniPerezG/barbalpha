@@ -21,6 +21,7 @@ namespace AlumnoEjemplos.BarbaAlpha
         Effect effect;
         float time;
         TgcSimpleTerrain terreno;
+        TgcMesh canoa;
         string heightmap;
         string textura;
         float scaleXZ;
@@ -53,6 +54,11 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             //Device de DirectX para crear primitivas
             Device d3dDevice = GuiController.Instance.D3dDevice;
+            TgcSceneLoader loader = new TgcSceneLoader();
+
+            canoa = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
+
+            canoa.Position = new Vector3(0, 5, 0);
 
             string shaderFolder = GuiController.Instance.AlumnoEjemplosMediaDir +"\\shaders";
             time = 0;
@@ -67,11 +73,14 @@ namespace AlumnoEjemplos.BarbaAlpha
             
 
             terreno = new TgcSimpleTerrain();
-            terreno.loadHeightmap(heightmap, scaleXZ, scaleY, new Vector3(0, 0, 0));
+            terreno.loadHeightmap(heightmap, scaleXZ, scaleY, new Vector3(50, 0, 50));
             terreno.loadTexture(textura);
             terreno.Effect = effect;
             terreno.Technique = "RenderScene";
 
+
+            GuiController.Instance.RotCamera.Enable = true;
+            GuiController.Instance.RotCamera.targetObject(canoa.BoundingBox);
         }
 
         public override void render(float elapsedTime)
@@ -79,11 +88,15 @@ namespace AlumnoEjemplos.BarbaAlpha
             Device d3dDevice = GuiController.Instance.D3dDevice;
             time += elapsedTime;
 
+            GuiController.Instance.RotCamera.targetObject(canoa.BoundingBox);
             GuiController.Instance.CurrentCamera.updateCamera();
 
+
             // Cargar variables de shader, por ejemplo el tiempo transcurrido.
+            
             effect.SetValue("time", time);
             terreno.render();
+            canoa.render();
 
 
         }

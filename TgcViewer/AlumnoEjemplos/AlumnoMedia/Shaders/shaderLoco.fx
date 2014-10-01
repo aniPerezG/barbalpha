@@ -21,7 +21,6 @@ sampler2D diffuseMap = sampler_state
 
 float time = 0;
 
-
 /**************************************************************************************/
 /* RenderScene */
 /**************************************************************************************/
@@ -50,13 +49,13 @@ VS_OUTPUT vs_main( VS_INPUT Input )
    VS_OUTPUT Output;
    
    //Animar Posicion
-   float X = Input.Position.x;
+   float X = Input.Position.x/100;
    float Y = Input.Position.y;
-   float Z = Input.Position.z;
-   time = time / 100;
- 
+   float Z = Input.Position.z/100;
+  
+   time = time;
 
-   Input.Position.y = Y+ (sin(X*time)*cos(Z*time) + sin(time*Z) +cos(time*X))*10;
+   Input.Position.y = (sin(X+time)*cos(Z+time) + sin(Z+time) + cos(X+time))*10 ;
 
 
    //Proyectar posicion
