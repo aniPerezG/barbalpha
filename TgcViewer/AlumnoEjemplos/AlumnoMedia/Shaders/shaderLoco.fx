@@ -53,11 +53,10 @@ VS_OUTPUT vs_main( VS_INPUT Input )
    float X = Input.Position.x;
    float Y = Input.Position.y;
    float Z = Input.Position.z;
+   time = time / 100;
  
 
-   Input.Position.x = X+sin(time)*cos(X);
-   Input.Position.y = Y+sin(time)*cos(Y);
-   Input.Position.z = Z+sin(time)*cos(Z)+ 5;
+   Input.Position.y = Y+ (sin(X*time)*cos(Z*time) + sin(time*Z) +cos(time*X))*10;
 
 
    //Proyectar posicion
@@ -91,7 +90,7 @@ float4 ps_main( float2 Texcoord: TEXCOORD0, float4 Color:COLOR0) : COLOR0
 // ------------------------------------------------------------------
 technique RenderScene
 {
-   pass Pass_0
+   pass P0
    {
 	  VertexShader = compile vs_2_0 vs_main();
 	  PixelShader = compile ps_2_0 ps_main();

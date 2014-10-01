@@ -10,6 +10,7 @@ using TgcViewer.Utils.Modifiers;
 using TgcViewer.Utils.TgcGeometry;
 using TgcViewer.Utils.TgcSceneLoader;
 using TgcViewer.Utils.Shaders;
+using AlumnoEjemplos.BarbaAlpha;
 
 namespace AlumnoEjemplos.MiGrupo
 {
@@ -20,9 +21,12 @@ namespace AlumnoEjemplos.MiGrupo
     {
 
         TgcMesh mesh;
+        TgcMesh canoa;
         Effect effect;
-        TgcScene scene;
         float time;
+       
+        
+        
 
         /// <summary>
         /// Categoría a la que pertenece el ejemplo.
@@ -38,7 +42,7 @@ namespace AlumnoEjemplos.MiGrupo
         /// </summary>
         public override string getName()
         {
-            return "Grupo 01";
+            return "Principal";
         }
 
         /// <summary>
@@ -66,13 +70,19 @@ namespace AlumnoEjemplos.MiGrupo
             string alumnoMediaFolder = GuiController.Instance.AlumnoEjemplosMediaDir;
             string alumnoShaderFolder = alumnoMediaFolder + "\\shaders";
             string exampleShaderFolder = GuiController.Instance.ExamplesDir + "\\Shaders\\WorkshopShaders\\Shaders\\";
+            string exampleMediaFolder = GuiController.Instance.ExamplesMediaDir;
 
             //Cargar modelo estatico
             TgcSceneLoader loader = new TgcSceneLoader();
             TgcScene scene = loader.loadSceneFromFile(alumnoMediaFolder + "aguita-TgcScene.xml");
             mesh = scene.Meshes[0];
-            mesh.Scale = new Vector3(0.5f, 0.5f, 0.5f);
-            mesh.Position = new Vector3(0f, 0f, 0f);
+            mesh.Scale = new Vector3(5.0f, 5.0f, 5.0f);
+            mesh.Position = new Vector3(-250f, 0f, 250f);
+
+           
+            canoa = loader.loadSceneFromFile(exampleMediaFolder + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
+
+            canoa.Position = new Vector3(0f, 60f, 0f);
 
 
             //Cargar Shader personalizado
@@ -188,11 +198,43 @@ namespace AlumnoEjemplos.MiGrupo
 
             // Cargar variables de shader, por ejemplo el tiempo transcurrido.
             effect.SetValue("time", time);
-                   
+
+
+            //Guardar posicion original antes de cambiarla
+            Vector3 originalPos = canoa.Position;
+
+
+            
+            bool collisionFound = false;
+           // foreach (TgcMesh mesh in scene.Meshes)
+            //{
+
+
+                //Los dos BoundingBox que vamos a testear
+                TgcBoundingBox canoaBoundingBox = canoa.BoundingBox;
+                TgcBoundingBox sceneMeshBoundingBox = mesh.BoundingBox;
+
+                
+
+                //Ejecutar algoritmo de detección de colisiones
+                TgcCollisionUtils.BoxBoxResult collisionResult = TgcCollisionUtils.classifyBoxBox(canoaBoundingBox, sceneMeshBoundingBox);
+
+                //Hubo colisión con un objeto. Guardar resultado y abortar loop.
+                if (collisionResult != TgcCollisionUtils.BoxBoxResult.Afuera)
+                {
+                    collisionFound = true;
+                }
+
+                if (collisionFound)
+                {
+                    canoa.Position = new Vector3(0,0,0);
+                }
+            
             //Renderizar modelo
             mesh.render();
 
-           
+            canoa.render();
+
             //Obtener valor de UserVar (hay que castear)
             int valor = (int)GuiController.Instance.UserVars.getValue("variablePrueba");
 
@@ -228,8 +270,7 @@ namespace AlumnoEjemplos.MiGrupo
         public override void close()
         {
             effect.Dispose();
-            scene.disposeAll();
-            
+                       
         }
 
     }

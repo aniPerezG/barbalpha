@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BarbaAlpha\EjemploAlumno.cs" />
+    <Compile Include="BarbaAlpha\marAbierto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
