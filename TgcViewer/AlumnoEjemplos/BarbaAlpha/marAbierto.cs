@@ -14,6 +14,8 @@ using System.Drawing;
 using TgcViewer.Utils.Terrain;
 using Microsoft.DirectX.DirectInput;
 using TgcViewer.Utils.Input;
+using TgcViewer.Utils.Collision.ElipsoidCollision;
+
 
 namespace AlumnoEjemplos.BarbaAlpha
 {
@@ -23,12 +25,15 @@ namespace AlumnoEjemplos.BarbaAlpha
         Microsoft.DirectX.Direct3D.Effect effect;
         float time;
         TgcSimpleTerrain terreno;
+
         TgcMesh canoa;
         string heightmap;
         string textura;
         float scaleXZ;
         float scaleY;
+        TgcElipsoid canoaEliptica;
 
+        TgcScene scene;
        
         public override string getCategory()
         {
@@ -55,7 +60,11 @@ namespace AlumnoEjemplos.BarbaAlpha
             canoa = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
 
             canoa.Position = new Vector3(0, 5, 0);
+            //canoa.AutoUpdateBoundingBox = false;
 
+            canoaEliptica = new TgcElipsoid(canoa.BoundingBox.calculateBoxCenter(), new Vector3(5, 5, 20));
+
+           
             string shaderFolder = GuiController.Instance.AlumnoEjemplosMediaDir +"\\shaders";
             time = 0;
 
