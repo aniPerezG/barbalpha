@@ -11,6 +11,7 @@ using TgcViewer.Utils.TgcSceneLoader;
 using TgcViewer.Utils.Shaders;
 using TgcViewer.Example;
 using System.Drawing;
+using TgcViewer.Utils.Terrain;
 
 namespace AlumnoEjemplos.BarbaAlpha
 {
@@ -19,6 +20,11 @@ namespace AlumnoEjemplos.BarbaAlpha
 
         Effect effect;
         float time;
+        TgcSimpleTerrain terreno;
+        string heightmap;
+        string textura;
+        float scaleXZ;
+        float scaleY;
 
         VertexBuffer bolsaDeVertices;
 
@@ -49,59 +55,41 @@ namespace AlumnoEjemplos.BarbaAlpha
             Device d3dDevice = GuiController.Instance.D3dDevice;
 
             string shaderFolder = GuiController.Instance.AlumnoEjemplosMediaDir +"\\shaders";
-
             time = 0;
 
-            
-            data = new CustomVertex.PositionColored[3];
-            data2 = new CustomVertex.PositionColored[3];
-            data3 = new CustomVertex.PositionColored[3];
-
-            data[0] = new CustomVertex.PositionColored(0, 1, 0, Color.Red.ToArgb());
-            data[1] = new CustomVertex.PositionColored(3, 1, 0, Color.Red.ToArgb());
-            data[2] = new CustomVertex.PositionColored(3, 1, 4, Color.Red.ToArgb());
-
-
-            data2[0] = new CustomVertex.PositionColored(3, 1, 4, Color.Blue.ToArgb());
-            data2[1] = new CustomVertex.PositionColored(6, 1, 4, Color.Blue.ToArgb());
-            data2[2] = new CustomVertex.PositionColored(3, 1, 0, Color.Blue.ToArgb());
-
-            data3[0] = new CustomVertex.PositionColored(3, 1, 0, Color.Green.ToArgb());
-            data3[1] = new CustomVertex.PositionColored(6, 1, 0, Color.Green.ToArgb());
-            data3[2] = new CustomVertex.PositionColored(6, 1, 4, Color.Green.ToArgb());
-
+            scaleXZ = 20f;
+            scaleY = 1.3f;
 
             effect = TgcShaders.loadEffect(shaderFolder + "\\shaderLoco.fx");
 
-           
+            heightmap = GuiController.Instance.AlumnoEjemplosMediaDir + "Heightmap\\" + "heightmap1.jpg";
+            textura = GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Textures\\Liquidos" + "\\water_flow.jpg";
+            
+
+            terreno = new TgcSimpleTerrain();
+            terreno.loadHeightmap(heightmap, scaleXZ, scaleY, new Vector3(0, 0, 0));
+            terreno.loadTexture(textura);
+            terreno.Effect = effect;
+            terreno.Technique = "RenderScene";
 
         }
 
         public override void render(float elapsedTime)
         {
             Device d3dDevice = GuiController.Instance.D3dDevice;
-            d3dDevice.VertexFormat = CustomVertex.PositionColored.Format;
-
             time += elapsedTime;
+
+            GuiController.Instance.CurrentCamera.updateCamera();
+
+            // Cargar variables de shader, por ejemplo el tiempo transcurrido.
             effect.SetValue("time", time);
-
-            
-            
-            effect.Begin(FX.None);
-            effect.BeginPass(0);
+            terreno.render();
 
 
-            d3dDevice.DrawUserPrimitives(PrimitiveType.TriangleList, 1, data);
-            d3dDevice.DrawUserPrimitives(PrimitiveType.TriangleList, 1, data2);
-            d3dDevice.DrawUserPrimitives(PrimitiveType.TriangleList, 1, data3);
-
-
-            effect.EndPass();
-            effect.End();
         }
 
         public override void close(){
-
+            effect.Dispose();
         }
 
     }
