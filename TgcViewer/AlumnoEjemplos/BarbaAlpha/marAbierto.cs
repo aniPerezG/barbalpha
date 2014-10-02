@@ -60,10 +60,6 @@ namespace AlumnoEjemplos.BarbaAlpha
             canoa = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
 
             canoa.Position = new Vector3(0, 5, 0);
-            //canoa.AutoUpdateBoundingBox = false;
-
-            canoaEliptica = new TgcElipsoid(canoa.BoundingBox.calculateBoxCenter(), new Vector3(5, 5, 20));
-
            
             string shaderFolder = GuiController.Instance.AlumnoEjemplosMediaDir +"\\shaders";
             time = 0;
@@ -73,9 +69,8 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             effect = TgcShaders.loadEffect(shaderFolder + "\\shaderLoco.fx");
 
-            heightmap = GuiController.Instance.AlumnoEjemplosMediaDir + "Heightmap\\" + "heightmap1.jpg";
+            heightmap = GuiController.Instance.AlumnoEjemplosMediaDir + "Heightmap\\" + "heightmap11.jpg";
             textura = GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Textures\\Liquidos" + "\\water_flow.jpg";
-            
 
             terreno = new TgcSimpleTerrain();
             terreno.loadHeightmap(heightmap, scaleXZ, scaleY, new Vector3(0, 0, 0));
@@ -103,60 +98,36 @@ namespace AlumnoEjemplos.BarbaAlpha
             Vector3 movement = new Vector3(0, 0, 0);
             if (input.keyDown(Key.Left) || input.keyDown(Key.A))
             {
-                movement.X = 1;
+                movement.X += 1;
             }
             else if (input.keyDown(Key.Right) || input.keyDown(Key.D))
             {
-                movement.X = -1;
+                movement.X += -1;
             }
             if (input.keyDown(Key.Up) || input.keyDown(Key.W))
             {
-                movement.Z = -1;
+                movement.Z += -1;
             }
             else if (input.keyDown(Key.Down) || input.keyDown(Key.S))
             {
-                movement.Z = 1;
+                movement.Z += 1;
             }
 
+            //Calcular altura de la canoa respecto a donde va a moverse
+            movement.Y += CalcularAlturaRespectoDe(canoa.Position.X, canoa.Position.Z, terreno);
 
             //Guardar la posicion anterior antes de cambiarla
             Vector3 originalPos = canoa.Position;
 
-            //Adaptar la canoa a la altura del agua
-            /*float x = originalPos.X;
-            float z = originalPos.Z;
-
-            float largo = scaleXZ * 64;
-            float pos_i = 64f * (0.5f + x / largo);
-            float pos_j = 64f * (0.5f + z / largo);
-
-            int pi = (int)x;
-            float fracc_i = pos_i - pi;
-            int pj = (int)z;
-            float fracc_j = pos_j - pj;
-
-            int pi1 = pi + 1;
-            int pj1 = pj + 1;
-
-
-            float H0 = terreno.HeightmapData[pi, pj] * scaleY;
-            float H1 = terreno.HeightmapData[pi1, pj] * scaleY;
-            float H2 = terreno.HeightmapData[pi, pj1] * scaleY;
-            float H3 = terreno.HeightmapData[pi1, pj1] * scaleY;
-            float H = (H0 * (1 - fracc_i) + H1 * fracc_i) * (1 - fracc_j) +
-                      (H2 * (1 - fracc_i) + H3 * fracc_i) * fracc_j;
-
-            */
-            //Aplicar movimiento
+            //Mover la canoa
             canoa.move(movement);
-            /*
-            Vector3 posicion = canoa.Position;
-            canoa.Position = posicion + new Vector3(0, H, 0);
-            */
+
+
             //Actualizar posicion de cámara
             GuiController.Instance.RotCamera.targetObject(canoa.BoundingBox);
             GuiController.Instance.CurrentCamera.updateCamera();
 
+            //Renderizo las mallas
             terreno.render();
             canoa.render();
 
@@ -165,6 +136,46 @@ namespace AlumnoEjemplos.BarbaAlpha
 
         public override void close(){
             effect.Dispose();
+        }
+
+        public float CalcularAlturaRespectoDe(float x, float z, TgcSimpleTerrain superficie)
+        {
+            float largo = scaleXZ * 64;
+            float pos_i = 64f * (0.5f + x / largo);
+            float pos_j = 64f * (0.5f + z / largo);
+
+            int pi = (int)pos_i;
+            float fracc_i = pos_i - pi;
+            int pj = (int)pos_j;
+            float fracc_j = pos_j - pj;
+
+            if (pi < 0)
+                pi = 0;
+            else
+                if (pi > 63)
+                    pi = 63;
+
+            if (pj < 0)
+                pj = 0;
+            else
+                if (pj > 63)
+                    pj = 63;
+
+            int pi1 = pi + 1;
+            int pj1 = pj + 1;
+            if (pi1 > 63)
+                pi1 = 63;
+            if (pj1 > 63)
+                pj1 = 63;
+
+            // 2x2 percent closest filtering usual: 
+            float H0 = superficie.HeightmapData[pi, pj] * scaleY;
+            float H1 = superficie.HeightmapData[pi1, pj] * scaleY;
+            float H2 = superficie.HeightmapData[pi, pj1] * scaleY;
+            float H3 = superficie.HeightmapData[pi1, pj1] * scaleY;
+            float H = (H0 * (1 - fracc_i) + H1 * fracc_i) * (1 - fracc_j) +
+                      (H2 * (1 - fracc_i) + H3 * fracc_i) * fracc_j;
+            return H;
         }
 
     }

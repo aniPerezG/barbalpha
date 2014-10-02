@@ -87,9 +87,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BarbaAlpha\Barco\Barco.cs" />
+    <Compile Include="BarbaAlpha\Barco\BarcoJugador.cs" />
+    <Compile Include="BarbaAlpha\Barco\BarcoIA.cs" />
+    <Compile Include="BarbaAlpha\Barco\Misil.cs" />
     <Compile Include="BarbaAlpha\EjemploAlumno.cs" />
     <Compile Include="BarbaAlpha\marAbierto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tank.cs" />
+    <Compile Include="TankEnemy.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TgcViewer\TgcViewer.csproj">

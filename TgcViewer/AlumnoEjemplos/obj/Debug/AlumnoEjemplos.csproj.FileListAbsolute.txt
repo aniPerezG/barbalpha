@@ -14,3 +14,11 @@ C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\AlumnoEjemplos\AlumnoEjemplos.
 C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\AlumnoEjemplos\TgcViewer.exe
 C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\AlumnoEjemplos\Ionic.Zip.dll
 C:\Users\Ani\Documents\GitHub\barbalpha\TgcViewer\AlumnoEjemplos\TgcViewer.pdb
+C:\Users\User\git\barbalpha\TgcViewer\AlumnoEjemplos\obj\Debug\AlumnoEjemplos.csprojResolveAssemblyReference.cache
+C:\Users\User\git\barbalpha\TgcViewer\AlumnoEjemplos\obj\Debug\AlumnoEjemplos.dll
+C:\Users\User\git\barbalpha\TgcViewer\AlumnoEjemplos\obj\Debug\AlumnoEjemplos.pdb
+C:\Users\User\git\barbalpha\TgcViewer\AlumnoEjemplos\AlumnoEjemplos.dll
+C:\Users\User\git\barbalpha\TgcViewer\AlumnoEjemplos\AlumnoEjemplos.pdb
+C:\Users\User\git\barbalpha\TgcViewer\AlumnoEjemplos\TgcViewer.exe
+C:\Users\User\git\barbalpha\TgcViewer\AlumnoEjemplos\Ionic.Zip.dll
+C:\Users\User\git\barbalpha\TgcViewer\AlumnoEjemplos\TgcViewer.pdb
