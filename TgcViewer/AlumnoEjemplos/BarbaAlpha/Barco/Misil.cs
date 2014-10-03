@@ -80,10 +80,10 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
     public bool teHundisteEn(marAbierto oceano) {
         return false ; //oceano.getYValueFor(this.Position.X, this.Position.Z) >= (int) this.Position.Y;
     } 
-
+        /*
     public bool chocasteConBarco(Barco unBarco) {
         return TgcCollisionUtils.testSphereAABB(unBarco.hitBoxSphere, this.mesh.BoundingBox); 
-    }
+    }*/
 
     public void dispose() {
         this.mesh.dispose();

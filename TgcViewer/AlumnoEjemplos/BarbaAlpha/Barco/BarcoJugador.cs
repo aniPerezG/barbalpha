@@ -5,7 +5,7 @@ using System.Text;
 using TgcViewer;
 using TgcViewer.Utils.TgcSceneLoader;
 using Microsoft.DirectX;
-
+/*
 namespace AlumnoEjemplos.BarbaAlpha.Barco
 {
     class BarcoJugador : Barco  {
@@ -44,3 +44,4 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         }
     }
 }
+*/

@@ -86,11 +86,12 @@ namespace AlumnoEjemplos.BarbaAlpha
 
         public override void render(float elapsedTime)
         {
-            Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
+            Microsoft.DirectX.Direct3D.Device device = GuiController.Instance.D3dDevice;
             time += elapsedTime;
 
             // Cargar variables de shader, por ejemplo el tiempo transcurrido.
             effect.SetValue("time", time);
+            effect.SetValue("matWorldViewProj", device.Transform.World * device.Transform.View * device.Transform.Projection);
 
 
             //Capturar las teclas del teclado

@@ -36,11 +36,11 @@ struct VS_INPUT
 //Output del Vertex Shader
 struct VS_OUTPUT 
 {
-   float4 Position :        POSITION0;
-   float2 Texcoord :        TEXCOORD0;
-   float4 Color :	       COLOR0;
+   float4 Position : POSITION0;
+   float2 Texcoord : TEXCOORD0;
+   float4 Color : COLOR0;
+   float2 Altura: TEXCOORD1;
 };
-
 
 
 //Vertex Shader
@@ -67,22 +67,24 @@ VS_OUTPUT vs_main( VS_INPUT Input )
    //Propago el color x vertice
    Output.Color = Input.Color;
 
+   //
+   Output.Altura.y = Output.Position.y;
+   Output.Altura.x = 0;
+
    return( Output );
    
 }
 
 
-
-
 //Pixel Shader
-float4 ps_main( float2 Texcoord: TEXCOORD0, float4 Color:COLOR0) : COLOR0
+float4 ps_main( float2 Texcoord: TEXCOORD0, float4 Color:COLOR0, float2 Heightcoord : TEXCOORD1) : COLOR0
 {      
 	// Obtener el texel de textura
 	// diffuseMap es el sampler, Texcoord son las coordenadas interpoladas
 	float4 fvBaseColor = tex2D( diffuseMap, Texcoord );
 	// combino color y textura
 	// en este ejemplo combino un 80% el color de la textura y un 20%el del vertice
-	return 0.8*fvBaseColor + 0.2*Color;
+	return fvBaseColor;
 }
 
 
@@ -94,5 +96,8 @@ technique RenderScene
 	  VertexShader = compile vs_2_0 vs_main();
 	  PixelShader = compile ps_2_0 ps_main();
    }
-
 }
+
+//*************************************************************
+
+

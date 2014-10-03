@@ -8,12 +8,12 @@ using Microsoft.DirectX.DirectInput;
 using TgcViewer.Utils.TgcSceneLoader;
 using TgcViewer.Utils.TgcGeometry;
 
-
+/*
 namespace AlumnoEjemplos.BarbaAlpha.Barco
 {
     class BarcoIA : Barco
     {
-        /*// private Direction dir = Direction.Forward;
+        /// private Direction dir = Direction.Forward;
         Vector3 destino;
         bool ocioso = true; // booleano que indica si el barco estaba sin nada que hacer
         bool avoiding = false;
@@ -86,9 +86,10 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
                 if (avoiding) avoiding = false;
             }
 
-            base.processMovement();*/
+            base.processMovement();/
         }
         
         
         
         }
+*/

@@ -7,7 +7,7 @@ using System.Text;
 using TgcViewer.Utils.Sound;
 using TgcViewer.Utils.TgcGeometry;
 using TgcViewer.Utils.TgcSceneLoader;
-
+/*
 namespace AlumnoEjemplos.BarbaAlpha.Barco
 {
     public abstract class Barco : ITransformObject {
@@ -68,7 +68,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         }
 
         private Vector3 crearPosicionHeightMapDePosicionDeBarco(Vector3 posicionDeBarco)     {
-            return new Vector3(posicionDeBarco.X, /*agua.getYValueFor(posicionDeBarco.X, posicionDeBarco.Z) * agua.ScaleY */ 0, posicionDeBarco.Z); // actualizar Y respecto de marea
+            return new Vector3(posicionDeBarco.X, /*agua.getYValueFor(posicionDeBarco.X, posicionDeBarco.Z) * agua.ScaleY / 0, posicionDeBarco.Z); // actualizar Y respecto de marea
         }
 
         public abstract void setInicioRotacionCanion();
@@ -128,3 +128,4 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
     }
 }
 
+*/
