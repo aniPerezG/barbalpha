@@ -35,13 +35,7 @@ namespace AlumnoEjemplos.BarbaAlpha
 
         TgcScene scene;
 
-        public const int TAMAÑO = 4000; //dado que el plano es cuadrado X y Z son iguales
-        public const int DISTANCIA_ENTRE_VERTICES = 25;
-        public const int LARGO = (2 * RADIO + 1);
-        public const int CANTIDAD_DE_VERTICES = LARGO * LARGO;
-        public const int RADIO = TAMAÑO / DISTANCIA_ENTRE_VERTICES;
-        //public static Vector3 _normal = Utiles.V3Y;
-
+        
         // Buffers
         public static CustomVertex.PositionNormalTextured[] _vertices;
         public static VertexBuffer _vertexBuffer;
@@ -109,43 +103,8 @@ namespace AlumnoEjemplos.BarbaAlpha
             barcoJugador.setEffect(effect);
             barcoJugador.setTechnique("HeightScene");
 
-            //*********************
-
-
-
-            _vertices = new CustomVertex.PositionNormalTextured[CANTIDAD_DE_VERTICES];
-            for (int x = -RADIO; x <= RADIO; x++)
-            {
-                for (int z = -RADIO; z <= RADIO; z++)
-                {
-                    /*_vertices[i++] = new CustomVertex.PositionNormalTextured(
-                        new Vector3(x * DISTANCIA_ENTRE_VERTICES, 0 , z * DISTANCIA_ENTRE_VERTICES),
-                        _normal,
-                        ((float)(x + RADIO) / ((float)LARGO - 1)),
-                        ((float)(z + RADIO) / ((float)LARGO - 1))
-                     );*/
-                }
-            };
-
-
-            /*
-            data = new CustomVertex.PositionColored[3];
-            data2 = new CustomVertex.PositionColored[3];
-            data3 = new CustomVertex.PositionColored[3];
-
-            data[0] = new CustomVertex.PositionColored(0, 1, 0, Color.Red.ToArgb());
-            data[1] = new CustomVertex.PositionColored(3, 1, 0, Color.Red.ToArgb());
-            data[2] = new CustomVertex.PositionColored(3, 1, 4, Color.Red.ToArgb());
-
-
-            data2[0] = new CustomVertex.PositionColored(3, 1, 4, Color.Blue.ToArgb());
-            data2[1] = new CustomVertex.PositionColored(6, 1, 4, Color.Blue.ToArgb());
-            data2[2] = new CustomVertex.PositionColored(3, 1, 0, Color.Blue.ToArgb());
-
-            data3[0] = new CustomVertex.PositionColored(3, 1, 0, Color.Green.ToArgb());
-            data3[1] = new CustomVertex.PositionColored(6, 1, 0, Color.Green.ToArgb());
-            data3[2] = new CustomVertex.PositionColored(6, 1, 4, Color.Green.ToArgb());
-            */
+            
+            
         }
 
         public override void render(float elapsedTime)
@@ -161,21 +120,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             barcoJugador.render(elapsedTime);
             //canoa.render();
 
-            //Guardo el target anterior, (monitor)
-            //Surface pPrevio = device.GetRenderTarget(0);
-            //seteo la textura renderTarget como destino del primer render del mar
-            //Surface pSurf = renderTarget.GetSurfaceLevel(0);
-            //device.SetRenderTarget(0, pSurf);
-
-            //device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
-
-            //terreno.render();
-
-            //device.SetRenderTarget(0, pPrevio);
-            //effect.SetValue("t_HeightTarget", renderTarget);
-
-            //canoa.Effect = effect;
-            //effect.Technique = "HeightScene";
+            
             //canoa.Technique = "HeightScene";
             //barcoJugador.render(elapsedTime);
 
@@ -185,27 +130,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox);
             GuiController.Instance.CurrentCamera.updateCamera();
 
-            //pPrevio.Dispose();
-            //pSurf.Dispose();
-
-
-            /*
-            //device.BeginScene();
-            effect.Begin(FX.None);
-            effect.BeginPass(0);
-
-
-            device.DrawUserPrimitives(PrimitiveType.TriangleList, 1, data);
-            device.DrawUserPrimitives(PrimitiveType.TriangleList, 1, data2);
-            device.DrawUserPrimitives(PrimitiveType.TriangleList, 1, data3);
-
-
-            effect.EndPass();
-            effect.End();
-            //device.EndScene();*/
-
-
-
+            
         }
 
         public override void close(){

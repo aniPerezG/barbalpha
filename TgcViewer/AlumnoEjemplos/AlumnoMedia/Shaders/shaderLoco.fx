@@ -7,8 +7,6 @@ float4x4 matWorldView; //Matriz World * View
 float4x4 matWorldViewProj; //Matriz World * View * Projection
 float4x4 matInverseTransposeWorld; //Matriz Transpose(Invert(World))
 
-//float alturaAgua;
-
 //Textura para DiffuseMap
 texture texDiffuseMap;
 sampler2D diffuseMap = sampler_state
@@ -21,27 +19,6 @@ sampler2D diffuseMap = sampler_state
 	MIPFILTER = LINEAR;
 };
 
-texture t_RenderTarget;
-sampler RenderTarget = sampler_state
-{
-	Texture = <t_RenderTarget>;
-	ADDRESSU = WRAP;
-	ADDRESSV = WRAP;
-	MINFILTER = LINEAR;
-	MAGFILTER = LINEAR;
-	MIPFILTER = LINEAR;
-};
-
-texture t_HeightTarget;
-sampler HeightTarget = sampler_state
-{
-	Texture = <t_HeightTarget>;
-	ADDRESSU = WRAP;
-	ADDRESSV = WRAP;
-	MINFILTER = LINEAR;
-	MAGFILTER = LINEAR;
-	MIPFILTER = LINEAR;
-};
 
 float time = 0;
 
@@ -63,7 +40,7 @@ struct VS_OUTPUT
    float4 Position : POSITION0;
    float2 Texcoord : TEXCOORD0;
    float4 Color : COLOR0;
-   float2 Altura: TEXCOORD1;
+   
 };
 
 
@@ -90,11 +67,7 @@ VS_OUTPUT vs_main( VS_INPUT Input )
 
    //Propago el color x vertice
    Output.Color = Input.Color;
-
-   //
-   Output.Altura.y = Output.Position.y;
-   Output.Altura.x = 0;
-
+   
    return( Output );
    
 }
@@ -105,10 +78,9 @@ float4 ps_main( float2 Texcoord: TEXCOORD0, float4 Color:COLOR0, float2 Heightco
 {      
 	// Obtener el texel de textura
 	// diffuseMap es el sampler, Texcoord son las coordenadas interpoladas
-	float4 fvBaseColor = tex2D( diffuseMap, Texcoord );
-	// combino color y textura
-	// en este ejemplo combino un 80% el color de la textura y un 20%el del vertice
-	return fvBaseColor;
+	float4 texColor = tex2D( diffuseMap, Texcoord );
+	
+	return texColor;
 }
 
 
@@ -127,10 +99,6 @@ technique RenderScene
 VS_OUTPUT vs_heightMap(VS_INPUT Input)
 {
 	VS_OUTPUT Output;
-	/*
-	float2 uv_pos;
-	uv_pos.x = Input.Position.x;
-	uv_pos.y = Input.Position.y;*/
 
 	//Animar Posicion
 	float X = Input.Position.x / 100;
@@ -141,13 +109,6 @@ VS_OUTPUT vs_heightMap(VS_INPUT Input)
 
 	Input.Position.y += (sin(X + time)*cos(Z + time) + sin(Z + time) + cos(X + time)) * 10 + 10;
 
-
-	/*
-	float4 color = tex2D(HeightTarget, uv_pos);
-	Input.Position.y += color.y;
-	*/
-
-
 	//Proyectar posicion
 	Output.Position = mul(Input.Position, matWorldViewProj);
 
@@ -156,13 +117,6 @@ VS_OUTPUT vs_heightMap(VS_INPUT Input)
 
 	//Propago el color x vertice
 	Output.Color = Input.Color;
-
-	//
-	//Output.Altura.y = Output.Position.y;
-	//Output.Altura.x = 0;
-
-	Output.Altura.x = 0;
-	Output.Altura.y = 0;
 
 	return(Output);
 
