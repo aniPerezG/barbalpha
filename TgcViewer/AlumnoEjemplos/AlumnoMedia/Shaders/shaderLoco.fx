@@ -7,6 +7,8 @@ float4x4 matWorldView; //Matriz World * View
 float4x4 matWorldViewProj; //Matriz World * View * Projection
 float4x4 matInverseTransposeWorld; //Matriz Transpose(Invert(World))
 
+//float alturaAgua;
+
 //Textura para DiffuseMap
 texture texDiffuseMap;
 sampler2D diffuseMap = sampler_state
@@ -125,10 +127,19 @@ technique RenderScene
 VS_OUTPUT vs_heightMap(VS_INPUT Input)
 {
 	VS_OUTPUT Output;
-
+	/*
 	float2 uv_pos;
 	uv_pos.x = Input.Position.x;
-	uv_pos.y = Input.Position.y;
+	uv_pos.y = Input.Position.y;*/
+
+	//Animar Posicion
+	float X = Input.Position.x / 100;
+	float Y = Input.Position.y;
+	float Z = Input.Position.z / 100;
+
+	time = time;
+
+	Input.Position.y += (sin(X + time)*cos(Z + time) + sin(Z + time) + cos(X + time)) * 10 + 10;
 
 
 	/*

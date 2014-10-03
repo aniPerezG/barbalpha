@@ -31,10 +31,22 @@ namespace AlumnoEjemplos.BarbaAlpha
         string textura;
         float scaleXZ;
         float scaleY;
-        TgcElipsoid canoaEliptica;
+        TgcMesh canoa;
 
         TgcScene scene;
-       
+
+        public const int TAMAÑO = 4000; //dado que el plano es cuadrado X y Z son iguales
+        public const int DISTANCIA_ENTRE_VERTICES = 25;
+        public const int LARGO = (2 * RADIO + 1);
+        public const int CANTIDAD_DE_VERTICES = LARGO * LARGO;
+        public const int RADIO = TAMAÑO / DISTANCIA_ENTRE_VERTICES;
+        //public static Vector3 _normal = Utiles.V3Y;
+
+        // Buffers
+        public static CustomVertex.PositionNormalTextured[] _vertices;
+        public static VertexBuffer _vertexBuffer;
+
+
         public override string getCategory()
         {
             return "Pirate Ship";
@@ -59,7 +71,11 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             barcoJugador = new BarcoJugador(new Vector3(0, 5, 0), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
             //barcoJugador.malla = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
-           
+
+
+            canoa = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
+            canoa.Position = new Vector3(0, 0, 0);
+
             string shaderFolder = GuiController.Instance.AlumnoEjemplosMediaDir +"\\shaders";
             time = 0;
 
@@ -87,6 +103,48 @@ namespace AlumnoEjemplos.BarbaAlpha
             //Centrar camara rotacional respecto a la canoa
             GuiController.Instance.RotCamera.Enable = true;
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox);
+
+            canoa.Effect = effect;
+            canoa.Technique = "HeightScene";
+
+            //*********************
+
+
+
+            _vertices = new CustomVertex.PositionNormalTextured[CANTIDAD_DE_VERTICES];
+            int i = 0;
+            for (int x = -RADIO; x <= RADIO; x++)
+            {
+                for (int z = -RADIO; z <= RADIO; z++)
+                {
+                    /*_vertices[i++] = new CustomVertex.PositionNormalTextured(
+                        new Vector3(x * DISTANCIA_ENTRE_VERTICES, 0 , z * DISTANCIA_ENTRE_VERTICES),
+                        _normal,
+                        ((float)(x + RADIO) / ((float)LARGO - 1)),
+                        ((float)(z + RADIO) / ((float)LARGO - 1))
+                     );*/
+                }
+            };
+
+
+            /*
+            data = new CustomVertex.PositionColored[3];
+            data2 = new CustomVertex.PositionColored[3];
+            data3 = new CustomVertex.PositionColored[3];
+
+            data[0] = new CustomVertex.PositionColored(0, 1, 0, Color.Red.ToArgb());
+            data[1] = new CustomVertex.PositionColored(3, 1, 0, Color.Red.ToArgb());
+            data[2] = new CustomVertex.PositionColored(3, 1, 4, Color.Red.ToArgb());
+
+
+            data2[0] = new CustomVertex.PositionColored(3, 1, 4, Color.Blue.ToArgb());
+            data2[1] = new CustomVertex.PositionColored(6, 1, 4, Color.Blue.ToArgb());
+            data2[2] = new CustomVertex.PositionColored(3, 1, 0, Color.Blue.ToArgb());
+
+            data3[0] = new CustomVertex.PositionColored(3, 1, 0, Color.Green.ToArgb());
+            data3[1] = new CustomVertex.PositionColored(6, 1, 0, Color.Green.ToArgb());
+            data3[2] = new CustomVertex.PositionColored(6, 1, 4, Color.Green.ToArgb());
+            */
         }
 
         public override void render(float elapsedTime)
@@ -99,7 +157,8 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect.SetValue("time", time);
             effect.SetValue("matWorldViewProj", device.Transform.World * device.Transform.View * device.Transform.Projection);
 
-            barcoJugador.render(elapsedTime);
+           // barcoJugador.render(elapsedTime);
+            canoa.render();
 
             //Guardo el target anterior, (monitor)
             //Surface pPrevio = device.GetRenderTarget(0);
@@ -127,6 +186,25 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             //pPrevio.Dispose();
             //pSurf.Dispose();
+
+
+            /*
+            //device.BeginScene();
+            effect.Begin(FX.None);
+            effect.BeginPass(0);
+
+
+            device.DrawUserPrimitives(PrimitiveType.TriangleList, 1, data);
+            device.DrawUserPrimitives(PrimitiveType.TriangleList, 1, data2);
+            device.DrawUserPrimitives(PrimitiveType.TriangleList, 1, data3);
+
+
+            effect.EndPass();
+            effect.End();
+            //device.EndScene();*/
+
+
+
         }
 
         public override void close(){
