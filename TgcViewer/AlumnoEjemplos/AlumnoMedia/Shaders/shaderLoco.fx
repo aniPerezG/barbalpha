@@ -63,7 +63,6 @@ struct VS_OUTPUT
    float4 Position : POSITION0;
    float2 Texcoord : TEXCOORD0;
    float4 Color : COLOR0;
-   float2 Altura: TEXCOORD1;
 };
 
 
@@ -90,10 +89,6 @@ VS_OUTPUT vs_main( VS_INPUT Input )
 
    //Propago el color x vertice
    Output.Color = Input.Color;
-
-   //
-   Output.Altura.y = Output.Position.y;
-   Output.Altura.x = 0;
 
    return( Output );
    
@@ -127,11 +122,7 @@ technique RenderScene
 VS_OUTPUT vs_heightMap(VS_INPUT Input)
 {
 	VS_OUTPUT Output;
-	/*
-	float2 uv_pos;
-	uv_pos.x = Input.Position.x;
-	uv_pos.y = Input.Position.y;*/
-
+	
 	//Animar Posicion
 	float X = Input.Position.x / 100;
 	float Y = Input.Position.y;
@@ -141,13 +132,6 @@ VS_OUTPUT vs_heightMap(VS_INPUT Input)
 
 	Input.Position.y += (sin(X + time)*cos(Z + time) + sin(Z + time) + cos(X + time)) * 10 + 10;
 
-
-	/*
-	float4 color = tex2D(HeightTarget, uv_pos);
-	Input.Position.y += color.y;
-	*/
-
-
 	//Proyectar posicion
 	Output.Position = mul(Input.Position, matWorldViewProj);
 
@@ -156,13 +140,6 @@ VS_OUTPUT vs_heightMap(VS_INPUT Input)
 
 	//Propago el color x vertice
 	Output.Color = Input.Color;
-
-	//
-	//Output.Altura.y = Output.Position.y;
-	//Output.Altura.x = 0;
-
-	Output.Altura.x = 0;
-	Output.Altura.y = 0;
 
 	return(Output);
 
