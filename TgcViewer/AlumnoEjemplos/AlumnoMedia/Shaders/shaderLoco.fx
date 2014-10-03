@@ -19,6 +19,28 @@ sampler2D diffuseMap = sampler_state
 	MIPFILTER = LINEAR;
 };
 
+texture t_RenderTarget;
+sampler RenderTarget = sampler_state
+{
+	Texture = <t_RenderTarget>;
+	ADDRESSU = WRAP;
+	ADDRESSV = WRAP;
+	MINFILTER = LINEAR;
+	MAGFILTER = LINEAR;
+	MIPFILTER = LINEAR;
+};
+
+texture t_HeightTarget;
+sampler HeightTarget = sampler_state
+{
+	Texture = <t_HeightTarget>;
+	ADDRESSU = WRAP;
+	ADDRESSV = WRAP;
+	MINFILTER = LINEAR;
+	MAGFILTER = LINEAR;
+	MIPFILTER = LINEAR;
+};
+
 float time = 0;
 
 /**************************************************************************************/
@@ -91,7 +113,7 @@ float4 ps_main( float2 Texcoord: TEXCOORD0, float4 Color:COLOR0, float2 Heightco
 // ------------------------------------------------------------------
 technique RenderScene
 {
-   pass P0
+   pass Pass_0
    {
 	  VertexShader = compile vs_2_0 vs_main();
 	  PixelShader = compile ps_2_0 ps_main();
@@ -100,4 +122,47 @@ technique RenderScene
 
 //*************************************************************
 
+VS_OUTPUT vs_heightMap(VS_INPUT Input)
+{
+	VS_OUTPUT Output;
+
+	float2 uv_pos;
+	uv_pos.x = Input.Position.x;
+	uv_pos.y = Input.Position.y;
+
+
+	/*
+	float4 color = tex2D(HeightTarget, uv_pos);
+	Input.Position.y += color.y;
+	*/
+
+
+	//Proyectar posicion
+	Output.Position = mul(Input.Position, matWorldViewProj);
+
+	//Propago las coordenadas de textura
+	Output.Texcoord = Input.Texcoord;
+
+	//Propago el color x vertice
+	Output.Color = Input.Color;
+
+	//
+	//Output.Altura.y = Output.Position.y;
+	//Output.Altura.x = 0;
+
+	Output.Altura.x = 0;
+	Output.Altura.y = 0;
+
+	return(Output);
+
+}
+
+technique HeightScene
+{
+	pass Pass_0
+	{
+		VertexShader = compile vs_3_0 vs_heightMap();
+		PixelShader = compile ps_3_0 ps_main();
+	}
+}
 

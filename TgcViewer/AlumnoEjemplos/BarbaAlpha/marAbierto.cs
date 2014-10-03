@@ -25,7 +25,7 @@ namespace AlumnoEjemplos.BarbaAlpha
         Microsoft.DirectX.Direct3D.Effect effect;
         float time;
         TgcSimpleTerrain terreno;
-
+        Texture renderTarget;
         TgcMesh canoa;
         string heightmap;
         string textura;
@@ -78,6 +78,12 @@ namespace AlumnoEjemplos.BarbaAlpha
             terreno.Effect = effect;
             terreno.Technique = "RenderScene";
 
+            // inicializo el render target
+            renderTarget = new Texture(d3dDevice, d3dDevice.PresentationParameters.BackBufferWidth
+                    , d3dDevice.PresentationParameters.BackBufferHeight, 1, Usage.RenderTarget,
+                        Format.X8R8G8B8, Pool.Default);
+
+            //effect.SetValue("t_RenderTarget", renderTarget);
 
             //Centrar camara rotacional respecto a la canoa
             GuiController.Instance.RotCamera.Enable = true;
@@ -115,24 +121,40 @@ namespace AlumnoEjemplos.BarbaAlpha
             }
 
             //Calcular altura de la canoa respecto a donde va a moverse
-            movement.Y += CalcularAlturaRespectoDe(canoa.Position.X, canoa.Position.Z, terreno);
+          //  movement.Y += CalcularAlturaRespectoDe(canoa.Position.X, canoa.Position.Z, terreno);
 
             //Guardar la posicion anterior antes de cambiarla
-            Vector3 originalPos = canoa.Position;
+           // Vector3 originalPos = canoa.Position;
 
             //Mover la canoa
             canoa.move(movement);
 
+            //Guardo el target anterior, (monitor)
+            Surface pPrevio = device.GetRenderTarget(0);
+            //seteo la textura renderTarget como destino del primer render del mar
+            Surface pSurf = renderTarget.GetSurfaceLevel(0);
+            device.SetRenderTarget(0, pSurf);
+
+            device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
+
+            terreno.render();
+
+            device.SetRenderTarget(0, pPrevio);
+            effect.SetValue("t_HeightTarget", renderTarget);
+
+            //canoa.Effect = effect;
+            //effect.Technique = "HeightScene";
+            //canoa.Technique = "HeightScene";
+            canoa.render();
+
+            terreno.render();
 
             //Actualizar posicion de cámara
             GuiController.Instance.RotCamera.targetObject(canoa.BoundingBox);
             GuiController.Instance.CurrentCamera.updateCamera();
 
-            //Renderizo las mallas
-            terreno.render();
-            canoa.render();
-
-
+            pPrevio.Dispose();
+            pSurf.Dispose();
         }
 
         public override void close(){

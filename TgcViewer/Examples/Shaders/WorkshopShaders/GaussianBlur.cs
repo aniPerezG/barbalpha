@@ -159,7 +159,7 @@ namespace Examples.Shaders.WorkshopShaders
                 bool separable = (bool)GuiController.Instance.Modifiers["separable"];
                 int cant_pasadas = (int)GuiController.Instance.Modifiers["cant_pasadas"];
 
-                /*if (separable)
+                if (separable)
                 {
                     // 1er pasada: downfilter x 4
                     // -----------------------------------------------------
@@ -239,7 +239,7 @@ namespace Examples.Shaders.WorkshopShaders
 
                     }
                 }
-                else*/
+                else
                 {
                     // Naive Gaussian blur
                     // restuaro el render target y el stencil
