@@ -20,6 +20,16 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.canion.AutoUpdateBoundingBox = this.malla.AutoTransformEnable = false;
         }
 
+        public override void setEffect(Microsoft.DirectX.Direct3D.Effect efecto)
+        {
+            canion.Effect = efecto;
+        }
+
+        public override void setTechnique(string tecnica)
+        {
+            canion.Technique = tecnica;
+        }
+
         public override void setInicioRotacionCanion()   {
             this.direccion_disparos = this.canion.Rotation;
         }

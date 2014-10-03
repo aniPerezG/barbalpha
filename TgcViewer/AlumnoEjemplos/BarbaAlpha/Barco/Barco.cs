@@ -76,6 +76,9 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.Position = posicionInicial;
         }
 
+        public abstract void setEffect(Microsoft.DirectX.Direct3D.Effect efecto);
+        public abstract void setTechnique(string tecnica);
+
         protected void disparar(float elapsedTime) {
             var nuevoMisil = new Misil(this.posicionReal(), vectorNormalA(this.posicionReal()));
             misilesDisparados.Add(nuevoMisil);
