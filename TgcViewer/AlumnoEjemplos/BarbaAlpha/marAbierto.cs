@@ -32,7 +32,6 @@ namespace AlumnoEjemplos.BarbaAlpha
         float scaleXZ;
         float scaleY;
         TgcMesh canoa;
-
         TgcScene scene;
 
         
@@ -58,17 +57,11 @@ namespace AlumnoEjemplos.BarbaAlpha
 
         public override void init()
         {
-
             //Device de DirectX para crear primitivas
             Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
             TgcSceneLoader loader = new TgcSceneLoader();
 
-            barcoJugador = new BarcoJugador(new Vector3(0, 0, 0), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
-            //barcoJugador.malla = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
-
-
-            //canoa = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
-            //canoa.Position = new Vector3(0, 0, 0);
+            barcoJugador = new BarcoJugador(new Vector3(20, 9, 20), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
 
             string shaderFolder = GuiController.Instance.AlumnoEjemplosMediaDir +"\\shaders";
             time = 0;
@@ -102,9 +95,6 @@ namespace AlumnoEjemplos.BarbaAlpha
             //canoa.Technique = "HeightScene";
             barcoJugador.setEffect(effect);
             barcoJugador.setTechnique("HeightScene");
-
-            
-            
         }
 
         public override void render(float elapsedTime)
@@ -116,68 +106,19 @@ namespace AlumnoEjemplos.BarbaAlpha
             // Cargar variables de shader, por ejemplo el tiempo transcurrido.
             effect.SetValue("time", time);
             effect.SetValue("matWorldViewProj", device.Transform.World * device.Transform.View * device.Transform.Projection);
-
             effect.Technique = "HeightScene";
-            barcoJugador.render(elapsedTime);
-            //canoa.render();
-
-            
-            //canoa.Technique = "HeightScene";
-            //barcoJugador.render(elapsedTime);
-
             effect.Technique = "RenderScene";
+
+            barcoJugador.render(elapsedTime);
             terreno.render();
 
             //Actualizar posicion de cámara
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox);
             GuiController.Instance.CurrentCamera.updateCamera();
-
-            
         }
 
         public override void close(){
             effect.Dispose();
         }
-
-        public float CalcularAlturaRespectoDe(float x, float z)
-        {
-            float largo = scaleXZ * 64;
-            float pos_i = 64f * (0.5f + x / largo);
-            float pos_j = 64f * (0.5f + z / largo);
-
-            int pi = (int)pos_i;
-            float fracc_i = pos_i - pi;
-            int pj = (int)pos_j;
-            float fracc_j = pos_j - pj;
-
-            if (pi < 0)
-                pi = 0;
-            else
-                if (pi > 63)
-                    pi = 63;
-
-            if (pj < 0)
-                pj = 0;
-            else
-                if (pj > 63)
-                    pj = 63;
-
-            int pi1 = pi + 1;
-            int pj1 = pj + 1;
-            if (pi1 > 63)
-                pi1 = 63;
-            if (pj1 > 63)
-                pj1 = 63;
-
-            // 2x2 percent closest filtering usual: 
-            float H0 = terreno.HeightmapData[pi, pj] * scaleY;
-            float H1 = terreno.HeightmapData[pi1, pj] * scaleY;
-            float H2 = terreno.HeightmapData[pi, pj1] * scaleY;
-            float H3 = terreno.HeightmapData[pi1, pj1] * scaleY;
-            float H = (H0 * (1 - fracc_i) + H1 * fracc_i) * (1 - fracc_j) +
-                      (H2 * (1 - fracc_i) + H3 * fracc_i) * fracc_j;
-            return H;
-        }
-
     }
 }

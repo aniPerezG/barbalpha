@@ -47,7 +47,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             barco.rotateY(angulo);
         }
 
-        protected void virar(Direccion direccion, float tiempo)
+        protected override void virar(Direccion direccion, float tiempo)
         {
             var velocidad = base.calcularVelocidadDeRotacion(direccion);
             var rotAngle = Geometry.DegreeToRadian(velocidad * tiempo);
@@ -78,8 +78,8 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         public override void render(float elapsedTime)   {
             base.render(elapsedTime);
-            this.barco.render();
             this.moverYVirar(elapsedTime);
+            this.barco.render();
         }
 
         public void dispose()      {

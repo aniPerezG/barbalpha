@@ -25,11 +25,19 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private const float intervalo_entre_misiles = 2.5f; //tiempo entre cada disparo
         private const float velocidadAbsolutaRotacion = 40f;
         private readonly marAbierto agua; // terreno sobre el que se navega
-        protected float tiempo = 0;
-        protected Vector3 direccion_normal = new Vector3(0, 0, 1); //dirección en que se desplaza "derecho"
         protected Vector3 direccion_disparos;
 
+
         public Vector3 Scale { get; set; }
+        public Vector3 Rotation { get; set; }
+        public Vector3 Position { get; set; }
+        public Matrix Transform { get; set; }
+        public bool AutoTransformEnable { get; set; }
+        public abstract void moveOrientedY(float movement);
+        public abstract void setEffect(Microsoft.DirectX.Direct3D.Effect efecto);
+        public abstract void setTechnique(string tecnica);
+        protected abstract void virar(Direccion direccion, float tiempo);
+        public abstract Vector3 posicion();
         public void move(Vector3 v)  {
             throw new NotImplementedException();
         }
@@ -42,10 +50,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         public void rotateX(float angle)    {
             throw new NotImplementedException();
         }
-        public Vector3 Rotation {get; set;}
-        public Vector3 Position{get; set;}
-        public abstract void moveOrientedY(float movement);
-
         public void rotateY(float angle)
         {
             throw new NotImplementedException();
@@ -54,20 +58,14 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
             throw new NotImplementedException();
         }
-        public Matrix Transform { get; set; }
-        public bool AutoTransformEnable { get; set; }
-
+        
         public Barco(Vector3 posicionInicial, marAbierto oceano, string pathEscena) {
             var loader = new TgcSceneLoader();
-
-            this.escena = loader.loadSceneFromFile(pathEscena); 
             this.direccion = new Direccion();
+            this.escena = loader.loadSceneFromFile(pathEscena);
             this.agua = oceano;
+            this.Position = posicionInicial;
         }
-
-        public abstract void setEffect(Microsoft.DirectX.Direct3D.Effect efecto);
-        public abstract void setTechnique(string tecnica);
-        public abstract Vector3 posicion();
 
         protected void disparar(float elapsedTime) {
             var nuevoMisil = new Misil(this.posicion(), vectorNormalA(this.posicion()));
@@ -82,10 +80,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             return vecAux;
         }
 
-        private bool nuncaSeDisparo()   {
-            return misilesDisparados.Count == 0;
-        }
-
         private void eliminarMisiles()
         {
             misilesAEliminar.ForEach((misil) => misilesAEliminar.Remove(misil));
@@ -95,13 +89,14 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
             foreach (var misil in this.misilesDisparados)
             {
-                if (misil.teHundisteEn(agua))
+                if (misil.teHundisteEn(this.agua))
                 {
                     misilesAEliminar.Add(misil);
                 }
                 else if (misil.chocasteConBarco(this.enemy))
                 {
                     misilesAEliminar.Add(misil);
+                    leDisteA(this.enemy);
                 }
                 else
                 {
@@ -111,26 +106,12 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         }
 
         protected void leDisteA(Barco enemigo)  {
-            if (++this.puntaje == 5)    {
-                this.close();
-            }
-          //  enemigo.teDieron(); // notifica al enemigo que fue atacado
+            if (++this.puntaje == 5) this.close();
         }
 
         protected float calcularVelocidadDeRotacion(Direccion direccion){
-            if (direccion.esDerecha())
-            {
-                return velocidadAbsolutaRotacion;
-            }
-            else
-            {
-                return velocidadAbsolutaRotacion * (-1);
-            }
-        }
-
-        protected void virar(Direccion direccion, float tiempo) {
-            var velocidad = this.calcularVelocidadDeRotacion(direccion);
-            var rotAngle = Geometry.DegreeToRadian(velocidad * tiempo);
+            if (direccion.esDerecha()) return velocidadAbsolutaRotacion;
+            else return velocidadAbsolutaRotacion * (-1);
         }
 
         public virtual void render(float elapsedTime)    {
