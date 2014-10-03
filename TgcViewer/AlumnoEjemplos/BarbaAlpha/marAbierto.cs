@@ -69,12 +69,12 @@ namespace AlumnoEjemplos.BarbaAlpha
             Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
             TgcSceneLoader loader = new TgcSceneLoader();
 
-            barcoJugador = new BarcoJugador(new Vector3(0, 5, 0), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
+            barcoJugador = new BarcoJugador(new Vector3(0, 0, 0), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
             //barcoJugador.malla = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
 
 
-            canoa = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
-            canoa.Position = new Vector3(0, 0, 0);
+            //canoa = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
+            //canoa.Position = new Vector3(0, 0, 0);
 
             string shaderFolder = GuiController.Instance.AlumnoEjemplosMediaDir +"\\shaders";
             time = 0;
@@ -104,8 +104,10 @@ namespace AlumnoEjemplos.BarbaAlpha
             GuiController.Instance.RotCamera.Enable = true;
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox);
 
-            canoa.Effect = effect;
-            canoa.Technique = "HeightScene";
+            //canoa.Effect = effect;
+            //canoa.Technique = "HeightScene";
+            barcoJugador.setEffect(effect);
+            barcoJugador.setTechnique("HeightScene");
 
             //*********************
 
@@ -157,8 +159,8 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect.SetValue("time", time);
             effect.SetValue("matWorldViewProj", device.Transform.World * device.Transform.View * device.Transform.Projection);
 
-           // barcoJugador.render(elapsedTime);
-            canoa.render();
+            barcoJugador.render(elapsedTime);
+            //canoa.render();
 
             //Guardo el target anterior, (monitor)
             //Surface pPrevio = device.GetRenderTarget(0);

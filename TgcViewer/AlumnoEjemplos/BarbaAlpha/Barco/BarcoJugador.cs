@@ -11,8 +11,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
     class BarcoJugador : Barco  {
 
         public TgcMesh canion;
-        private float rotacion_canion = 0.5f; // en cuánto comienza rotado respecto de la dirección del barco
-        private float angulo_canion_y = 0.5f; // ángulo respecto del plano XZ (apertura del cañón)
 
         public BarcoJugador(Vector3 posicion_inicial, marAbierto oceano, string pathEscena) : base (posicion_inicial, oceano, pathEscena) {
             var loader = new TgcSceneLoader();
@@ -22,8 +20,18 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.canion.AutoUpdateBoundingBox = this.malla.AutoTransformEnable = false;
         }
 
+        public override void setEffect(Microsoft.DirectX.Direct3D.Effect efecto)
+        {
+            canion.Effect = efecto;
+        }
+
+        public override void setTechnique(string tecnica)
+        {
+            canion.Technique = tecnica;
+        }
+
         public override void setInicioRotacionCanion()   {
-            this.rotacion_inicial_canion = this.canion.Rotation;
+            this.direccion_disparos = this.canion.Rotation;
         }
         
         public override void moveOrientedY(float desplazamientoEnY)  {

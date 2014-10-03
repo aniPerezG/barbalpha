@@ -29,7 +29,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private readonly marAbierto agua; // terreno sobre el que se navega
         protected float tiempo = 0;
         protected Vector3 direccion_normal = new Vector3(0, 0, 1); //dirección en que se desplaza "derecho"
-        protected Vector3 rotacion_inicial_canion;
+        protected Vector3 direccion_disparos;
 
         public Vector3 Rotation
         {
@@ -74,12 +74,22 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.agua = oceano;
             this.BoundingBox = malla.BoundingBox;
             this.Position = posicionInicial;
-            //this.mesh.AutoTransformEnable =  this.mesh.AutoUpdateBoundingBox = false;
         }
 
+        public abstract void setEffect(Microsoft.DirectX.Direct3D.Effect efecto);
+        public abstract void setTechnique(string tecnica);
+
         protected void disparar(float elapsedTime) {
-            var nuevoMisil = new Misil(this.posicionReal(), this.rotacion_inicial_canion);
+            var nuevoMisil = new Misil(this.posicionReal(), vectorNormalA(this.posicionReal()));
             misilesDisparados.Add(nuevoMisil);
+        }
+
+        public Vector3 vectorNormalA(Vector3 vector)
+        {
+            float offset = 10;
+            var vecAux = new Vector3(vector.X, vector.Y, vector.Z + offset);
+            vecAux = Vector3.Cross(vector, vecAux);
+            return vecAux;
         }
 
         private bool nuncaSeDisparo()   {
@@ -96,7 +106,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         public virtual void rotarSobreY(float angle)    {
             this.malla.rotateY(angle);
-            this.direccion_normal.TransformNormal(Matrix.RotationY(angle));
         }
 
         private Vector3 crearPosicionHeightMapDePosicionDeBarco(Vector3 posicionDeBarco)     {
