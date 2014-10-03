@@ -90,6 +90,7 @@
     <Compile Include="BarbaAlpha\Barco\Barco.cs" />
     <Compile Include="BarbaAlpha\Barco\BarcoJugador.cs" />
     <Compile Include="BarbaAlpha\Barco\BarcoIA.cs" />
+    <Compile Include="BarbaAlpha\Barco\Direccion.cs" />
     <Compile Include="BarbaAlpha\Barco\Misil.cs" />
     <Compile Include="BarbaAlpha\EjemploAlumno.cs" />
     <Compile Include="BarbaAlpha\marAbierto.cs" />

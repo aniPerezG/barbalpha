@@ -15,7 +15,7 @@ using TgcViewer.Utils.Terrain;
 using Microsoft.DirectX.DirectInput;
 using TgcViewer.Utils.Input;
 using TgcViewer.Utils.Collision.ElipsoidCollision;
-
+using AlumnoEjemplos.BarbaAlpha.Barco;
 
 namespace AlumnoEjemplos.BarbaAlpha
 {
@@ -26,7 +26,7 @@ namespace AlumnoEjemplos.BarbaAlpha
         float time;
         TgcSimpleTerrain terreno;
         Texture renderTarget;
-        TgcMesh canoa;
+        BarcoJugador barcoJugador;
         string heightmap;
         string textura;
         float scaleXZ;
@@ -57,9 +57,8 @@ namespace AlumnoEjemplos.BarbaAlpha
             Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
             TgcSceneLoader loader = new TgcSceneLoader();
 
-            canoa = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
-
-            canoa.Position = new Vector3(0, 5, 0);
+            barcoJugador = new BarcoJugador(new Vector3(0, 5, 0), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
+            //barcoJugador.malla = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
            
             string shaderFolder = GuiController.Instance.AlumnoEjemplosMediaDir +"\\shaders";
             time = 0;
@@ -87,11 +86,12 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             //Centrar camara rotacional respecto a la canoa
             GuiController.Instance.RotCamera.Enable = true;
-            GuiController.Instance.RotCamera.targetObject(canoa.BoundingBox);
+            GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox);
         }
 
         public override void render(float elapsedTime)
         {
+            
             Microsoft.DirectX.Direct3D.Device device = GuiController.Instance.D3dDevice;
             time += elapsedTime;
 
@@ -99,35 +99,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect.SetValue("time", time);
             effect.SetValue("matWorldViewProj", device.Transform.World * device.Transform.View * device.Transform.Projection);
 
-
-            //Capturar las teclas del teclado
-            TgcD3dInput input = GuiController.Instance.D3dInput;
-            Vector3 movement = new Vector3(0, 0, 0);
-            if (input.keyDown(Key.Left) || input.keyDown(Key.A))
-            {
-                movement.X += 1;
-            }
-            else if (input.keyDown(Key.Right) || input.keyDown(Key.D))
-            {
-                movement.X += -1;
-            }
-            if (input.keyDown(Key.Up) || input.keyDown(Key.W))
-            {
-                movement.Z += -1;
-            }
-            else if (input.keyDown(Key.Down) || input.keyDown(Key.S))
-            {
-                movement.Z += 1;
-            }
-
-            //Calcular altura de la canoa respecto a donde va a moverse
-          //  movement.Y += CalcularAlturaRespectoDe(canoa.Position.X, canoa.Position.Z, terreno);
-
-            //Guardar la posicion anterior antes de cambiarla
-           // Vector3 originalPos = canoa.Position;
-
-            //Mover la canoa
-            canoa.move(movement);
+            barcoJugador.render(elapsedTime);
 
             //Guardo el target anterior, (monitor)
             Surface pPrevio = device.GetRenderTarget(0);
@@ -145,12 +117,12 @@ namespace AlumnoEjemplos.BarbaAlpha
             //canoa.Effect = effect;
             //effect.Technique = "HeightScene";
             //canoa.Technique = "HeightScene";
-            canoa.render();
+            //barcoJugador.render(elapsedTime);
 
             terreno.render();
 
             //Actualizar posicion de cámara
-            GuiController.Instance.RotCamera.targetObject(canoa.BoundingBox);
+            GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox);
             GuiController.Instance.CurrentCamera.updateCamera();
 
             pPrevio.Dispose();
@@ -161,7 +133,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect.Dispose();
         }
 
-        public float CalcularAlturaRespectoDe(float x, float z, TgcSimpleTerrain superficie)
+        public float CalcularAlturaRespectoDe(float x, float z)
         {
             float largo = scaleXZ * 64;
             float pos_i = 64f * (0.5f + x / largo);
@@ -192,10 +164,10 @@ namespace AlumnoEjemplos.BarbaAlpha
                 pj1 = 63;
 
             // 2x2 percent closest filtering usual: 
-            float H0 = superficie.HeightmapData[pi, pj] * scaleY;
-            float H1 = superficie.HeightmapData[pi1, pj] * scaleY;
-            float H2 = superficie.HeightmapData[pi, pj1] * scaleY;
-            float H3 = superficie.HeightmapData[pi1, pj1] * scaleY;
+            float H0 = terreno.HeightmapData[pi, pj] * scaleY;
+            float H1 = terreno.HeightmapData[pi1, pj] * scaleY;
+            float H2 = terreno.HeightmapData[pi, pj1] * scaleY;
+            float H3 = terreno.HeightmapData[pi1, pj1] * scaleY;
             float H = (H0 * (1 - fracc_i) + H1 * fracc_i) * (1 - fracc_j) +
                       (H2 * (1 - fracc_i) + H3 * fracc_i) * fracc_j;
             return H;
