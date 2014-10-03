@@ -15,7 +15,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private float angulo_canion_y = 0.5f; // ángulo respecto del plano XZ (apertura del cañón)
 
         public BarcoJugador(Vector3 posicion_inicial, marAbierto oceano, string pathEscena) : base (posicion_inicial, oceano, pathEscena) {
-
             var loader = new TgcSceneLoader();
             var escenaCanion = loader.loadSceneFromFile(pathEscena); // escena del cañon
 

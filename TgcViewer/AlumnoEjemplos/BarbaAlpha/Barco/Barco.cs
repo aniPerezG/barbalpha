@@ -28,7 +28,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private const float velocidadAbsolutaRotacion = 40f;
         private readonly marAbierto agua; // terreno sobre el que se navega
         protected float tiempo = 0;
-        protected Vector3 direccion_normal = new Vector3(0, 0, -1); //dirección en que se desplaza "derecho"
+        protected Vector3 direccion_normal = new Vector3(0, 0, 1); //dirección en que se desplaza "derecho"
         protected Vector3 rotacion_inicial_canion;
 
         public Vector3 Rotation
@@ -163,9 +163,9 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             TgcD3dInput input = GuiController.Instance.D3dInput;
 
             if (input.keyDown(Key.Up))
-                this.moveOrientedY(1);
-            if (input.keyDown(Key.Down))
                 this.moveOrientedY(-1);
+            if (input.keyDown(Key.Down))
+                this.moveOrientedY(1);
             if (input.keyDown(Key.Right))
             {
                 direccion.haciaLaDerecha();

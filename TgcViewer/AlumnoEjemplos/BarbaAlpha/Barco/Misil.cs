@@ -13,10 +13,10 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
     class Misil{
 
     public float tiempoDeVuelo { set; get; } // cuánto hace que esta volando
-    private float velocidad_inicial_vertical = 1f; // Vo respecto de Y
-    private const int altura_canion = 150; // altura inicial desde donde se realiza el tiro oblicuo
+    private float velocidad_inicial_vertical = 3f; // Vo respecto de Y
+    private const int altura_canion = 5; // altura inicial desde donde se realiza el tiro oblicuo
     private const float gravedad = -0.2f; // sólo afecta el desplazamiento respecto de Y
-    private const float velocidad_inicial_horizontal = -1f; // Sobre X no hay gravedad, es constante
+    private const float velocidad_inicial_horizontal = -1000f; // Sobre X no hay gravedad, es constante
     private TgcMesh mesh; // malla del misil
   
     public TgcBoundingBox BoundingBox

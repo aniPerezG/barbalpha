@@ -13,44 +13,39 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 {
     class BarcoIA : Barco
     {
-        /// private Direction dir = Direction.Forward;
-        Vector3 destino;
-        bool ocioso = true; // booleano que indica si el barco estaba sin nada que hacer
-        bool avoiding = false;
-        float timeAvoiding = 0;
-        const double THRESHOLD_POS = 200;
-        const double THRESHOLD_DIR = 0.5;
+        private Vector3 direccion_normal;
+        private Vector3 posicion_inicial;
+        private Barco enemigo; // el enemigo es el barco del jugador
 
-        
-        public BarcoIA(Vector3 posicionInicial, marAbierto oceano, string directorioEscena) : base (initialPosition, terrain, directorioEscena);
-    
-        protected override void moverYRotar() {
-            //IA del enemigo:
-            //El chabon se mueve siempre para adelante, persiguiendo a la posición del tanque jugador
-            //Para llegar a una determinada posición, primero debería rotar en la dirección adecuada
-            //Y darle para adelante.
+        public BarcoIA(Vector3 posicionInicial, marAbierto oceano, string pathEscena)
+            : base(posicionInicial, oceano, pathEscena) { }
+
+        public void moverYVirar(float elapsedTime)   {
+            // El barco se mueve manteniendo una mínima distancia 'd' respecto de la posición del barco enemigo
+            if (this.totalSpeed == 0) isMoving = false;
+            isRotating = false;
 
             //Origen, y destino
-            Vector3 origen = this.Position;
-            if (ocioso) { 
-                this.destino = this.enemy.Position;
-                ocioso = false;
+            Vector3 origin = this.Position;
+            if (iddle) { //(hasta no llegar ahí no cambia de destino)
+                this.destination = this.enemy.Position;
+                iddle = false;
             }
 
             //Direcciones origen y destino
-            Vector3 direccionOrigen = this.forwardVector; 
-            Vector3 direccionDestino = this.destino - this.Position;
+            Vector3 direcOrg = this.forwardVector; 
+            Vector3 direcDst = this.destination - this.Position;
 
             //Normalizar direcciones y sus ángulos
-            direccionOrigen.Normalize(); 
-            direccionDestino.Normalize();
-            double anguloOrigen = Math.Atan2(direccionOrigen.Z, direccionOrigen.X);
-            double anguloDestino = Math.Atan2(direccionOrigen.Z, direccionOrigen.X);
-            if (anguloOrigen < 0) anguloOrigen += 2 * Math.PI;
-            if (anguloDestino < 0) anguloOrigen += 2 * Math.PI;
-            double distLeft = anguloOrigen > anguloDestino ? Math.PI * 2 - anguloOrigen + anguloDestino : anguloDestino - anguloOrigen;
-            double distRight = anguloOrigen < anguloDestino ? Math.PI * 2 - anguloDestino + anguloOrigen : anguloOrigen - anguloDestino;
-            if (!isInPosition(direccionOrigen, direccionOrigen, THRESHOLD_DIR)) {
+            direcOrg.Normalize(); 
+            direcDst.Normalize();
+            double angOrg = Math.Atan2(direcOrg.Z, direcOrg.X);
+            double angDst = Math.Atan2(direcDst.Z, direcDst.X);
+            if (angOrg < 0) angOrg += 2 * Math.PI;
+            if (angDst < 0) angOrg += 2 * Math.PI;
+            double distLeft = angOrg > angDst ? Math.PI * 2 - angOrg + angDst : angDst - angOrg;
+            double distRight = angOrg < angDst ? Math.PI * 2 - angDst + angOrg : angOrg - angDst;
+            if (!isInPosition(direcOrg, direcDst, THRESHOLD_DIR)) {
                 if (distLeft < distRight) {
                     this.rotate(Direction.Left);
                 } else {
@@ -84,12 +79,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             if (isInPosition(Position, destination, THRESHOLD_POS)) {
                 iddle = true;
                 if (avoiding) avoiding = false;
-            }
 
-            base.processMovement();/
-        }
-        
-        
-        
-        }
+    }
+}
 */
