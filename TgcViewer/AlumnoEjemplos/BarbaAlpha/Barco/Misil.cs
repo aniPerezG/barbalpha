@@ -37,7 +37,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         var escena = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Objetos\\BarrilPolvora\\BarrilPolvora-TgcScene.xml");
         this.mesh = escena.Meshes[0];
         this.mesh.Position = new Vector3(posicionBarco.X, posicionBarco.Y + altura_canion, posicionBarco.Z);
-        this.mesh.Rotation = new Vector3(rotacionRespectoDeBarco.X + 0.5f, rotacionRespectoDeBarco.Y, rotacionRespectoDeBarco.Z + 0.5f);
+        this.mesh.Rotation = new Vector3(rotacionRespectoDeBarco.X, rotacionRespectoDeBarco.Y, rotacionRespectoDeBarco.Z);
     }
 
     public void move(Vector3 v) {
