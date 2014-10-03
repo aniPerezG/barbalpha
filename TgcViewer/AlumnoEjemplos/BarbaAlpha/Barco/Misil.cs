@@ -18,6 +18,8 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
     private const float gravedad = -0.2f; // sólo afecta el desplazamiento respecto de Y
     private const float velocidad_inicial_horizontal = -1000f; // Sobre X no hay gravedad, es constante
     private TgcMesh mesh; // malla del misil
+    private object p;
+    private Vector3 vector3;
   
     public TgcBoundingBox BoundingBox
     {
@@ -32,12 +34,12 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
     public Vector3 Rotation { get; set; }
     public Vector3 Scale { get; set; }
     
-    public Misil(Vector3 posicionBarco, Vector3 rotacionRespectoDeBarco) {
+    public Misil(Vector3 posicionBarco, Vector3 direccionCanion) {
         TgcSceneLoader loader = new TgcSceneLoader();
         var escena = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Objetos\\BarrilPolvora\\BarrilPolvora-TgcScene.xml");
         this.mesh = escena.Meshes[0];
-        this.mesh.Position = new Vector3(posicionBarco.X, posicionBarco.Y + altura_canion, posicionBarco.Z);
-        this.mesh.Rotation = new Vector3(rotacionRespectoDeBarco.X, rotacionRespectoDeBarco.Y, rotacionRespectoDeBarco.Z);
+        this.mesh.Position = new Vector3(posicionBarco.X, posicionBarco.Y + 5, posicionBarco.Z);
+        this.mesh.Rotation = direccionCanion;
     }
 
     public void move(Vector3 v) {

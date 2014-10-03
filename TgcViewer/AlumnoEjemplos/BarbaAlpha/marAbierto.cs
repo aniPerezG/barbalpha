@@ -114,7 +114,6 @@ namespace AlumnoEjemplos.BarbaAlpha
 
 
             _vertices = new CustomVertex.PositionNormalTextured[CANTIDAD_DE_VERTICES];
-            int i = 0;
             for (int x = -RADIO; x <= RADIO; x++)
             {
                 for (int z = -RADIO; z <= RADIO; z++)
