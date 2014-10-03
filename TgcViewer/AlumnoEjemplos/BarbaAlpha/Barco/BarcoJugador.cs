@@ -18,8 +18,8 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             var loader = new TgcSceneLoader();
             var escenaCanion = loader.loadSceneFromFile(pathEscena); // escena del cañon
 
-            this.canion = escenaCanion.Meshes[0];         
-            this.canion.AutoUpdateBoundingBox = this.canion.AutoTransformEnable = false;
+            this.canion = escenaCanion.Meshes[0];
+            this.canion.AutoUpdateBoundingBox = this.malla.AutoTransformEnable = false;
         }
 
         public override void setInicioRotacionCanion()   {

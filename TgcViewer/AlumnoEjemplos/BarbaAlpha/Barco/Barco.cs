@@ -155,7 +155,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private void virar(Direccion direccion, float tiempo) {
             var velocidad = this.calcularVelocidadDeRotacion(direccion);
             var rotAngle = Geometry.DegreeToRadian(velocidad * tiempo);
-
             this.rotarSobreY(rotAngle);
         }
 
@@ -181,12 +180,9 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         }
 
         public virtual void render(float elapsedTime)    {
-
-            this.malla.render(); // renderiza la malla del barco
             this.moverYVirar(elapsedTime);
             this.verificarDisparos(elapsedTime); // evalúa el estado de los misiles disparados
             this.eliminarMisiles(); // elimina aquellos misiles que terminaron su trayectoria
-
         }
         
         private void close()
