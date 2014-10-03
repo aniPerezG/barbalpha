@@ -102,17 +102,17 @@ namespace AlumnoEjemplos.BarbaAlpha
             barcoJugador.render(elapsedTime);
 
             //Guardo el target anterior, (monitor)
-            Surface pPrevio = device.GetRenderTarget(0);
+            //Surface pPrevio = device.GetRenderTarget(0);
             //seteo la textura renderTarget como destino del primer render del mar
-            Surface pSurf = renderTarget.GetSurfaceLevel(0);
-            device.SetRenderTarget(0, pSurf);
+            //Surface pSurf = renderTarget.GetSurfaceLevel(0);
+            //device.SetRenderTarget(0, pSurf);
 
-            device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
+            //device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
 
-            terreno.render();
+            //terreno.render();
 
-            device.SetRenderTarget(0, pPrevio);
-            effect.SetValue("t_HeightTarget", renderTarget);
+            //device.SetRenderTarget(0, pPrevio);
+            //effect.SetValue("t_HeightTarget", renderTarget);
 
             //canoa.Effect = effect;
             //effect.Technique = "HeightScene";
@@ -125,8 +125,8 @@ namespace AlumnoEjemplos.BarbaAlpha
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox);
             GuiController.Instance.CurrentCamera.updateCamera();
 
-            pPrevio.Dispose();
-            pSurf.Dispose();
+            //pPrevio.Dispose();
+            //pSurf.Dispose();
         }
 
         public override void close(){
