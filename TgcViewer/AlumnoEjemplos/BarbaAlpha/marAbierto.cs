@@ -117,6 +117,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect.SetValue("time", time);
             effect.SetValue("matWorldViewProj", device.Transform.World * device.Transform.View * device.Transform.Projection);
 
+            effect.Technique = "HeightScene";
             barcoJugador.render(elapsedTime);
             //canoa.render();
 
@@ -124,6 +125,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             //canoa.Technique = "HeightScene";
             //barcoJugador.render(elapsedTime);
 
+            effect.Technique = "RenderScene";
             terreno.render();
 
             //Actualizar posicion de cámara
