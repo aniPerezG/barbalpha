@@ -34,6 +34,7 @@ struct VS_INPUT
    float2 Texcoord : TEXCOORD0;
 };
 
+
 //Output del Vertex Shader
 struct VS_OUTPUT 
 {
@@ -54,8 +55,6 @@ VS_OUTPUT vs_main( VS_INPUT Input )
    float Y = Input.Position.y;
    float Z = Input.Position.z/100;
   
-   time = time;
-
    Input.Position.y = (sin(X+time)*cos(Z+time) + sin(Z+time) + cos(X+time))*10 ;
 
 
@@ -100,12 +99,16 @@ VS_OUTPUT vs_heightMap(VS_INPUT Input)
 {
 	VS_OUTPUT Output;
 
+	/*
+	float X = posX/ 100;
+	float Y = posY;
+	float Z = posZ / 100;
+	*/
+
 	//Animar Posicion
 	float X = Input.Position.x / 100;
 	float Y = Input.Position.y;
 	float Z = Input.Position.z / 100;
-
-	time = time;
 
 	Input.Position.y += (sin(X + time)*cos(Z + time) + sin(Z + time) + cos(X + time)) * 10 + 10;
 
@@ -126,8 +129,8 @@ technique HeightScene
 {
 	pass Pass_0
 	{
-		VertexShader = compile vs_3_0 vs_heightMap();
-		PixelShader = compile ps_3_0 ps_main();
+		VertexShader = compile vs_2_0 vs_heightMap();
+		PixelShader = compile ps_2_0 ps_main();
 	}
 }
 

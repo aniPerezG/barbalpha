@@ -62,7 +62,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             TgcSceneLoader loader = new TgcSceneLoader();
 
             barcoJugador = new BarcoJugador(new Vector3(20, 9, 20), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
-            //canoa = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
+            canoa = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
 
             string shaderFolder = GuiController.Instance.AlumnoEjemplosMediaDir +"\\shaders";
             time = 0;
@@ -81,36 +81,65 @@ namespace AlumnoEjemplos.BarbaAlpha
             terreno.Effect = effect;
             terreno.Technique = "RenderScene";
 
+            // inicializo el render target
+            renderTarget = new Texture(d3dDevice, d3dDevice.PresentationParameters.BackBufferWidth
+                    , d3dDevice.PresentationParameters.BackBufferHeight, 1, Usage.RenderTarget,
+                        Format.X8R8G8B8, Pool.Default);
+
 
             //Centrar camara rotacional respecto a la canoa
             GuiController.Instance.RotCamera.Enable = true;
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox);
 
-            //canoa.Effect = effect;
-           // canoa.Technique = "HeightScene";
+            canoa.Effect = effect;
+            canoa.Technique = "HeightScene";
             barcoJugador.setEffect(effect);
             barcoJugador.setTechnique("HeightScene");
         }
 
         public override void render(float elapsedTime)
         {
+            TgcD3dInput input = GuiController.Instance.D3dInput;
             
             Microsoft.DirectX.Direct3D.Device device = GuiController.Instance.D3dDevice;
             time += elapsedTime;
 
+
             // Cargar variables de shader, por ejemplo el tiempo transcurrido.
             effect.SetValue("time", time);
             effect.SetValue("matWorldViewProj", device.Transform.World * device.Transform.View * device.Transform.Projection);
-                       
-            effect.Technique = "HeightScene";
-            barcoJugador.render(elapsedTime);
-
+            
             effect.Technique = "RenderScene";
             terreno.render();
+            
+            //barcoJugador.render(elapsedTime);
+            effect.Technique = "HeightScene";
+            canoa.Technique = "HeightScene";
+            canoa.render();
 
+            Vector3 movement = new Vector3(0, 0, 0);
+
+            if (input.keyDown(Key.Up))
+                movement.Z = -1;
+            if (input.keyDown(Key.Down))
+                 movement.Z = 1;
+            if (input.keyDown(Key.Right))
+            {
+                movement.X = -1;
+            }
+            if (input.keyDown(Key.Left))
+            {
+                movement.X = 1;
+            }
+
+            canoa.move(movement);
+
+            
+            
             //Actualizar posicion de cámara
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox);
             GuiController.Instance.CurrentCamera.updateCamera();
+
         }
 
         public override void close(){
