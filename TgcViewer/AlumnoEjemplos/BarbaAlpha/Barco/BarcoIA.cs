@@ -8,78 +8,73 @@ using Microsoft.DirectX.DirectInput;
 using TgcViewer.Utils.TgcSceneLoader;
 using TgcViewer.Utils.TgcGeometry;
 
-/*
+
 namespace AlumnoEjemplos.BarbaAlpha.Barco
 {
     class BarcoIA : Barco
     {
-        private Vector3 direccion_normal;
+        private const float distancia_minima = 4;
+        private const float frecuencia_disparo = 5;
+        protected float tiempo = 0;
+        private Vector3 direccion_normal = new Vector3(0, 0, 1);
         private Vector3 posicion_inicial;
+        private Vector3 posicion_enemigo;
+        private bool estasMuyCerca = false;
         private Barco enemigo; // el enemigo es el barco del jugador
+        private TgcMesh barco; // la malla de este barco
+
+        public override Vector3 posicion()
+        {
+            throw new NotImplementedException();
+        }
+        protected override void virar(Direccion direccion, float tiempo)
+        {
+            throw new NotImplementedException();
+        }
+        public override void setTechnique(string tecnica) { }
+        public override void setEffect(Microsoft.DirectX.Direct3D.Effect efecto) { }
+        public override void moveOrientedY(float movement) { }
 
         public BarcoIA(Vector3 posicionInicial, marAbierto oceano, string pathEscena)
-            : base(posicionInicial, oceano, pathEscena) { }
+            : base(posicionInicial, oceano, pathEscena)
+        {
+            var loader = new TgcSceneLoader();
+            var escenaCanion = loader.loadSceneFromFile(pathEscena);
+            this.barco = escenaCanion.Meshes[1];
+            this.posicion_inicial = this.barco.Position = posicionInicial;
+        }
 
-        public void moverYVirar(float elapsedTime)   {
+        public void evaluarDistanciaDeEnemigo()
+        {
+            var vecAux = new Vector3(posicion_enemigo.X - this.barco.Position.X,
+                                     posicion_enemigo.Y - this.barco.Position.Y,
+                                     posicion_enemigo.Z - this.barco.Position.Z);
+            if (Vector3.Length(vecAux) > distancia_minima) estasMuyCerca = false;
+            else estasMuyCerca = true;
+        }
+
+        public void moverYVirar(float elapsedTime)
+        {
             // El barco se mueve manteniendo una mínima distancia 'd' respecto de la posición del barco enemigo
-            if (this.totalSpeed == 0) isMoving = false;
-            isRotating = false;
-
-            //Origen, y destino
-            Vector3 origin = this.Position;
-            if (iddle) { //(hasta no llegar ahí no cambia de destino)
-                this.destination = this.enemy.Position;
-                iddle = false;
+            Vector3 posicionEnemigo = new Vector3(0, 0, 0);
+            tiempo += elapsedTime;
+            enemigo.getPosition(posicion_enemigo);
+            evaluarDistanciaDeEnemigo();
+            if(estasMuyCerca)
+            {
+                // Debo moverme para alejarme de mi enemigo
             }
-
-            //Direcciones origen y destino
-            Vector3 direcOrg = this.forwardVector; 
-            Vector3 direcDst = this.destination - this.Position;
-
-            //Normalizar direcciones y sus ángulos
-            direcOrg.Normalize(); 
-            direcDst.Normalize();
-            double angOrg = Math.Atan2(direcOrg.Z, direcOrg.X);
-            double angDst = Math.Atan2(direcDst.Z, direcDst.X);
-            if (angOrg < 0) angOrg += 2 * Math.PI;
-            if (angDst < 0) angOrg += 2 * Math.PI;
-            double distLeft = angOrg > angDst ? Math.PI * 2 - angOrg + angDst : angDst - angOrg;
-            double distRight = angOrg < angDst ? Math.PI * 2 - angDst + angOrg : angOrg - angDst;
-            if (!isInPosition(direcOrg, direcDst, THRESHOLD_DIR)) {
-                if (distLeft < distRight) {
-                    this.rotate(Direction.Left);
-                } else {
-                    this.rotate(Direction.Right);
-                }   
+            if ((tiempo % frecuencia_disparo) == 0)
+            {
+                this.disparar(elapsedTime); // disparo cada 5 segundos;
             }
-            this.acel(1);
-            this.move(dir);
-            this.doFriction();
+        }
 
-            //Si este random se cumple, dispara
-            if (new Utils.Randomizer(1, 500).getNext() > 495) {
-                this.shoot();
-                iddle = true; //para que tenga chances de esquivar el bache...
-            }
-
-            if (colliding) {
-                if (!avoiding) {
-                    recalc(); //REECALCULANDO...
-                    timeAvoiding = 0;
-                } else {
-                    timeAvoiding += Shared.ElapsedTime;
-                    if (timeAvoiding > 3) {
-                        recalc();
-                        timeAvoiding = 0;
-                    }
-                }
-            }
-
-            //Si llego al destino, lo marca como inactivo para buscar uno nuevo...
-            if (isInPosition(Position, destination, THRESHOLD_POS)) {
-                iddle = true;
-                if (avoiding) avoiding = false;
-
+        public override void render(float elapsedTime)
+        {
+            base.render(elapsedTime);
+            this.moverYVirar(elapsedTime);
+            this.barco.render();
+        }
     }
 }
-*/
