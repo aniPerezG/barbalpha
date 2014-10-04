@@ -104,7 +104,6 @@ namespace AlumnoEjemplos.BarbaAlpha
             Microsoft.DirectX.Direct3D.Device device = GuiController.Instance.D3dDevice;
             time += elapsedTime;
 
-
             // Cargar variables de shader, por ejemplo el tiempo transcurrido.
             effect.SetValue("time", time);
             effect.SetValue("matWorldViewProj", device.Transform.World * device.Transform.View * device.Transform.Projection);
@@ -112,10 +111,6 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect.Technique = "RenderScene";
             terreno.render();
             
-            //barcoJugador.render(elapsedTime);
-            effect.Technique = "HeightScene";
-            canoa.Technique = "HeightScene";
-            canoa.render();
 
             Vector3 movement = new Vector3(0, 0, 0);
 
@@ -134,8 +129,8 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             canoa.move(movement);
 
-            
-            
+            canoa.render();
+
             //Actualizar posicion de cámara
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox);
             GuiController.Instance.CurrentCamera.updateCamera();
