@@ -62,6 +62,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             TgcSceneLoader loader = new TgcSceneLoader();
 
             barcoJugador = new BarcoJugador(new Vector3(20, 9, 20), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
+            //canoa = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
 
             string shaderFolder = GuiController.Instance.AlumnoEjemplosMediaDir +"\\shaders";
             time = 0;
@@ -80,19 +81,13 @@ namespace AlumnoEjemplos.BarbaAlpha
             terreno.Effect = effect;
             terreno.Technique = "RenderScene";
 
-            // inicializo el render target
-            renderTarget = new Texture(d3dDevice, d3dDevice.PresentationParameters.BackBufferWidth
-                    , d3dDevice.PresentationParameters.BackBufferHeight, 1, Usage.RenderTarget,
-                        Format.X8R8G8B8, Pool.Default);
-
-            //effect.SetValue("t_RenderTarget", renderTarget);
 
             //Centrar camara rotacional respecto a la canoa
             GuiController.Instance.RotCamera.Enable = true;
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox);
 
             //canoa.Effect = effect;
-            //canoa.Technique = "HeightScene";
+           // canoa.Technique = "HeightScene";
             barcoJugador.setEffect(effect);
             barcoJugador.setTechnique("HeightScene");
         }
@@ -106,10 +101,11 @@ namespace AlumnoEjemplos.BarbaAlpha
             // Cargar variables de shader, por ejemplo el tiempo transcurrido.
             effect.SetValue("time", time);
             effect.SetValue("matWorldViewProj", device.Transform.World * device.Transform.View * device.Transform.Projection);
+                       
             effect.Technique = "HeightScene";
-            effect.Technique = "RenderScene";
-
             barcoJugador.render(elapsedTime);
+
+            effect.Technique = "RenderScene";
             terreno.render();
 
             //Actualizar posicion de cámara
