@@ -81,18 +81,11 @@ namespace AlumnoEjemplos.BarbaAlpha
             terreno.Effect = effect;
             terreno.Technique = "RenderScene";
 
-            // inicializo el render target
-            renderTarget = new Texture(d3dDevice, d3dDevice.PresentationParameters.BackBufferWidth
-                    , d3dDevice.PresentationParameters.BackBufferHeight, 1, Usage.RenderTarget,
-                        Format.X8R8G8B8, Pool.Default);
-
 
             //Centrar camara rotacional respecto a la canoa
             GuiController.Instance.RotCamera.Enable = true;
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox);
 
-            canoa.Effect = effect;
-            canoa.Technique = "HeightScene";
             barcoJugador.setEffect(effect);
             barcoJugador.setTechnique("HeightScene");
         }
@@ -110,26 +103,8 @@ namespace AlumnoEjemplos.BarbaAlpha
             
             effect.Technique = "RenderScene";
             terreno.render();
-            
 
-            Vector3 movement = new Vector3(0, 0, 0);
-
-            if (input.keyDown(Key.Up))
-                movement.Z = -1;
-            if (input.keyDown(Key.Down))
-                 movement.Z = 1;
-            if (input.keyDown(Key.Right))
-            {
-                movement.X = -1;
-            }
-            if (input.keyDown(Key.Left))
-            {
-                movement.X = 1;
-            }
-
-            canoa.move(movement);
-
-            canoa.render();
+            barcoJugador.render(elapsedTime);
 
             //Actualizar posicion de cámara
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox);
