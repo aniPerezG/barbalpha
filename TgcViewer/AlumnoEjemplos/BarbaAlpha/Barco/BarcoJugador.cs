@@ -22,6 +22,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             var loader = new TgcSceneLoader();
             var escenaCanion = loader.loadSceneFromFile(pathEscena); // escena del cañon
             this.barco = escenaCanion.Meshes[0];
+            this.barco.Position = posicion_inicial;
             this.BoundingBox = this.barco.BoundingBox;
         }
         

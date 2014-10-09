@@ -140,6 +140,19 @@ namespace AlumnoEjemplos.BarbaAlpha
             skyBox.render();
             //barcoIA.render(elapsedTime);
 
+            bool colision = false;
+            foreach (TgcMesh cara in skyBox.Faces)
+            {
+                TgcCollisionUtils.BoxBoxResult result = TgcCollisionUtils.classifyBoxBox(barcoJugador.barco.BoundingBox, cara.BoundingBox);
+                if (result == TgcCollisionUtils.BoxBoxResult.Adentro || result == TgcCollisionUtils.BoxBoxResult.Atravesando)
+                {
+                    colision = true;
+                    break;
+                }
+            }
+
+            if (colision) barcoJugador.velocidad = 0;
+
             //Actualizar posicion de cámara
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox);
             GuiController.Instance.CurrentCamera.updateCamera();

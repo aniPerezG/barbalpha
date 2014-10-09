@@ -66,7 +66,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.direccion = new Direccion();
             this.escena = loader.loadSceneFromFile(pathEscena);
             this.agua = oceano;
-            this.Position = posicionInicial;
             this.friccion = 5000f;
         }
 
