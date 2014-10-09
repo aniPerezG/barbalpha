@@ -55,15 +55,34 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             barco.rotateY(rotAngle);
         }
 
+        protected void acelerar(float aceleracion)
+        {
+            velocidad += aceleracion; 
+        }
+
+
         protected virtual void moverYVirar(float elapsedTime)
         {
             this.time += elapsedTime;
             TgcD3dInput input = GuiController.Instance.D3dInput;
 
+            if (velocidad != 0)
+            {
+
+                if (velocidad * friccion > 0)
+                {
+                    friccion *= (-1);
+                }
+
+                velocidad += friccion * elapsedTime * elapsedTime / 2;
+            }
+
             if (input.keyDown(Key.Up))
-                this.moveOrientedY(-1);
+                this.acelerar(-1);
+                this.moveOrientedY(velocidad * elapsedTime);
             if (input.keyDown(Key.Down))
-                this.moveOrientedY(1);
+                this.acelerar(1);
+                this.moveOrientedY(velocidad * elapsedTime);
             if (input.keyDown(Key.Right))
             {
                 direccion.haciaLaDerecha();
@@ -76,6 +95,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             }
             if (input.keyDown(Key.Space))
                 this.disparar(elapsedTime);
+
             /*
             float posY = 3 * (float)Math.Sin(time + barco.Position.X) * (float)Math.Cos(time + barco.Position.Z)
                            + (float)Math.Cos(barco.Position.X + time) + (float)Math.Sin(barco.Position.Y + time);

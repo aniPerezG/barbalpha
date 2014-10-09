@@ -17,6 +17,8 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
     public abstract class Barco : ITransformObject {
 
         public int puntaje; // contador de disparos exitosos
+        public float velocidad = 0;
+        public float friccion = 0;
         public Barco enemy { set; get; } // barco enemigo al que se ataca o del que se defiende
         public Direccion direccion;
         public TgcScene escena; //escena donde existe el barco
@@ -65,6 +67,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.escena = loader.loadSceneFromFile(pathEscena);
             this.agua = oceano;
             this.Position = posicionInicial;
+            this.friccion = 5000f;
         }
 
         protected void disparar(float elapsedTime) {
