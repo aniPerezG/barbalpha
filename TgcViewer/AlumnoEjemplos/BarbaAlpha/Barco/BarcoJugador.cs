@@ -76,9 +76,10 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             }
             if (input.keyDown(Key.Space))
                 this.disparar(elapsedTime);
-
-            float posY = 3 * (float)Math.Cos(time + 100);
-            this.barco.move(new Vector3(0, ((posY) - barco.Position.Y), 0));
+            /*
+            float posY = 3 * (float)Math.Sin(time + barco.Position.X) * (float)Math.Cos(time + barco.Position.Z)
+                           + (float)Math.Cos(barco.Position.X + time) + (float)Math.Sin(barco.Position.Y + time);
+            this.barco.move(new Vector3(0, ((posY) - barco.Position.Y), 0));*/
         }
 
         public override void render(float elapsedTime)   {

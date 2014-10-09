@@ -22,6 +22,9 @@ sampler2D diffuseMap = sampler_state
 
 float time = 0;
 
+float amplitud;
+float frecuencia;
+
 /**************************************************************************************/
 /* RenderScene */
 /**************************************************************************************/
@@ -34,6 +37,13 @@ struct VS_INPUT
    float2 Texcoord : TEXCOORD0;
 };
 
+
+struct VS_INPUT_BARCO
+{
+	float4 Position : POSITION0;
+	float4 Color : COLOR0;
+	float2 Texcoord : TEXCOORD0;
+};
 
 //Output del Vertex Shader
 struct VS_OUTPUT 
@@ -51,11 +61,11 @@ VS_OUTPUT vs_main( VS_INPUT Input )
    VS_OUTPUT Output;
    
    //Animar Posicion
-   float X = Input.Position.x/100;
+   float X = Input.Position.x/frecuencia;
    float Y = Input.Position.y;
-   float Z = Input.Position.z/100;
+   float Z = Input.Position.z/frecuencia;
   
-   Input.Position.y = (sin(X+time)*cos(Z+time) + sin(Z+time) + cos(X+time))*10 ;
+   Input.Position.y = (sin(X+time)*cos(Z+time) + sin(Z+time) + cos(X+time))*amplitud ;
 
 
    //Proyectar posicion
@@ -95,16 +105,19 @@ technique RenderScene
 
 //*************************************************************
 
-VS_OUTPUT vs_heightMap(VS_INPUT Input)
+VS_OUTPUT vs_heightMap(VS_INPUT_BARCO Input)
 {
 	VS_OUTPUT Output;
 
 	
 	//Animar Posicion
-	float X = Input.Position.x / 100;
-	float Z = Input.Position.z / 100;
+	float X = Input.Position.x / frecuencia;
+	float Z = Input.Position.z / frecuencia;
+	float Y = Input.Position.y;
 
-	Input.Position.y += (sin(X + time)*cos(Z + time) + sin(Z + time) + cos(X + time)) * 10 + 10;
+	//a cada vertice de la canoa le sumo la altura del agua, mas 10 que es el "fondo" de la canoa
+	Input.Position.y += 10 + (sin(X + time)*cos(Z + time) + sin(Z + time) + cos(X + time))*amplitud;
+
 	
 	//Proyectar posicion
 	Output.Position = mul(Input.Position, matWorldViewProj);

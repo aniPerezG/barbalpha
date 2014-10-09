@@ -93,6 +93,10 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             barcoIA.setEffect(effect);
             barcoIA.setTechnique("HeightScene");
+
+            GuiController.Instance.Modifiers.addFloat("alturaOlas", 5f, 30f, 10f);
+            GuiController.Instance.Modifiers.addFloat("frecuenciaOlas", 50f, 300f, 100f);
+
         }
 
         public override void render(float elapsedTime)
@@ -102,15 +106,23 @@ namespace AlumnoEjemplos.BarbaAlpha
             Microsoft.DirectX.Direct3D.Device device = GuiController.Instance.D3dDevice;
             time += elapsedTime;
 
+            float alturaOlas = (float)GuiController.Instance.Modifiers["alturaOlas"];
+            float frecuenciaOlas = (float)GuiController.Instance.Modifiers["frecuenciaOlas"];
+
             // Cargar variables de shader, por ejemplo el tiempo transcurrido.
             effect.SetValue("time", time);
             effect.SetValue("matWorldViewProj", device.Transform.World * device.Transform.View * device.Transform.Projection);
-            
+            effect.SetValue("amplitud", alturaOlas);
+            effect.SetValue("frecuencia", frecuenciaOlas);
+            //effect.SetValue("centroBarco", barcoJugador.centro);
+
+
             effect.Technique = "RenderScene";
             terreno.render();
 
+            effect.Technique = "HeightScene";
             barcoJugador.render(elapsedTime);
-            barcoIA.render(elapsedTime);
+            //barcoIA.render(elapsedTime);
 
             //Actualizar posicion de cámara
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox);
