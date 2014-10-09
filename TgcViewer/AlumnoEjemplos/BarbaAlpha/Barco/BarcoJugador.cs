@@ -16,6 +16,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         public TgcMesh barco;
         public TgcBoundingBox BoundingBox;
+        public float time = 0;
 
         public BarcoJugador(Vector3 posicion_inicial, marAbierto oceano, string pathEscena) : base (posicion_inicial, oceano, pathEscena) {
             var loader = new TgcSceneLoader();
@@ -56,6 +57,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         protected virtual void moverYVirar(float elapsedTime)
         {
+            this.time += elapsedTime;
             TgcD3dInput input = GuiController.Instance.D3dInput;
 
             if (input.keyDown(Key.Up))
@@ -74,6 +76,9 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             }
             if (input.keyDown(Key.Space))
                 this.disparar(elapsedTime);
+
+            float posY = 3 * (float)Math.Cos(time + 100);
+            this.barco.move(new Vector3(0, ((posY) - barco.Position.Y), 0));
         }
 
         public override void render(float elapsedTime)   {

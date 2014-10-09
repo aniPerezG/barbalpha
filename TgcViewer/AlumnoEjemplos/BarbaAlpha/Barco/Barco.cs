@@ -73,7 +73,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         }
 
         public Vector3 vectorNormalA(Vector3 vector)
-        {
+        {   // FIXME deberia depender de la rotacion del barco y no del desplazamiento
             float offset = 1;
             var vecAux = new Vector3(vector.X, vector.Y, vector.Z + offset);
             vecAux = Vector3.Cross(vector, vecAux);

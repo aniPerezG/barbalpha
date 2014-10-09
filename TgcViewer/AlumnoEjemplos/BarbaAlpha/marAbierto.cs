@@ -27,6 +27,7 @@ namespace AlumnoEjemplos.BarbaAlpha
         TgcSimpleTerrain terreno;
         Texture renderTarget;
         BarcoJugador barcoJugador;
+        BarcoIA barcoIA;
         string heightmap;
         string textura;
         float scaleXZ;
@@ -61,8 +62,9 @@ namespace AlumnoEjemplos.BarbaAlpha
             Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
             TgcSceneLoader loader = new TgcSceneLoader();
 
-            barcoJugador = new BarcoJugador(new Vector3(20, 9, 20), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
-            canoa = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
+            barcoJugador = new BarcoJugador(new Vector3(0, 0, 0), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
+            barcoIA = new BarcoIA(new Vector3(4, 0, 4), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml", barcoJugador);
+            //canoa = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
 
             string shaderFolder = GuiController.Instance.AlumnoEjemplosMediaDir +"\\shaders";
             time = 0;
@@ -88,6 +90,9 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             barcoJugador.setEffect(effect);
             barcoJugador.setTechnique("HeightScene");
+
+            barcoIA.setEffect(effect);
+            barcoIA.setTechnique("HeightScene");
         }
 
         public override void render(float elapsedTime)
@@ -105,6 +110,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             terreno.render();
 
             barcoJugador.render(elapsedTime);
+            barcoIA.render(elapsedTime);
 
             //Actualizar posicion de cámara
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox);
