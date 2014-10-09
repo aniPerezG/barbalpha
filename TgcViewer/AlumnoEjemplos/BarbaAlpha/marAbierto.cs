@@ -138,7 +138,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect.Technique = "HeightScene";
             barcoJugador.render(elapsedTime);
             skyBox.render();
-            //barcoIA.render(elapsedTime);
+            barcoIA.render(elapsedTime);
 
             bool colision = false;
             foreach (TgcMesh cara in skyBox.Faces)

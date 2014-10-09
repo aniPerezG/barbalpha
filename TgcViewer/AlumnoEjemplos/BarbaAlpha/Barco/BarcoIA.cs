@@ -13,13 +13,13 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 {
     class BarcoIA : Barco
     {
-        private const float distancia_minima = 4;
+        private const float distancia_minima = 500;
         private const float frecuencia_disparo = 3;
         protected float tiempo = 0;
         private Vector3 direccion_normal = new Vector3(0, 0, -1);
         private Vector3 posicion_inicial;
         private Vector3 posicion_enemigo = new Vector3(0, 0, 0);
-        private bool estasMuyCerca = false;
+        private bool estasMuyCerca = true;
         private Barco enemigo; // el enemigo es el barco del jugador
         private TgcMesh barco; // la malla de este barco
 
@@ -33,7 +33,10 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         }
         public override void setTechnique(string tecnica) { }
         public override void setEffect(Microsoft.DirectX.Direct3D.Effect efecto) { }
-        public override void moveOrientedY(float movement) { }
+        public override void moveOrientedY(float movement) 
+        {
+            this.barco.moveOrientedY(movement);
+        }
 
         public BarcoIA(Vector3 posicionInicial, marAbierto oceano, string pathEscena, BarcoJugador enemigo)
             : base(posicionInicial, oceano, pathEscena)
@@ -108,13 +111,18 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         public void moverYVirar(float elapsedTime)
         {   // El barco se mueve manteniendo una mínima distancia 'd' respecto de la posición del barco enemigo
             tiempo += elapsedTime;
+            
             posicion_enemigo = enemigo.posicion();
             this.evaluarDistanciaDeEnemigo();
+            //base.aplicarFriccion(elapsedTime);
+            
             if (estasMuyCerca)
-            {   // Debo virar en dirección al destino, moverme hacia esa posición y virar en posicion de disparo
-                this.virarHaciaDestino();
+            {   // Debo virar en dirección al destino, moverme hacia esa posición y virar en posicion de disparo*/
+                /*this.virarHaciaDestino();
                 this.move(this.obtenerMovimiento());
-                this.apuntarAEnemigo();
+                this.apuntarAEnemigo();*/ 
+                this.acelerar(1);
+                this.moveOrientedY(velocidad * elapsedTime); //velocidad * elapsedTime);
             }
             if ((tiempo % frecuencia_disparo) == 0)
             {   

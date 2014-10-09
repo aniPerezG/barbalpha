@@ -116,7 +116,27 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             else return velocidadAbsolutaRotacion * (-1);
         }
 
-        public virtual void render(float elapsedTime)    {
+        protected void acelerar(float aceleracion)
+        {
+            velocidad += aceleracion;
+        }
+
+        protected void aplicarFriccion(float elapsedTime)
+        {
+            if (velocidad != 0)
+            {
+
+                if (velocidad * friccion > 0)
+                {
+                    friccion *= (-1);
+                }
+
+                velocidad += friccion * elapsedTime * elapsedTime / 2;
+            }
+        }
+
+        public virtual void render(float elapsedTime)    
+        {
             this.verificarDisparos(elapsedTime); // evalúa el estado de los misiles disparados
             this.eliminarMisiles(); // elimina aquellos misiles que terminaron su trayectoria
         }

@@ -56,27 +56,12 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             barco.rotateY(rotAngle);
         }
 
-        protected void acelerar(float aceleracion)
-        {
-            velocidad += aceleracion; 
-        }
-
-
         protected virtual void moverYVirar(float elapsedTime)
         {
             this.time += elapsedTime;
             TgcD3dInput input = GuiController.Instance.D3dInput;
 
-            if (velocidad != 0)
-            {
-
-                if (velocidad * friccion > 0)
-                {
-                    friccion *= (-1);
-                }
-
-                velocidad += friccion * elapsedTime * elapsedTime / 2;
-            }
+            base.aplicarFriccion(elapsedTime);
 
             if (input.keyDown(Key.Up))
                 this.acelerar(-1);
