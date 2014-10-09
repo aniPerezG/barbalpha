@@ -24,7 +24,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.barco = escenaCanion.Meshes[0];
             this.BoundingBox = this.barco.BoundingBox;
         }
-
+        
         public override void setEffect(Microsoft.DirectX.Direct3D.Effect efecto)
         {
             barco.Effect = efecto;
