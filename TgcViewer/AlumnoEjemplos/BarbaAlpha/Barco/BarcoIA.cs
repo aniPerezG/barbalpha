@@ -121,7 +121,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
                 /*this.virarHaciaDestino();
                 this.move(this.obtenerMovimiento());
                 this.apuntarAEnemigo();*/ 
-                this.acelerar(1);
+                this.acelerar(-1);
                 this.moveOrientedY(velocidad * elapsedTime); //velocidad * elapsedTime);
             }
             if ((tiempo % frecuencia_disparo) == 0)
