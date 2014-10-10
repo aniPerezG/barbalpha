@@ -21,22 +21,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private Vector3 posicion_enemigo = new Vector3(0, 0, 0);
         private bool estasMuyCerca = true;
         private Barco enemigo; // el enemigo es el barco del jugador
-        private TgcMesh barco; // la malla de este barco
-
-        public override Vector3 posicion()
-        {
-            throw new NotImplementedException();
-        }
-        protected override void virar(Direccion direccion, float tiempo)
-        {
-            throw new NotImplementedException();
-        }
-        public override void setTechnique(string tecnica) { }
-        public override void setEffect(Microsoft.DirectX.Direct3D.Effect efecto) { }
-        public override void moveOrientedY(float movement) 
-        {
-            this.barco.moveOrientedY(movement);
-        }
 
         public BarcoIA(Vector3 posicionInicial, marAbierto oceano, string pathEscena, BarcoJugador enemigo)
             : base(posicionInicial, oceano, pathEscena)
@@ -67,11 +51,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
             if (distLeft < distRight) this.rotate(new Vector3(1, 0, 0));
             else this.rotate(new Vector3(-1, 0, 0));
-        }
-
-        public void move(Vector3 movimiento)
-        {   // Muevo el barco segun indica el vector movimiento
-            this.barco.move(movimiento);
         }
 
         private Vector3 calcularDireccion()

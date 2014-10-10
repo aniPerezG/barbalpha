@@ -22,6 +22,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         public Barco enemy { set; get; } // barco enemigo al que se ataca o del que se defiende
         public Direccion direccion;
         public TgcScene escena; //escena donde existe el barco
+        public TgcMesh barco; // malla del barco
         private List<Misil> misilesDisparados = new List<Misil>(); // misiles ya en el aire
         private List<Misil> misilesAEliminar = new List<Misil>(); // misiles a remover de la escena
         private const float intervalo_entre_misiles = 2.5f; //tiempo entre cada disparo
@@ -35,14 +36,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         public Vector3 Position { get; set; }
         public Matrix Transform { get; set; }
         public bool AutoTransformEnable { get; set; }
-        public abstract void moveOrientedY(float movement);
-        public abstract void setEffect(Microsoft.DirectX.Direct3D.Effect efecto);
-        public abstract void setTechnique(string tecnica);
-        protected abstract void virar(Direccion direccion, float tiempo);
-        public abstract Vector3 posicion();
-        public void move(Vector3 v)  {
-            throw new NotImplementedException();
-        }
+
         public void move(float x, float y, float z)  {
             throw new NotImplementedException();
         }
@@ -69,6 +63,48 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.friccion = 10000f;
         }
 
+        public void move(Vector3 v)
+        {
+            barco.move(v);
+        }
+
+        public TgcBoundingBox BoundingBox()
+        {
+            return barco.BoundingBox;
+        }
+
+        public void rotarSobreY(float angulo)
+        {
+            barco.rotateY(angulo);
+        }
+
+        public Vector3 posicion()
+        {
+            return barco.Position;
+        }
+        
+        public void setEffect(Microsoft.DirectX.Direct3D.Effect efecto)
+        {
+            barco.Effect = efecto;
+        }
+
+        public void setTechnique(string tecnica)
+        {
+            barco.Technique = tecnica;
+        }
+       
+        public void moveOrientedY(float movement)
+        {
+            barco.moveOrientedY(movement); 
+        }
+
+        protected void virar(Direccion direccion, float tiempo)
+        {
+            var velocidad = this.calcularVelocidadDeRotacion(direccion);
+            var rotAngle = Geometry.DegreeToRadian(velocidad * tiempo);
+            barco.rotateY(rotAngle);
+        }
+        
         protected void disparar(float elapsedTime) {
             var nuevoMisil = new Misil(this.posicion(), vectorNormalA(this.posicion()));
             misilesDisparados.Add(nuevoMisil);

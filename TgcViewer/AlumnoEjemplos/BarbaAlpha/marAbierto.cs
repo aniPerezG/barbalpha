@@ -101,7 +101,7 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             //Centrar camara rotacional respecto a la canoa
             GuiController.Instance.RotCamera.Enable = true;
-            GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox);
+            GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
 
             barcoJugador.setEffect(effect);
             barcoJugador.setTechnique("HeightScene");
@@ -154,7 +154,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             if (colision) barcoJugador.velocidad = 0;
 
             //Actualizar posicion de cámara
-            GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox);
+            GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
             GuiController.Instance.CurrentCamera.updateCamera();
 
         }
