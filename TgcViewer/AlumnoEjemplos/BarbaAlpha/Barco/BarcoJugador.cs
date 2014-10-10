@@ -14,7 +14,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 {
     class BarcoJugador : Barco  {
 
-        public float time = 0;
+        private float time = 0;
 
         public BarcoJugador(Vector3 posicion_inicial, marAbierto oceano, string pathEscena) : base (posicion_inicial, oceano, pathEscena) {
             var loader = new TgcSceneLoader();
@@ -25,21 +25,12 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         protected virtual void moverYVirar(float elapsedTime)
         {
-            this.time += elapsedTime;
+            time += elapsedTime;
             TgcD3dInput input = GuiController.Instance.D3dInput;
 
-            base.aplicarFriccion(elapsedTime);
-
-            if (input.keyDown(Key.Up))
-            {
-                this.acelerar(-1);
-                this.moveOrientedY(velocidad * elapsedTime);
-            }
-            if (input.keyDown(Key.Down))
-            {
-                this.acelerar(1);
-                this.moveOrientedY(velocidad * elapsedTime);
-            }
+            if (input.keyDown(Key.Up)) this.acelerar(-1);
+            if (input.keyDown(Key.Down)) this.acelerar(1);
+            if (input.keyDown(Key.Space)) this.disparar(elapsedTime);
             if (input.keyDown(Key.Right))
             {
                 direccion.haciaLaDerecha();
@@ -50,7 +41,9 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
                 direccion.haciaLaIzquierda();
                 this.virar(direccion, elapsedTime);
             }
-            if (input.keyDown(Key.Space)) this.disparar(elapsedTime);
+
+            // siempre se está en movimiento
+            this.moveOrientedY(velocidad * elapsedTime);
         }
 
         public override void render(float elapsedTime)   {

@@ -34,12 +34,12 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
     public Vector3 Rotation { get; set; }
     public Vector3 Scale { get; set; }
     
-    public Misil(Vector3 posicionBarco, Vector3 direccionCanion) {
+    public Misil(Barco barco) {
         TgcSceneLoader loader = new TgcSceneLoader();
         var escena = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Objetos\\BarrilPolvora\\BarrilPolvora-TgcScene.xml");
         this.mesh = escena.Meshes[0];
-        this.mesh.Position = new Vector3(posicionBarco.X, posicionBarco.Y + 5, posicionBarco.Z);
-        this.mesh.Rotation = direccionCanion;
+        this.mesh.Position = new Vector3(barco.posicion().X, barco.posicion().Y + 5, barco.posicion().Z);
+        this.mesh.Rotation = new Vector3(0, 0, 1);
     }
 
     public void move(Vector3 v) {

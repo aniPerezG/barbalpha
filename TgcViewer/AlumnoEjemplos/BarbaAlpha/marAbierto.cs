@@ -136,9 +136,15 @@ namespace AlumnoEjemplos.BarbaAlpha
             terreno.render();
 
             effect.Technique = "HeightScene";
+
+            // render de barcos
             barcoJugador.render(elapsedTime);
-            skyBox.render();
             barcoIA.render(elapsedTime);
+
+            // muevo el SkyBox para simular espacio infinito
+            skyBox.Center = barcoJugador.posicion();
+            skyBox.updateValues();
+            skyBox.render();
 
             bool colision = false;
             foreach (TgcMesh cara in skyBox.Faces)

@@ -25,7 +25,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         public TgcMesh barco; // malla del barco
         private List<Misil> misilesDisparados = new List<Misil>(); // misiles ya en el aire
         private List<Misil> misilesAEliminar = new List<Misil>(); // misiles a remover de la escena
-        private const float intervalo_entre_misiles = 2.5f; //tiempo entre cada disparo
         private const float velocidadAbsolutaRotacion = 40f;
         private readonly marAbierto agua; // terreno sobre el que se navega
         protected Vector3 direccion_disparos;
@@ -63,25 +62,26 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.friccion = 10000f;
         }
 
-        public void move(Vector3 v)
-        {
-            barco.move(v);
-        }
-
         public TgcBoundingBox BoundingBox()
         {
             return barco.BoundingBox;
-        }
-
-        public void rotarSobreY(float angulo)
-        {
-            barco.rotateY(angulo);
         }
 
         public Vector3 posicion()
         {
             return barco.Position;
         }
+        
+        public void move(Vector3 v)
+        {
+            barco.move(v);
+        }
+        
+        public void rotarSobreY(float angulo)
+        {
+            barco.rotateY(angulo);
+        }
+
         
         public void setEffect(Microsoft.DirectX.Direct3D.Effect efecto)
         {
@@ -106,7 +106,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         }
         
         protected void disparar(float elapsedTime) {
-            var nuevoMisil = new Misil(this.posicion(), vectorNormalA(this.posicion()));
+            var nuevoMisil = new Misil(this);
             misilesDisparados.Add(nuevoMisil);
         }
 
@@ -175,6 +175,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
             this.verificarDisparos(elapsedTime); // evalúa el estado de los misiles disparados
             this.eliminarMisiles(); // elimina aquellos misiles que terminaron su trayectoria
+            this.aplicarFriccion(elapsedTime);
         }
         public virtual void close()
         {
