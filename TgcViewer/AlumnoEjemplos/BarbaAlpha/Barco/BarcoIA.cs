@@ -15,10 +15,9 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
     {
         private const float distancia_minima = 500;
         private const float frecuencia_disparo = 3;
-        protected float tiempo = 0;
         private Vector3 direccion_normal = new Vector3(0, 0, -1);
-        private Vector3 posicion_inicial;
-        private Vector3 posicion_enemigo = new Vector3(0, 0, 0);
+        private Vector3 posicion_anterior;
+        private Vector3 posicion_enemigo;
         private bool estasMuyCerca = true;
         private Barco enemigo; // el enemigo es el barco del jugador
 
@@ -28,8 +27,9 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             var loader = new TgcSceneLoader();
             var escenaCanion = loader.loadSceneFromFile(pathEscena);
             this.barco = escenaCanion.Meshes[0];
-            this.posicion_inicial = this.barco.Position = posicionInicial;
+            this.barco.Position = posicionInicial;
             this.enemigo = enemigo;
+            this.direccion.haciaLaDerecha();
         }
 
         public void rotate(Vector3 rotacion)
@@ -42,10 +42,10 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         public void virarHaciaDestino() 
         {   // Debería virar el barco hasta alinearse en la direccion propuesta
             direccion_normal.Normalize();
-            calcularDireccion().Normalize();
+            obtenerDireccionAEnemigo().Normalize();
 
             double angOrg = Math.Atan2(direccion_normal.Z, direccion_normal.X) + 2 * Math.PI;
-            double angDst = Math.Atan2(calcularDireccion().Z, calcularDireccion().X) + 2 * Math.PI;
+            double angDst = Math.Atan2(obtenerDireccionAEnemigo().Z, obtenerDireccionAEnemigo().X) + 2 * Math.PI;
             double distLeft = angOrg > angDst ? 2 * Math.PI - angOrg + angDst : angDst - angOrg;
             double distRight = angOrg < angDst ? 2 * Math.PI - angDst + angOrg : angOrg - angDst;
 
@@ -53,7 +53,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             else this.rotate(new Vector3(-1, 0, 0));
         }
 
-        private Vector3 calcularDireccion()
+        private Vector3 obtenerDireccionAEnemigo()
         {   // Retorna el vector director de la recta que pasa por la posición de este barco y
             // por la posición del barco enemigo
             return new Vector3(posicion_enemigo.X - this.barco.Position.X,
@@ -64,21 +64,30 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private Vector3 obtenerDestino()
         {   // Retorna un punto en el espacio tomando un múltiplo del vector director 
             // sumando el punto independiente de la recta
-            return new Vector3(2 * calcularDireccion().X + this.barco.Position.X,
-                               2 * calcularDireccion().Y + this.barco.Position.Y,
-                               2 * calcularDireccion().Z + this.barco.Position.Z);
+            return new Vector3(2 * obtenerDireccionAEnemigo().X + this.barco.Position.X,
+                               2 * obtenerDireccionAEnemigo().Y + this.barco.Position.Y,
+                               2 * obtenerDireccionAEnemigo().Z + this.barco.Position.Z);
         }
 
-        public Vector3 obtenerMovimiento()
+        private Vector3 obtenerMovimiento()
         {   // Retorna el vector diferencia entre el destino del barco y la posición actual
             return new Vector3(obtenerDestino().X - this.barco.Position.X,
                                obtenerDestino().Y - this.barco.Position.Y,
                                obtenerDestino().Z - this.barco.Position.Z);
         }
 
+        private Vector3 obtenerDireccionNormal()
+        {
+            var normal = new Vector3(this.posicion().X - this.posicion_anterior.X,
+                                     this.posicion().Y - this.posicion_anterior.Y,
+                                     this.posicion().Z - this.posicion_anterior.Z); 
+            normal.Normalize();
+            return normal;
+        }
+
         public void evaluarDistanciaDeEnemigo()
         {
-            if (Vector3.Length(calcularDireccion()) > distancia_minima) estasMuyCerca = false;
+            if (Vector3.Length(obtenerDireccionAEnemigo()) > distancia_minima) estasMuyCerca = false;
             else estasMuyCerca = true;
         }
 
@@ -87,23 +96,22 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.barco.rotateY(FastMath.PI_HALF);
         }
 
-        public void moverYVirar(float elapsedTime)
+        protected override void moverYVirar(float elapsedTime)
         {   // El barco se mueve manteniendo una mínima distancia 'd' respecto de la posición del barco enemigo
+            
             tiempo += elapsedTime;
-            
-            posicion_enemigo = enemigo.posicion();
+            this.posicion_anterior = this.barco.Position;
+            this.posicion_enemigo = enemigo.posicion();
             this.evaluarDistanciaDeEnemigo();
-            //base.aplicarFriccion(elapsedTime);
-            
+
             if (estasMuyCerca)
             {   // Debo virar en dirección al destino, moverme hacia esa posición y virar en posicion de disparo*/
-                /*this.virarHaciaDestino();
-                this.move(this.obtenerMovimiento());
-                this.apuntarAEnemigo();*/ 
                 this.acelerar(-1);
-                this.moveOrientedY(velocidad * elapsedTime); //velocidad * elapsedTime);
+                this.virar(direccion, elapsedTime);
+                this.moveOrientedY(velocidad * elapsedTime);
             }
-            if ((tiempo % frecuencia_disparo) == 0)
+            else this.apuntarAEnemigo();
+            if ((Math.Floor(tiempo) % frecuencia_disparo) == 0)
             {   
                 this.disparar(elapsedTime); // disparo cada 'frecuencia_disparo' segundos;
             }
@@ -112,8 +120,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         public override void render(float elapsedTime)
         {
             base.render(elapsedTime);
-            this.moverYVirar(elapsedTime);
-            this.barco.render();
         }
     }
 }

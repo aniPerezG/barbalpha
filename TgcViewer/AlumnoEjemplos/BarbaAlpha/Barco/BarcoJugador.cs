@@ -14,8 +14,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 {
     class BarcoJugador : Barco  {
 
-        private float time = 0;
-
         public BarcoJugador(Vector3 posicion_inicial, marAbierto oceano, string pathEscena) : base (posicion_inicial, oceano, pathEscena) {
             var loader = new TgcSceneLoader();
             var escenaCanion = loader.loadSceneFromFile(pathEscena); // escena del cañon
@@ -23,9 +21,9 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.barco.Position = posicion_inicial;
         }
 
-        protected virtual void moverYVirar(float elapsedTime)
+        protected override void moverYVirar(float elapsedTime)
         {
-            time += elapsedTime;
+            tiempo += elapsedTime;
             TgcD3dInput input = GuiController.Instance.D3dInput;
 
             if (input.keyDown(Key.Up)) this.acelerar(-1);
@@ -41,15 +39,11 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
                 direccion.haciaLaIzquierda();
                 this.virar(direccion, elapsedTime);
             }
-
-            // siempre se está en movimiento
             this.moveOrientedY(velocidad * elapsedTime);
         }
 
         public override void render(float elapsedTime)   {
             base.render(elapsedTime);
-            this.moverYVirar(elapsedTime);
-            this.barco.render();
         }
 
         public void dispose()      {

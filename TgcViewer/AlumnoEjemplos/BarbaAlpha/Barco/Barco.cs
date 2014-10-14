@@ -17,7 +17,9 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
     public abstract class Barco : ITransformObject {
 
         public int puntaje; // contador de disparos exitosos
+        public float tiempo = 0;
         public float velocidad = 0;
+        public float velocidad_maxima = 40;
         public float friccion = 0;
         public Barco enemy { set; get; } // barco enemigo al que se ataca o del que se defiende
         public Direccion direccion;
@@ -53,6 +55,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
             throw new NotImplementedException();
         }
+        protected abstract void moverYVirar(float elapsedTime);
         
         public Barco(Vector3 posicionInicial, marAbierto oceano, string pathEscena) {
             var loader = new TgcSceneLoader();
@@ -82,7 +85,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             barco.rotateY(angulo);
         }
 
-        
         public void setEffect(Microsoft.DirectX.Direct3D.Effect efecto)
         {
             barco.Effect = efecto;
@@ -108,14 +110,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         protected void disparar(float elapsedTime) {
             var nuevoMisil = new Misil(this);
             misilesDisparados.Add(nuevoMisil);
-        }
-
-        public Vector3 vectorNormalA(Vector3 vector)
-        {   // FIXME deberia depender de la rotacion del barco y no del desplazamiento
-            float offset = 1;
-            var vecAux = new Vector3(vector.X, vector.Y, vector.Z + offset);
-            vecAux = Vector3.Cross(vector, vecAux);
-            return vecAux;
         }
 
         private void eliminarMisiles()
@@ -161,22 +155,29 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
             if (velocidad != 0)
             {
-
-                if (velocidad * friccion > 0)
-                {
-                    friccion *= (-1);
-                }
-
+                if (velocidad * friccion > 0) friccion *= (-1);
                 velocidad += friccion * elapsedTime * elapsedTime / 2;
             }
         }
 
+        protected void controlarVelocidadMaxima() 
+        {
+            var signo = Math.Sign(velocidad);
+            if (Math.Abs(velocidad) > velocidad_maxima) velocidad = velocidad_maxima * signo;
+        }
+       
         public virtual void render(float elapsedTime)    
         {
+            tiempo += elapsedTime;
+            this.barco.render();
+            this.aplicarFriccion(elapsedTime);
+            this.moverYVirar(elapsedTime);
+            this.controlarVelocidadMaxima();
             this.verificarDisparos(elapsedTime); // evalúa el estado de los misiles disparados
             this.eliminarMisiles(); // elimina aquellos misiles que terminaron su trayectoria
-            this.aplicarFriccion(elapsedTime);
         }
+
+        
         public virtual void close()
         {
 
