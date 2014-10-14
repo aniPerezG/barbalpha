@@ -25,6 +25,11 @@ float time = 0;
 float amplitud;
 float frecuencia;
 
+float offsetX;
+float offsetZ;
+float offsetY;
+
+
 /**************************************************************************************/
 /* RenderScene */
 /**************************************************************************************/
@@ -111,9 +116,10 @@ VS_OUTPUT vs_heightMap(VS_INPUT_BARCO Input)
 
 	
 	//Animar Posicion
-	float X = Input.Position.x / frecuencia;
-	float Z = Input.Position.z / frecuencia;
-	float Y = Input.Position.y;
+	float X = (Input.Position.x + offsetX) / frecuencia;
+	float Z = (Input.Position.z + offsetZ) / frecuencia;
+	Input.Position.y += offsetY;
+
 
 	//a cada vertice de la canoa le sumo la altura del agua, mas 10 que es el "fondo" de la canoa
 	Input.Position.y += 10 + (sin(X + time)*cos(Z + time) + sin(Z + time) + cos(X + time))*amplitud;

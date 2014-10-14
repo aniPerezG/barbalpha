@@ -137,6 +137,11 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             effect.Technique = "HeightScene";
 
+            effect.SetValue("offsetX", barcoJugador.posicion().X);
+            effect.SetValue("offsetZ", barcoJugador.posicion().Z);
+            effect.SetValue("offsetY", barcoJugador.posicion().Y);
+
+
             // render de barcos
             barcoJugador.render(elapsedTime);
             barcoIA.render(elapsedTime);
