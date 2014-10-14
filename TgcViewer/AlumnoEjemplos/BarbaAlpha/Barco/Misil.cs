@@ -12,14 +12,12 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 {
     class Misil{
 
-    public float tiempoDeVuelo { set; get; } // cuánto hace que esta volando
-    private float velocidad_inicial_vertical = 10f; // Vo respecto de Y
-    private const int altura_canion = 5; // altura inicial desde donde se realiza el tiro oblicuo
-    private const float gravedad = -0.2f; // sólo afecta el desplazamiento respecto de Y
-    private const float velocidad_inicial_horizontal = -1500f; // Sobre X no hay gravedad, es constante
-    private TgcMesh mesh; // malla del misil
-    private marAbierto oceano;
-    private Vector3 vector3;
+        public float tiempoDeVuelo = 0;
+        private float velocidad_inicial_vertical = 10f; // Vo respecto de Y
+        private const int altura_canion = 5; // altura inicial desde donde se realiza el tiro oblicuo
+        private const float gravedad = -0.2f; // sólo afecta el desplazamiento respecto de Y
+        private const float velocidad_inicial_horizontal = -1500f; // Sobre X no hay gravedad, es constante
+        private TgcMesh mesh; // malla del misil
   
     public TgcBoundingBox BoundingBox
     {
@@ -61,7 +59,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
     public void rotateX(float angulo) {
         throw new NotImplementedException();
     }
-    public void rotateY(float angulo){
+    public void rotateY(float angulo) {
         throw new NotImplementedException();
     }
     public void rotateZ(float angulo) {

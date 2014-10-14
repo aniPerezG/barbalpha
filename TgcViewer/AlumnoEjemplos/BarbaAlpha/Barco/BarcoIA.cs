@@ -39,7 +39,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.barco.rotateZ(rotacion.Z);
         }
 
-        public void virarHaciaDestino() 
+        private void virarHaciaDestino() 
         {   // Debería virar el barco hasta alinearse en la direccion propuesta
             direccion_normal.Normalize();
             obtenerDireccionAEnemigo().Normalize();
@@ -85,15 +85,32 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             return normal;
         }
 
-        public void evaluarDistanciaDeEnemigo()
+        private void evaluarDistanciaDeEnemigo()
         {
             if (Vector3.Length(obtenerDireccionAEnemigo()) > distancia_minima) estasMuyCerca = false;
             else estasMuyCerca = true;
         }
 
-        public void apuntarAEnemigo()
+        private void apuntarAEnemigo()
         {   // Dado que estoy paralelo a la dirección del enemigo, roto 90° para apuntarle
             this.barco.rotateY(FastMath.PI_HALF);
+        }
+
+        private void atacarA(Barco enemigo, float elapsedTime)
+        {
+            if ((Math.Floor(tiempo) % frecuencia_disparo) == 0)
+            {
+                this.disparar(elapsedTime); // disparo cada 'frecuencia_disparo' segundos;
+            }
+        }
+
+        private void navegar(float elapsedTime)
+        {   // El barco se desplaza formando una circunferencia cuyo centro es la posicion del enemigo.
+            // Siempre está apuntando al enemigo, salvo que esté muy cerca.
+
+            this.acelerar(1);
+            this.virar(direccion, elapsedTime/5);
+            this.atacarA(enemigo, elapsedTime);
         }
 
         protected override void moverYVirar(float elapsedTime)
@@ -107,14 +124,9 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             if (estasMuyCerca)
             {   // Debo virar en dirección al destino, moverme hacia esa posición y virar en posicion de disparo*/
                 this.acelerar(-1);
-                this.virar(direccion, elapsedTime);
                 this.moveOrientedY(velocidad * elapsedTime);
             }
-            else this.apuntarAEnemigo();
-            if ((Math.Floor(tiempo) % frecuencia_disparo) == 0)
-            {   
-                this.disparar(elapsedTime); // disparo cada 'frecuencia_disparo' segundos;
-            }
+            else this.navegar(elapsedTime);
         }
 
         public override void render(float elapsedTime)

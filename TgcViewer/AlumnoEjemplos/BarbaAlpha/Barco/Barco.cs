@@ -16,20 +16,22 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 {
     public abstract class Barco : ITransformObject {
 
-        public int puntaje; // contador de disparos exitosos
         public float tiempo = 0;
         public float velocidad = 0;
-        public float velocidad_maxima = 40;
-        public float friccion = 0;
+        public float velocidad_maxima = 100;
         public Barco enemy { set; get; } // barco enemigo al que se ataca o del que se defiende
         public Direccion direccion;
-        public TgcScene escena; //escena donde existe el barco
         public TgcMesh barco; // malla del barco
-        private List<Misil> misilesDisparados = new List<Misil>(); // misiles ya en el aire
+        private Misil ultimoMisil = null;
+        private int puntaje; // contador de disparos exitosos
+        private float friccion = 0;
+        private float intervalo_entre_disparos = 3;
+        private float velocidadAbsolutaRotacion = 40f;
+        private marAbierto agua; // terreno sobre el que se navega
         private List<Misil> misilesAEliminar = new List<Misil>(); // misiles a remover de la escena
-        private const float velocidadAbsolutaRotacion = 40f;
-        private readonly marAbierto agua; // terreno sobre el que se navega
-        protected Vector3 direccion_disparos;
+        private List<Misil> misilesDisparados = new List<Misil>(); // misiles ya en el aire
+        private TgcScene escena; //escena donde existe el barco
+        private Vector3 direccion_disparos;
 
 
         public Vector3 Scale { get; set; }
@@ -117,9 +119,14 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             misilesAEliminar.ForEach((misil) => misilesAEliminar.Remove(misil));
         }
 
+        private bool nuncaDisparo()
+        {
+            return ultimoMisil == null;
+        }
+
         private void verificarDisparos(float elapsedTime)
         {
-            foreach (var misil in this.misilesDisparados)
+            foreach (Misil misil in misilesDisparados)
             {
                 if (misil.teHundisteEn(this.agua))
                 {
@@ -130,10 +137,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
                     misilesAEliminar.Add(misil);
                     leDisteA(this.enemy);
                 }
-                else
-                {
-                    misil.render(elapsedTime);
-                }
+                else if (true) misil.render(elapsedTime);
             }
         }
 
