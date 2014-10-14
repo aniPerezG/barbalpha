@@ -14,7 +14,9 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 {
     class BarcoJugador : Barco  {
 
-        public BarcoJugador(Vector3 posicion_inicial, marAbierto oceano, string pathEscena) : base (posicion_inicial, oceano, pathEscena) {
+        public BarcoJugador(Vector3 posicion_inicial, marAbierto oceano, string pathEscena)
+            : base(posicion_inicial, oceano, pathEscena)
+        {
             var loader = new TgcSceneLoader();
             var escenaCanion = loader.loadSceneFromFile(pathEscena); // escena del cañon
             this.barco = escenaCanion.Meshes[0];
@@ -28,7 +30,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
             if (input.keyDown(Key.Up)) this.acelerar(-1);
             if (input.keyDown(Key.Down)) this.acelerar(1);
-            if (input.keyDown(Key.Space)) this.disparar(elapsedTime);
+            if (input.keyDown(Key.Space)) this.disparar();
             if (input.keyDown(Key.Right))
             {
                 direccion.haciaLaDerecha();

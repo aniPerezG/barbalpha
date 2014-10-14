@@ -10,7 +10,8 @@ using Microsoft.DirectX;
 
 namespace AlumnoEjemplos.BarbaAlpha.Barco
 {
-    class Misil{
+    public class Misil
+    {
 
         public float tiempoDeVuelo = 0;
         private float velocidad_inicial_vertical = 10f; // Vo respecto de Y
@@ -18,73 +19,72 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private const float gravedad = -0.2f; // sólo afecta el desplazamiento respecto de Y
         private const float velocidad_inicial_horizontal = -1500f; // Sobre X no hay gravedad, es constante
         private TgcMesh mesh; // malla del misil
-  
-    public TgcBoundingBox BoundingBox
-    {
-        get { return this.mesh.BoundingBox; }
-    }
-    
-    public Vector3 Position {
-        get { return this.mesh.Position; }
-        set { throw new NotImplementedException(); }
-    }
 
-    public Vector3 Rotation { get; set; }
-    public Vector3 Scale { get; set; }
-    
-    public Misil(Barco barco) {
-        TgcSceneLoader loader = new TgcSceneLoader();
-        var escena = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Objetos\\BarrilPolvora\\BarrilPolvora-TgcScene.xml");
-        this.mesh = escena.Meshes[0];
-        this.mesh.Position = new Vector3(barco.posicion().X, barco.posicion().Y + 5, barco.posicion().Z);
-        this.mesh.Rotation = new Vector3(0, 0, 1);
-    }
 
-    public void move(Vector3 v) {
-        throw new NotImplementedException();
-    }
-    public void move(float x, float y, float z) {
-        throw new NotImplementedException();
-    }
-    public void volarHorizontal(float movement) {
-        this.mesh.moveOrientedY(movement);
-    }
-    public void volarVertical() {
-        this.velocidad_inicial_vertical += gravedad * this.tiempoDeVuelo; // Vyi = g * (t-t0)
-        this.mesh.move(0, this.velocidad_inicial_vertical * this.tiempoDeVuelo + 0.5f * gravedad * this.tiempoDeVuelo * this.tiempoDeVuelo, 0); // y = Vyi * (t-t0) + g/2 * (t-t0)^2 ; g < 0
-    }
-    public void getPosition(Vector3 pos) {
-        throw new NotImplementedException();
-    }
-    public void rotateX(float angulo) {
-        throw new NotImplementedException();
-    }
-    public void rotateY(float angulo) {
-        throw new NotImplementedException();
-    }
-    public void rotateZ(float angulo) {
-        throw new NotImplementedException();
-    }
+        public Misil(Barco barco)
+        {
+            TgcSceneLoader loader = new TgcSceneLoader();
+            TgcScene escena = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Objetos\\BarrilPolvora\\BarrilPolvora-TgcScene.xml");
+            float angulo = FastMath.PI / 2 + barco.getRotacionAcumulada();
+            
+            this.mesh = escena.Meshes[0];
+            this.mesh.Position = barco.posicion();
+            this.rotateY(angulo);
+        }
 
-    public void render(float elapsedTime) {
-        this.tiempoDeVuelo += elapsedTime;
-        this.volarHorizontal(velocidad_inicial_horizontal * elapsedTime);
-        this.volarVertical();
-        this.mesh.render();
-    }
+        public TgcBoundingBox BoundingBox()
+        {
+            return this.mesh.BoundingBox;
+        }
 
-    public bool teHundisteEn(marAbierto oceano) {
-        return this.Position.Y < 0;
-    } 
-      
-    public bool chocasteConBarco(Barco unBarco) {
-        // return TgcCollisionUtils.testAABBAABB(unBarco.BoundingBox, this.mesh.BoundingBox); 
-        return false;
-    }
+        public void rotateY(float angulo)
+        {
+            this.mesh.rotateY(angulo);
+        }
 
-    public void dispose() {
-        this.mesh.dispose();
+        public void move(float x, float y, float z)
+        {
+            this.mesh.move(x, y, z);
+        }
+
+        public void moveOrientedY(float movement)
+        {
+            this.mesh.moveOrientedY(movement);
+        }
+
+        private void volarHorizontal(float movement)
+        {
+            this.moveOrientedY(movement);
+        }
+
+        private void volarVertical()
+        {
+            this.velocidad_inicial_vertical += gravedad * this.tiempoDeVuelo; // Vyi = g * (t-t0)
+            this.move(0, this.velocidad_inicial_vertical * this.tiempoDeVuelo + 0.5f * gravedad * this.tiempoDeVuelo * this.tiempoDeVuelo, 0); // y = Vyi * (t-t0) + g/2 * (t-t0)^2 ; g < 0
+        }
+
+        public void render(float elapsedTime)
+        {
+            this.tiempoDeVuelo += elapsedTime;
+            this.volarHorizontal(velocidad_inicial_horizontal * elapsedTime);
+            this.volarVertical();
+            this.mesh.render();
+        }
+
+        public bool teHundisteEn(marAbierto oceano)
+        {
+            return this.mesh.Position.Y < 0;
+        }
+
+        public bool chocasteConBarco(Barco unBarco)
+        {
+            return TgcCollisionUtils.testAABBAABB(unBarco.BoundingBox(), this.BoundingBox()); 
+        }
+
+        public void dispose()
+        {
+            this.mesh.dispose();
+        }
     }
 }
-    }
 

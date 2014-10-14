@@ -14,59 +14,42 @@ using TgcViewer.Utils.TgcSceneLoader;
 
 namespace AlumnoEjemplos.BarbaAlpha.Barco
 {
-    public abstract class Barco : ITransformObject {
+    public abstract class Barco {
 
         public float tiempo = 0;
         public float velocidad = 0;
         public float velocidad_maxima = 100;
+        public float rotacion_acumulada = 0;
         public Barco enemy { set; get; } // barco enemigo al que se ataca o del que se defiende
-        public Direccion direccion;
+        public Direccion direccion = new Direccion();
         public TgcMesh barco; // malla del barco
-        private Misil ultimoMisil = null;
         private int puntaje; // contador de disparos exitosos
-        private float friccion = 0;
-        private float intervalo_entre_disparos = 3;
+        private float friccion = 10000f;
         private float velocidadAbsolutaRotacion = 40f;
         private marAbierto agua; // terreno sobre el que se navega
         private List<Misil> misilesAEliminar = new List<Misil>(); // misiles a remover de la escena
         private List<Misil> misilesDisparados = new List<Misil>(); // misiles ya en el aire
         private TgcScene escena; //escena donde existe el barco
-        private Vector3 direccion_disparos;
 
 
-        public Vector3 Scale { get; set; }
-        public Vector3 Rotation { get; set; }
-        public Vector3 Position { get; set; }
-        public Matrix Transform { get; set; }
-        public bool AutoTransformEnable { get; set; }
-
-        public void move(float x, float y, float z)  {
-            throw new NotImplementedException();
-        }
-        public void getPosition(Vector3 pos)    {
-            throw new NotImplementedException();
-        }
-        public void rotateX(float angle)    {
-            throw new NotImplementedException();
-        }
-        public void rotateY(float angle)
-        {
-            throw new NotImplementedException();
-        }
-        public void rotateZ(float angle)
-        {
-            throw new NotImplementedException();
-        }
         protected abstract void moverYVirar(float elapsedTime);
         
         public Barco(Vector3 posicionInicial, marAbierto oceano, string pathEscena) {
             var loader = new TgcSceneLoader();
-            this.direccion = new Direccion();
             this.escena = loader.loadSceneFromFile(pathEscena);
             this.agua = oceano;
-            this.friccion = 10000f;
         }
 
+        public float getRotacionAcumulada()
+        {
+            return rotacion_acumulada;
+        }
+
+        public Barco getEnemy()
+        {
+            return enemy;
+        }
+        
         public TgcBoundingBox BoundingBox()
         {
             return barco.BoundingBox;
@@ -76,6 +59,11 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
             return barco.Position;
         }
+
+        public void setEnemy(Barco enemigo)
+        {
+            this.enemy = enemigo;
+        }
         
         public void move(Vector3 v)
         {
@@ -84,6 +72,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         
         public void rotarSobreY(float angulo)
         {
+            this.rotacion_acumulada += angulo;
             barco.rotateY(angulo);
         }
 
@@ -106,10 +95,10 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
             var velocidad = this.calcularVelocidadDeRotacion(direccion);
             var rotAngle = Geometry.DegreeToRadian(velocidad * tiempo);
-            barco.rotateY(rotAngle);
+            this.rotarSobreY(rotAngle);
         }
         
-        protected void disparar(float elapsedTime) {
+        protected void disparar() {
             var nuevoMisil = new Misil(this);
             misilesDisparados.Add(nuevoMisil);
         }
@@ -119,11 +108,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             misilesAEliminar.ForEach((misil) => misilesAEliminar.Remove(misil));
         }
 
-        private bool nuncaDisparo()
-        {
-            return ultimoMisil == null;
-        }
-
         private void verificarDisparos(float elapsedTime)
         {
             foreach (Misil misil in misilesDisparados)
@@ -131,13 +115,15 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
                 if (misil.teHundisteEn(this.agua))
                 {
                     misilesAEliminar.Add(misil);
+                    continue;
                 }
-                else if (misil.chocasteConBarco(this.enemy))
+                else if (misil.chocasteConBarco(this.getEnemy()))
                 {
                     misilesAEliminar.Add(misil);
                     leDisteA(this.enemy);
+                    continue;
                 }
-                else if (true) misil.render(elapsedTime);
+                misil.render(elapsedTime);
             }
         }
 

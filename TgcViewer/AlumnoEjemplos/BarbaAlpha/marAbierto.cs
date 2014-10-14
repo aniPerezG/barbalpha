@@ -25,15 +25,12 @@ namespace AlumnoEjemplos.BarbaAlpha
         Microsoft.DirectX.Direct3D.Effect effect;
         float time;
         TgcSimpleTerrain terreno;
-        Texture renderTarget;
         BarcoJugador barcoJugador;
         BarcoIA barcoIA;
         string heightmap;
         string textura;
         float scaleXZ;
         float scaleY;
-        TgcMesh canoa;
-        TgcScene scene;
         TgcSkyBox skyBox;
 
         
@@ -64,7 +61,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             TgcSceneLoader loader = new TgcSceneLoader();
 
             barcoJugador = new BarcoJugador(new Vector3(0, 0, 0), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
-            barcoIA = new BarcoIA(new Vector3(4, 0, 4), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml", barcoJugador);
+            barcoIA = new BarcoIA(new Vector3(4, 0, 4), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
             //canoa = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
 
             string shaderFolder = GuiController.Instance.AlumnoEjemplosMediaDir +"\\shaders";
@@ -103,9 +100,11 @@ namespace AlumnoEjemplos.BarbaAlpha
             GuiController.Instance.RotCamera.Enable = true;
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
 
+            barcoJugador.setEnemy(barcoIA);
             barcoJugador.setEffect(effect);
             barcoJugador.setTechnique("HeightScene");
 
+            barcoIA.setEnemy(barcoJugador);
             barcoIA.setEffect(effect);
             barcoIA.setTechnique("HeightScene");
 
@@ -150,19 +149,6 @@ namespace AlumnoEjemplos.BarbaAlpha
             skyBox.Center = barcoJugador.posicion();
             skyBox.updateValues();
             skyBox.render();
-
-            bool colision = false;
-            foreach (TgcMesh cara in skyBox.Faces)
-            {
-                TgcCollisionUtils.BoxBoxResult result = TgcCollisionUtils.classifyBoxBox(barcoJugador.barco.BoundingBox, cara.BoundingBox);
-                if (result == TgcCollisionUtils.BoxBoxResult.Adentro || result == TgcCollisionUtils.BoxBoxResult.Atravesando)
-                {
-                    colision = true;
-                    break;
-                }
-            }
-
-            if (colision) barcoJugador.velocidad = 0;
 
             //Actualizar posicion de cámara
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
