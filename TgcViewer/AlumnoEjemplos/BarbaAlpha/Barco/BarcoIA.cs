@@ -16,19 +16,10 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private const float distancia_minima = 500;
         private const float frecuencia_disparo = 3;
         private Vector3 direccion_normal = new Vector3(0, 0, -1);
-        private Vector3 posicion_anterior;
         private bool estasMuyCerca = true;
-        private Barco enemigo; // el enemigo es el barco del jugador
 
         public BarcoIA(Vector3 posicionInicial, marAbierto oceano, string pathEscena)
-            : base (posicionInicial, oceano, pathEscena)
-        {
-            var loader = new TgcSceneLoader();
-            var escenaCanion = loader.loadSceneFromFile(pathEscena);
-            this.barco = escenaCanion.Meshes[0];
-            this.barco.Position = posicionInicial;
-            this.direccion.haciaLaDerecha();
-        }
+            : base(posicionInicial, oceano, pathEscena) { this.direccion.haciaLaDerecha(); }
 
         public Vector3 posicionEnemigo()
         {
@@ -79,15 +70,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
                                obtenerDestino().Z - this.posicion().Z);
         }
 
-        private Vector3 obtenerDireccionNormal()
-        {
-            var normal = new Vector3(this.posicion().X - this.posicion_anterior.X,
-                                     this.posicion().Y - this.posicion_anterior.Y,
-                                     this.posicion().Z - this.posicion_anterior.Z); 
-            normal.Normalize();
-            return normal;
-        }
-
         private void evaluarDistanciaDeEnemigo()
         {
             if (Vector3.Length(obtenerDireccionAEnemigo()) > distancia_minima) estasMuyCerca = false;
@@ -107,6 +89,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private void navegar(float elapsedTime)
         {   // El barco se desplaza formando una circunferencia cuyo centro es la posicion del enemigo.
             // Siempre está apuntando al enemigo, salvo que esté muy cerca.
+            Barco enemigo = this.getEnemy();
 
             this.acelerar(1);
             this.virar(direccion, elapsedTime/5);
@@ -116,10 +99,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         protected override void moverYVirar(float elapsedTime)
         {   // El barco se mueve manteniendo una mínima distancia 'd' respecto de la posición del barco enemigo
             
-            tiempo += elapsedTime;
-            this.posicion_anterior = this.barco.Position;
             this.evaluarDistanciaDeEnemigo();
-
             if (estasMuyCerca)
             {   // Debo virar en dirección al destino, moverme hacia esa posición y virar en posicion de disparo*/
                 this.acelerar(-1);

@@ -32,13 +32,14 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private marAbierto agua; // terreno sobre el que se navega
         private List<Misil> misilesAEliminar = new List<Misil>(); // misiles a remover de la escena
         private List<Misil> misilesDisparados = new List<Misil>(); // misiles ya en el aire
-        private TgcScene escena; //escena donde existe el barco
 
         
         public Barco(Vector3 posicionInicial, marAbierto oceano, string pathEscena) {
-            var loader = new TgcSceneLoader();
-            this.escena = loader.loadSceneFromFile(pathEscena);
-            this.agua = oceano;
+            TgcSceneLoader loader = new TgcSceneLoader();
+            TgcScene escenaCanion = loader.loadSceneFromFile(pathEscena); // escena del cañon
+            this.barco = escenaCanion.Meshes[0];
+            this.setPosition(posicionInicial);
+            this.setAgua(oceano);
         }
 
         protected abstract void moverYVirar(float elapsedTime);
@@ -70,18 +71,33 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         
         public void move(Vector3 v)
         {
-            barco.move(v);
+            this.barco.move(v);
         }
         
         public void rotarSobreY(float angulo)
         {
             this.rotacion_acumulada += angulo;
-            barco.rotateY(angulo);
+            this.barco.rotateY(angulo);
+        }
+
+        public void setAgua(marAbierto oceano)
+        {
+            agua = oceano;
+        }
+
+        public void setFrecuenciaDeDisparos(float frecuencia)
+        {
+            this.frecuencia_disparo = frecuencia;
         }
 
         public void setEffect(Microsoft.DirectX.Direct3D.Effect efecto)
         {
             barco.Effect = efecto;
+        }
+
+        public void setPosition(Vector3 posicion)
+        {
+            this.barco.Position = posicion;
         }
 
         public void setTechnique(string tecnica)
