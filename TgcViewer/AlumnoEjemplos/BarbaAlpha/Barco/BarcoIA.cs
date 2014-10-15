@@ -101,10 +101,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         private void atacarA(Barco enemigo, float elapsedTime)
         {
-            if ((Math.Floor(tiempo) % frecuencia_disparo) == 0)
-            {
-                this.disparar(); // disparo cada 'frecuencia_disparo' segundos;
-            }
+            this.disparar(); // disparo cada 'frecuencia_disparo' segundos;
         }
 
         private void navegar(float elapsedTime)

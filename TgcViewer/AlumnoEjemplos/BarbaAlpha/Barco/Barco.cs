@@ -23,7 +23,10 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         public Barco enemy { set; get; } // barco enemigo al que se ataca o del que se defiende
         public Direccion direccion = new Direccion();
         public TgcMesh barco; // malla del barco
+        private bool canionListo;
         private int puntaje; // contador de disparos exitosos
+        private float tiempo_entre_disparos = 0;
+        private float frecuencia_disparo = 2;
         private float friccion = 10000f;
         private float velocidadAbsolutaRotacion = 40f;
         private marAbierto agua; // terreno sobre el que se navega
@@ -31,14 +34,14 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private List<Misil> misilesDisparados = new List<Misil>(); // misiles ya en el aire
         private TgcScene escena; //escena donde existe el barco
 
-
-        protected abstract void moverYVirar(float elapsedTime);
         
         public Barco(Vector3 posicionInicial, marAbierto oceano, string pathEscena) {
             var loader = new TgcSceneLoader();
             this.escena = loader.loadSceneFromFile(pathEscena);
             this.agua = oceano;
         }
+
+        protected abstract void moverYVirar(float elapsedTime);
 
         public float getRotacionAcumulada()
         {
@@ -93,14 +96,38 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         protected void virar(Direccion direccion, float tiempo)
         {
-            var velocidad = this.calcularVelocidadDeRotacion(direccion);
-            var rotAngle = Geometry.DegreeToRadian(velocidad * tiempo);
+            float velocidad = this.calcularVelocidadDeRotacion(direccion);
+            float rotAngle = Geometry.DegreeToRadian(velocidad * tiempo);
             this.rotarSobreY(rotAngle);
         }
+
+        private void prepararCanion(float elapsedTime)
+        {
+            tiempo_entre_disparos += elapsedTime;
+            if (tiempo_entre_disparos > 1 && FastMath.Floor(tiempo_entre_disparos) % frecuencia_disparo == 0)
+            {
+                tiempo_entre_disparos = 0;
+                canionListo = true;
+            }
+            
+        }
+
+        private void verificarCanion(float elapsedTime)
+        {
+            if (!canionListo)
+            {
+                this.prepararCanion(elapsedTime);
+            }
+        }
         
-        protected void disparar() {
-            var nuevoMisil = new Misil(this);
-            misilesDisparados.Add(nuevoMisil);
+        protected void disparar() 
+        {
+            if (canionListo)
+            {
+                Misil nuevoMisil = new Misil(this);
+                misilesDisparados.Add(nuevoMisil);
+                canionListo = false;
+            }
         }
 
         private void eliminarMisiles()
@@ -152,7 +179,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         protected void controlarVelocidadMaxima() 
         {
-            var signo = Math.Sign(velocidad);
+            int signo = Math.Sign(velocidad);
             if (Math.Abs(velocidad) > velocidad_maxima) velocidad = velocidad_maxima * signo;
         }
        
@@ -163,6 +190,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.aplicarFriccion(elapsedTime);
             this.moverYVirar(elapsedTime);
             this.controlarVelocidadMaxima();
+            this.verificarCanion(elapsedTime);
             this.verificarDisparos(elapsedTime); // evalúa el estado de los misiles disparados
             this.eliminarMisiles(); // elimina aquellos misiles que terminaron su trayectoria
         }
