@@ -83,7 +83,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         private void atacarA(Barco enemigo, float elapsedTime)
         {
-            this.disparar(); // disparo cada 'frecuencia_disparo' segundos;
+            this.disparar();
         }
 
         private void navegar(float elapsedTime)
@@ -93,12 +93,11 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
             this.acelerar(1);
             this.virar(direccion, elapsedTime/5);
-            this.atacarA(enemigo, elapsedTime);
+            //this.atacarA(enemigo, elapsedTime);
         }
 
         protected override void moverYVirar(float elapsedTime)
         {   // El barco se mueve manteniendo una mínima distancia 'd' respecto de la posición del barco enemigo
-            
             this.evaluarDistanciaDeEnemigo();
             if (estasMuyCerca)
             {   // Debo virar en dirección al destino, moverme hacia esa posición y virar en posicion de disparo*/

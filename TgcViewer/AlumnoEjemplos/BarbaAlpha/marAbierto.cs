@@ -133,6 +133,7 @@ namespace AlumnoEjemplos.BarbaAlpha
 
 
             effect.Technique = "RenderScene";
+            
             terreno.render();
 
             effect.Technique = "HeightScene";
@@ -140,14 +141,17 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect.SetValue("offsetX", barcoJugador.posicion().X);
             effect.SetValue("offsetZ", barcoJugador.posicion().Z);
             effect.SetValue("offsetY", barcoJugador.posicion().Y);
-
-
-            // render de barcos
+            
             barcoJugador.render(elapsedTime);
+
+            effect.SetValue("offsetX", barcoIA.posicion().X);
+            effect.SetValue("offsetZ", barcoIA.posicion().Z);
+            effect.SetValue("offsetY", barcoIA.posicion().Y);
+            
             barcoIA.render(elapsedTime);
 
             // muevo el SkyBox para simular espacio infinito
-            skyBox.Center = barcoJugador.posicion();
+            skyBox.Center = new Vector3(barcoJugador.posicion().X, 0, barcoJugador.posicion().Z);
             skyBox.updateValues();
             skyBox.render();
 
