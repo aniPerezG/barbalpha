@@ -170,10 +170,10 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             largo = barcoJugador.BoundingBox().calculateAxisRadius().X * 2;
             ancho = barcoJugador.BoundingBox().calculateAxisRadius().Z * 2;
-            punto1 = aplicarTrigonometrica(barcoJugador.posicion(), radioEnY, time, alturaOlas);
-            posicion2 = barcoJugador.posicion() + new Vector3(largo/3, 0, 0);
+            punto1 = aplicarTrigonometrica(centroBase, radioEnY, time, alturaOlas);
+            posicion2 = centroBase + new Vector3(largo/3, 0, 0);
             punto2 = aplicarTrigonometrica(posicion2, radioEnY, time, alturaOlas);
-            posicion3 = barcoJugador.posicion() + new Vector3(0, 0, ancho/3);
+            posicion3 = centroBase + new Vector3(0, 0, ancho/3);
             punto3 = aplicarTrigonometrica(posicion3, radioEnY, time, alturaOlas);
 
             vector1 = punto2 - punto1;
