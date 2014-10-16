@@ -38,7 +38,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             TgcSceneLoader loader = new TgcSceneLoader();
             TgcScene escenaCanion = loader.loadSceneFromFile(pathEscena); // escena del cañon
             this.barco = escenaCanion.Meshes[0];
-            this.setPosition(posicionInicial);
+            this.setPosicion(posicionInicial);
             this.setAgua(oceano);
         }
 
@@ -62,11 +62,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         public Vector3 posicion()
         {
             return barco.Position;
-        }
-
-        public void setPosicion( Vector3 nueva)
-        {
-            barco.Position = nueva;
         }
 
         public void setEnemy(Barco enemigo)
@@ -105,7 +100,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             barco.Effect = efecto;
         }
 
-        public void setPosition(Vector3 posicion)
+        public void setPosicion(Vector3 posicion)
         {
             this.barco.Position = posicion;
         }

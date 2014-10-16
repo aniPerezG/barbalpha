@@ -52,6 +52,9 @@ namespace AlumnoEjemplos.BarbaAlpha
         Vector3 punto3;
         Vector3 vector1;
         Vector3 vector2;
+
+        //variables necesarias para "Infinitud" del terreno
+        Vector3 posicionAnterior;
         
         // Buffers
         public static CustomVertex.PositionNormalTextured[] _vertices;
@@ -177,7 +180,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             vector2 = punto3 - punto1;
             normalPlano = Vector3.Cross(vector1, vector2);
 
-
+            posicionAnterior = barcoJugador.posicion();
             barcoJugador.setPosicion(new Vector3(barcoJugador.posicion().X, aplicarTrigonometrica(barcoJugador.posicion(), 0, time, alturaOlas).Y - barcoJugador.posicion().Y, barcoJugador.posicion().Z));
             //barcoJugador.setPosicion(aplicarTrigonometrica(barcoJugador.posicion(), radioEnY, t.ime));
 
@@ -209,8 +212,11 @@ namespace AlumnoEjemplos.BarbaAlpha
             barcoIA.render(elapsedTime);
 
             // muevo el SkyBox para simular espacio infinito
-            skyBox.Center = new Vector3(barcoJugador.posicion().X, 0, barcoJugador.posicion().Z);
-            skyBox.updateValues();
+            foreach (TgcMesh cara in skyBox.Faces)
+            {
+                cara.move(barcoJugador.posicion() - posicionAnterior);
+            }
+
             skyBox.render();
 
             //Actualizar posicion de cámara
