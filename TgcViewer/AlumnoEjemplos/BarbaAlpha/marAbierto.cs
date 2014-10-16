@@ -33,6 +33,11 @@ namespace AlumnoEjemplos.BarbaAlpha
         TgcSimpleTerrain terreno;
         TgcSkyBox skyBox;
 
+        //variables necesarias para el render
+        float frecuenciaOlas;
+        float alturaOlas;
+        float frecuenciaDeDisparo;
+        float velocidadMaxima;
         
         // Buffers
         public static CustomVertex.PositionNormalTextured[] _vertices;
@@ -123,10 +128,10 @@ namespace AlumnoEjemplos.BarbaAlpha
             Microsoft.DirectX.Direct3D.Device device = GuiController.Instance.D3dDevice;
             time += elapsedTime;
 
-            float alturaOlas = (float)GuiController.Instance.Modifiers["alturaOlas"];
-            float frecuenciaDeDisparo = (float)GuiController.Instance.Modifiers["frecuenciaDeDisparo"];
-            float frecuenciaOlas = (float)GuiController.Instance.Modifiers["frecuenciaOlas"];
-            float velocidadMaxima = (float)GuiController.Instance.Modifiers["velocidadMaxima"];
+            alturaOlas = (float)GuiController.Instance.Modifiers["alturaOlas"];
+            frecuenciaDeDisparo = (float)GuiController.Instance.Modifiers["frecuenciaDeDisparo"];
+            frecuenciaOlas = (float)GuiController.Instance.Modifiers["frecuenciaOlas"];
+            velocidadMaxima = (float)GuiController.Instance.Modifiers["velocidadMaxima"];
 
             // Cargar variables de shader, por ejemplo el tiempo transcurrido.
             effect.SetValue("time", time);
@@ -141,6 +146,37 @@ namespace AlumnoEjemplos.BarbaAlpha
             terreno.render();
 
             effect.Technique = "HeightScene";
+
+            //-----------------------------------------------------
+            // calculo la ecucacion del plano que esta formada por los puntos cercanos al centro de la base del barco
+            float radioEnY = barcoJugador.BoundingBox().calculateAxisRadius().Y;
+            Vector3 centroBase = barcoJugador.posicion() - new Vector3(0, radioEnY , 0);
+
+            float largo = barcoJugador.BoundingBox().calculateAxisRadius().X * 2;
+            float ancho = barcoJugador.BoundingBox().calculateAxisRadius().Z * 2;
+            Vector3 punto1 = aplicarTrigonometrica(barcoJugador.posicion(), radioEnY, time);
+            Vector3 posicion2 = barcoJugador.posicion() + new Vector3(largo/3, 0, 0);
+            Vector3 punto2 = aplicarTrigonometrica(posicion2, radioEnY, time);
+            Vector3 posicion3 = barcoJugador.posicion() + new Vector3(0, 0, ancho/3);
+            Vector3 punto3 = aplicarTrigonometrica(posicion3, radioEnY, time);
+
+            Vector3 vector1 = punto2 - punto1;
+            Vector3 vector2 = punto3 - punto1;
+            Vector3 normalPlano = Vector3.Cross(vector1, vector2);
+
+            //barcoJugador.move(new Vector3(0, Math.Abs((aplicarTrigonometrica(barcoJugador.posicion(),0, time).Y)/3 - barcoJugador.posicion().Y), 0));
+
+            effect.SetValue("A", normalPlano.X);
+            effect.SetValue("B", normalPlano.Y);
+            effect.SetValue("C", normalPlano.Z);
+
+            effect.SetValue("xEnElPlano", centroBase.X);
+            effect.SetValue("yEnElPlano", centroBase.Y);
+            effect.SetValue("zEnElPlano", centroBase.Z);
+
+            //------------------------------------------------------
+
+            
 
             effect.SetValue("offsetX", barcoJugador.posicion().X);
             effect.SetValue("offsetZ", barcoJugador.posicion().Z);
@@ -172,5 +208,19 @@ namespace AlumnoEjemplos.BarbaAlpha
         public override void close(){
             effect.Dispose();
         }
+
+        public Vector3 aplicarTrigonometrica (Vector3 posicion, float radioY, float actualTime){
+
+            float X = posicion.X / frecuenciaOlas;
+            float Z = posicion.Z / frecuenciaOlas;
+
+            posicion.Y += radioY + (float)(Math.Sin(X + actualTime) * Math.Cos(Z + actualTime) + Math.Sin(Z + actualTime) + Math.Cos(X + actualTime)) * alturaOlas;
+
+            return posicion;
+        }
+
+
+
     }
+
 }

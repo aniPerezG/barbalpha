@@ -64,6 +64,11 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             return barco.Position;
         }
 
+        public void setPosicion( Vector3 nueva)
+        {
+            barco.Position = nueva;
+        }
+
         public void setEnemy(Barco enemigo)
         {
             this.enemy = enemigo;

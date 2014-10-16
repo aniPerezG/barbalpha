@@ -29,6 +29,14 @@ float offsetX;
 float offsetZ;
 float offsetY;
 
+float A;
+float B;
+float C;
+float D;
+
+float xEnElPlano;
+float yEnElPlano;
+float zEnElPlano;
 
 /**************************************************************************************/
 /* RenderScene */
@@ -138,11 +146,41 @@ VS_OUTPUT vs_heightMap(VS_INPUT_BARCO Input)
 
 }
 
+VS_OUTPUT vs_alturaPlano(VS_INPUT Input)
+{
+	VS_OUTPUT Output;
+
+	float X = Input.Position.x + offsetX;
+	Input.Position.y += offsetY;
+	float Z = Input.Position.z + offsetZ;
+
+	//Ecuacion de un plano: Ax+By+Cz+D = 0
+
+	D = A*xEnElPlano + B*yEnElPlano + C*zEnElPlano;
+	D *= -1;
+
+	//Despejando y en la posicion del plano y = (-D -Cz -Ax)/B
+	//10 es el radio en Y, hay que abstraerlo
+	Input.Position.y += 10 + (-D - C*Z - A*X) / B;
+
+	//Proyectar posicion
+	Output.Position = mul(Input.Position, matWorldViewProj);
+
+	//Propago las coordenadas de textura
+	Output.Texcoord = Input.Texcoord;
+
+	//Propago el color x vertice
+	Output.Color = Input.Color;
+
+	return(Output);
+
+}
+
 technique HeightScene
 {
 	pass Pass_0
 	{
-		VertexShader = compile vs_2_0 vs_heightMap();
+		VertexShader = compile vs_2_0 vs_alturaPlano();
 		PixelShader = compile ps_2_0 ps_main();
 	}
 }
