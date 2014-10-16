@@ -181,8 +181,6 @@ namespace AlumnoEjemplos.BarbaAlpha
             normalPlano = Vector3.Cross(vector1, vector2);
 
             posicionAnterior = barcoJugador.posicion();
-            barcoJugador.setPosicion(new Vector3(barcoJugador.posicion().X, aplicarTrigonometrica(barcoJugador.posicion(), 0, time, alturaOlas).Y - barcoJugador.posicion().Y, barcoJugador.posicion().Z));
-            //barcoJugador.setPosicion(aplicarTrigonometrica(barcoJugador.posicion(), radioEnY, t.ime));
 
             effect.SetValue("A", normalPlano.X);
             effect.SetValue("B", normalPlano.Y);
