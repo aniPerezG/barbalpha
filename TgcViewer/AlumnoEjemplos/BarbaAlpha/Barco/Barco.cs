@@ -68,6 +68,11 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
             this.enemy = enemigo;
         }
+
+        public void setVelocidadMaxima(float velocidadMaxima)
+        {
+            this.velocidad_maxima = velocidadMaxima;
+        }
         
         public void move(Vector3 v)
         {

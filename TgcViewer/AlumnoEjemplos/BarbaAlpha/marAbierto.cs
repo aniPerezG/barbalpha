@@ -110,7 +110,9 @@ namespace AlumnoEjemplos.BarbaAlpha
             barcoIA.setTechnique("HeightScene");
 
             GuiController.Instance.Modifiers.addFloat("alturaOlas", 5f, 30f, 10f);
+            GuiController.Instance.Modifiers.addFloat("frecuenciaDeDisparo", 1f, 3f, 2f);
             GuiController.Instance.Modifiers.addFloat("frecuenciaOlas", 50f, 300f, 100f);
+            GuiController.Instance.Modifiers.addFloat("velocidadMaxima", 10f, 400f, 100f);
 
         }
 
@@ -122,7 +124,9 @@ namespace AlumnoEjemplos.BarbaAlpha
             time += elapsedTime;
 
             float alturaOlas = (float)GuiController.Instance.Modifiers["alturaOlas"];
+            float frecuenciaDeDisparo = (float)GuiController.Instance.Modifiers["frecuenciaDeDisparo"];
             float frecuenciaOlas = (float)GuiController.Instance.Modifiers["frecuenciaOlas"];
+            float velocidadMaxima = (float)GuiController.Instance.Modifiers["velocidadMaxima"];
 
             // Cargar variables de shader, por ejemplo el tiempo transcurrido.
             effect.SetValue("time", time);
@@ -141,13 +145,17 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect.SetValue("offsetX", barcoJugador.posicion().X);
             effect.SetValue("offsetZ", barcoJugador.posicion().Z);
             effect.SetValue("offsetY", barcoJugador.posicion().Y);
-            
+
+            barcoJugador.setFrecuenciaDeDisparos(frecuenciaDeDisparo);
+            barcoJugador.setVelocidadMaxima(velocidadMaxima);
             barcoJugador.render(elapsedTime);
 
             effect.SetValue("offsetX", barcoIA.posicion().X);
             effect.SetValue("offsetZ", barcoIA.posicion().Z);
             effect.SetValue("offsetY", barcoIA.posicion().Y);
-            
+
+            barcoIA.setFrecuenciaDeDisparos(frecuenciaDeDisparo);
+            barcoIA.setVelocidadMaxima(velocidadMaxima);
             barcoIA.render(elapsedTime);
 
             // muevo el SkyBox para simular espacio infinito
