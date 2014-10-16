@@ -38,6 +38,20 @@ namespace AlumnoEjemplos.BarbaAlpha
         float alturaOlas;
         float frecuenciaDeDisparo;
         float velocidadMaxima;
+
+        //variables necesarias para calculo del plano
+        float ancho;
+        float largo;
+        float radioEnY;
+        Vector3 centroBase;
+        Vector3 normalPlano;
+        Vector3 punto1;
+        Vector3 posicion2;
+        Vector3 punto2;
+        Vector3 posicion3;
+        Vector3 punto3;
+        Vector3 vector1;
+        Vector3 vector2;
         
         // Buffers
         public static CustomVertex.PositionNormalTextured[] _vertices;
@@ -148,22 +162,21 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             //-----------------------------------------------------
             // calculo la ecucacion del plano que esta formada por los puntos cercanos al centro de la base del barco
-            float radioEnY = barcoJugador.BoundingBox().calculateAxisRadius().Y;
-            Vector3 centroBase = barcoJugador.posicion() - new Vector3(0, radioEnY , 0);
+            radioEnY = barcoJugador.BoundingBox().calculateAxisRadius().Y;
+            centroBase = barcoJugador.posicion() - new Vector3(0, radioEnY , 0);
 
-            float largo = barcoJugador.BoundingBox().calculateAxisRadius().X * 2;
-            float ancho = barcoJugador.BoundingBox().calculateAxisRadius().Z * 2;
-            Vector3 punto1 = aplicarTrigonometrica(barcoJugador.posicion(), radioEnY, time, alturaOlas);
-            Vector3 posicion2 = barcoJugador.posicion() + new Vector3(largo/3, 0, 0);
-            Vector3 punto2 = aplicarTrigonometrica(posicion2, radioEnY, time, alturaOlas);
-            Vector3 posicion3 = barcoJugador.posicion() + new Vector3(0, 0, ancho/3);
-            Vector3 punto3 = aplicarTrigonometrica(posicion3, radioEnY, time, alturaOlas);
+            largo = barcoJugador.BoundingBox().calculateAxisRadius().X * 2;
+            ancho = barcoJugador.BoundingBox().calculateAxisRadius().Z * 2;
+            punto1 = aplicarTrigonometrica(barcoJugador.posicion(), radioEnY, time, alturaOlas);
+            posicion2 = barcoJugador.posicion() + new Vector3(largo/3, 0, 0);
+            punto2 = aplicarTrigonometrica(posicion2, radioEnY, time, alturaOlas);
+            posicion3 = barcoJugador.posicion() + new Vector3(0, 0, ancho/3);
+            punto3 = aplicarTrigonometrica(posicion3, radioEnY, time, alturaOlas);
 
-            Vector3 vector1 = punto2 - punto1;
-            Vector3 vector2 = punto3 - punto1;
-            Vector3 normalPlano = Vector3.Cross(vector1, vector2);
+            vector1 = punto2 - punto1;
+            vector2 = punto3 - punto1;
+            normalPlano = Vector3.Cross(vector1, vector2);
 
-            
 
             barcoJugador.setPosicion(new Vector3(barcoJugador.posicion().X, aplicarTrigonometrica(barcoJugador.posicion(), 0, time, alturaOlas).Y - barcoJugador.posicion().Y, barcoJugador.posicion().Z));
             //barcoJugador.setPosicion(aplicarTrigonometrica(barcoJugador.posicion(), radioEnY, t.ime));
@@ -177,7 +190,6 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect.SetValue("zEnElPlano", centroBase.Z);
 
             //------------------------------------------------------
-
             
 
             effect.SetValue("offsetX", barcoJugador.posicion().X);

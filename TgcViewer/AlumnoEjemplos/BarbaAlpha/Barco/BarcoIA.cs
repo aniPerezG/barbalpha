@@ -78,7 +78,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         private void apuntarAEnemigo()
         {   // Dado que estoy paralelo a la dirección del enemigo, roto 90° para apuntarle
-            this.barco.rotateY(FastMath.PI_HALF);
+            this.barco.rotateY(this.getEnemy().getRotacionAcumulada());
         }
 
         private void atacarA(Barco enemigo, float elapsedTime)
