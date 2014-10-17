@@ -186,9 +186,9 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect.SetValue("B", normalPlano.Y);
             effect.SetValue("C", normalPlano.Z);
 
-            effect.SetValue("xEnElPlano", centroBase.X);
-            effect.SetValue("yEnElPlano", centroBase.Y);
-            effect.SetValue("zEnElPlano", centroBase.Z);
+            effect.SetValue("xEnElPlano", punto1.X);
+            effect.SetValue("yEnElPlano", punto1.Y);
+            effect.SetValue("zEnElPlano", punto1.Z);
 
             //------------------------------------------------------
             
