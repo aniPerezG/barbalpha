@@ -163,6 +163,7 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             effect.Technique = "HeightScene";
 
+            posicionAnterior = barcoJugador.posicion();
             //-----------------------------------------------------
             // calculo la ecucacion del plano que esta formada por los puntos cercanos al centro de la base del barco
             radioEnY = barcoJugador.BoundingBox().calculateAxisRadius().Y;
@@ -180,7 +181,6 @@ namespace AlumnoEjemplos.BarbaAlpha
             vector2 = punto3 - punto1;
             normalPlano = Vector3.Cross(vector1, vector2);
 
-            posicionAnterior = barcoJugador.posicion();
 
             effect.SetValue("A", normalPlano.X);
             effect.SetValue("B", normalPlano.Y);
@@ -190,9 +190,6 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect.SetValue("yEnElPlano", punto1.Y);
             effect.SetValue("zEnElPlano", punto1.Z);
 
-            //------------------------------------------------------
-            
-
             effect.SetValue("offsetX", barcoJugador.posicion().X);
             effect.SetValue("offsetZ", barcoJugador.posicion().Z);
             effect.SetValue("offsetY", barcoJugador.posicion().Y);
@@ -200,6 +197,33 @@ namespace AlumnoEjemplos.BarbaAlpha
             barcoJugador.setFrecuenciaDeDisparos(frecuenciaDeDisparo);
             barcoJugador.setVelocidadMaxima(velocidadMaxima);
             barcoJugador.render(elapsedTime);
+
+            //-------------------------------------------------
+            //Esto es asqueroso porque se repite muuuuuuucho codigo
+
+            radioEnY = barcoIA.BoundingBox().calculateAxisRadius().Y;
+            centroBase = barcoIA.posicion() - new Vector3(0, radioEnY, 0);
+
+            largo = barcoIA.BoundingBox().calculateAxisRadius().X * 2;
+            ancho = barcoIA.BoundingBox().calculateAxisRadius().Z * 2;
+            punto1 = aplicarTrigonometrica(centroBase, radioEnY, time, alturaOlas);
+            posicion2 = centroBase + new Vector3(largo / 3, 0, 0);
+            punto2 = aplicarTrigonometrica(posicion2, radioEnY, time, alturaOlas);
+            posicion3 = centroBase + new Vector3(0, 0, ancho / 3);
+            punto3 = aplicarTrigonometrica(posicion3, radioEnY, time, alturaOlas);
+
+            vector1 = punto2 - punto1;
+            vector2 = punto3 - punto1;
+            normalPlano = Vector3.Cross(vector1, vector2);
+
+
+            effect.SetValue("A", normalPlano.X);
+            effect.SetValue("B", normalPlano.Y);
+            effect.SetValue("C", normalPlano.Z);
+
+            effect.SetValue("xEnElPlano", punto1.X);
+            effect.SetValue("yEnElPlano", punto1.Y);
+            effect.SetValue("zEnElPlano", punto1.Z);
 
             effect.SetValue("offsetX", barcoIA.posicion().X);
             effect.SetValue("offsetZ", barcoIA.posicion().Z);
@@ -237,8 +261,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             return posicion;
         }
 
-
-
+                
     }
 
 }
