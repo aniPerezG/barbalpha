@@ -19,6 +19,18 @@ using AlumnoEjemplos.BarbaAlpha.Barco;
 
 namespace AlumnoEjemplos.BarbaAlpha
 {
+
+    public struct Plano
+    {
+        public Vector3 normal, punto;
+
+        public Plano(Vector3 n1, Vector3 p1)
+        {
+            normal = n1;
+            punto = p1;
+        }
+    }
+
     public class marAbierto : TgcExample
     {
 
@@ -40,22 +52,8 @@ namespace AlumnoEjemplos.BarbaAlpha
         float velocidadMaxima;
 
         //variables necesarias para calculo del plano
-        float ancho;
-        float largo;
-        float radioEnY;
-        Vector3 centroBase;
-        Vector3 normalPlano;
-        Vector3 punto1;
-        Vector3 posicionLargo1;
-        Vector3 posicionLargo2;
-        Vector3 puntoLargo1;
-        Vector3 puntoLargo2;
-        Vector3 posicionAncho1;
-        Vector3 puntoAncho1;
-        Vector3 posicionAncho2;
-        Vector3 puntoAncho2;
-        Vector3 vector1;
-        Vector3 vector2;
+      
+        
 
         //variables necesarias para "Infinitud" del terreno
         Vector3 posicionAnterior;
@@ -168,81 +166,25 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect.Technique = "HeightScene";
 
             posicionAnterior = barcoJugador.posicion();
-            //-----------------------------------------------------
-            // calculo la ecucacion del plano que esta formada por los puntos cercanos al centro de la base del barco
-            radioEnY = barcoJugador.BoundingBox().calculateAxisRadius().Y;
-            centroBase = barcoJugador.posicion() - new Vector3(0, radioEnY , 0);
 
-            largo = barcoJugador.BoundingBox().calculateAxisRadius().X * 2;
-            ancho = barcoJugador.BoundingBox().calculateAxisRadius().Z * 2;
-            punto1 = aplicarTrigonometrica(centroBase, radioEnY, time, alturaOlas);
+            //Render del barco del Jugador
+            Plano planoBase = obtenerPlano(barcoJugador);
 
-
-            posicionLargo1 = centroBase + new Vector3(largo/2, 0, 0);
-            puntoLargo1 = aplicarTrigonometrica(posicionLargo1, radioEnY, time, alturaOlas);
-            posicionLargo2 = centroBase + new Vector3(-largo/2, 0, 0);
-            puntoLargo2 = aplicarTrigonometrica(posicionLargo2, radioEnY, time, alturaOlas);
-
-            posicionAncho1 = centroBase + new Vector3(0, 0, ancho/2);
-            puntoAncho1 = aplicarTrigonometrica(posicionAncho1, radioEnY, time, alturaOlas);
-            posicionAncho2 = centroBase + new Vector3(0, 0, -ancho/2);
-            puntoAncho2 = aplicarTrigonometrica(posicionAncho2, radioEnY, time, alturaOlas);
-
-            vector1 = puntoLargo1 - puntoLargo2;
-            vector2 = puntoAncho1 - puntoAncho2;
-            normalPlano = Vector3.Cross(vector1, vector2);
-
-
-            effect.SetValue("A", normalPlano.X);
-            effect.SetValue("B", normalPlano.Y);
-            effect.SetValue("C", normalPlano.Z);
-
-            effect.SetValue("xEnElPlano", punto1.X);
-            effect.SetValue("yEnElPlano", punto1.Y);
-            effect.SetValue("zEnElPlano", punto1.Z);
-
-            effect.SetValue("offsetX", barcoJugador.posicion().X);
-            effect.SetValue("offsetZ", barcoJugador.posicion().Z);
-            effect.SetValue("offsetY", barcoJugador.posicion().Y);
-
+            setearVariablesBarcoShader(planoBase, barcoJugador.posicion(), effect);
+        
             barcoJugador.setFrecuenciaDeDisparos(frecuenciaDeDisparo);
             barcoJugador.setVelocidadMaxima(velocidadMaxima);
             barcoJugador.render(elapsedTime);
 
-            //-------------------------------------------------
-            //Esto es asqueroso porque se repite muuuuuuucho codigo
+            //Render del barco con IA
+            planoBase = obtenerPlano(barcoIA);
 
-            radioEnY = barcoIA.BoundingBox().calculateAxisRadius().Y;
-            centroBase = barcoIA.posicion() - new Vector3(0, radioEnY, 0);
-
-            largo = barcoIA.BoundingBox().calculateAxisRadius().X * 2;
-            ancho = barcoIA.BoundingBox().calculateAxisRadius().Z * 2;
-            punto1 = aplicarTrigonometrica(centroBase, radioEnY, time, alturaOlas);
-            posicionLargo1 = centroBase + new Vector3(largo / 3, 0, 0);
-            puntoLargo1 = aplicarTrigonometrica(posicionLargo1, radioEnY, time, alturaOlas);
-            posicionAncho1 = centroBase + new Vector3(0, 0, ancho / 3);
-            puntoAncho1 = aplicarTrigonometrica(posicionAncho1, radioEnY, time, alturaOlas);
-
-            vector1 = puntoLargo1 - punto1;
-            vector2 = puntoAncho1 - punto1;
-            normalPlano = Vector3.Cross(vector1, vector2);
-
-
-            effect.SetValue("A", normalPlano.X);
-            effect.SetValue("B", normalPlano.Y);
-            effect.SetValue("C", normalPlano.Z);
-
-            effect.SetValue("xEnElPlano", punto1.X);
-            effect.SetValue("yEnElPlano", punto1.Y);
-            effect.SetValue("zEnElPlano", punto1.Z);
-
-            effect.SetValue("offsetX", barcoIA.posicion().X);
-            effect.SetValue("offsetZ", barcoIA.posicion().Z);
-            effect.SetValue("offsetY", barcoIA.posicion().Y);
+            setearVariablesBarcoShader(planoBase, barcoIA.posicion(), effect);
 
             barcoIA.setFrecuenciaDeDisparos(frecuenciaDeDisparo);
             barcoIA.setVelocidadMaxima(velocidadMaxima);
             barcoIA.render(elapsedTime);
+
 
             // muevo el SkyBox para simular espacio infinito
             foreach (TgcMesh cara in skyBox.Faces)
@@ -272,7 +214,65 @@ namespace AlumnoEjemplos.BarbaAlpha
             return posicion;
         }
 
-                
+        public Plano obtenerPlano (AlumnoEjemplos.BarbaAlpha.Barco.Barco barco)
+        {
+            float ancho;
+            float largo;
+            float radioEnY;
+            Vector3 centroBase;
+            Vector3 normalPlano;
+            Vector3 puntoBase;
+            Vector3 posicionLargo1;
+            Vector3 posicionLargo2;
+            Vector3 puntoLargo1;
+            Vector3 puntoLargo2;
+            Vector3 posicionAncho1;
+            Vector3 puntoAncho1;
+            Vector3 posicionAncho2;
+            Vector3 puntoAncho2;
+            Vector3 vector1;
+            Vector3 vector2;
+
+            radioEnY = barco.BoundingBox().calculateAxisRadius().Y;
+            centroBase = barco.posicion() - new Vector3(0, radioEnY, 0);
+
+            largo = barco.BoundingBox().calculateAxisRadius().X * 2;
+            ancho = barco.BoundingBox().calculateAxisRadius().Z * 2;
+
+            puntoBase = aplicarTrigonometrica(centroBase, radioEnY, time, alturaOlas);
+            
+            posicionLargo1 = centroBase + new Vector3(largo / 2, 0, 0);
+            puntoLargo1 = aplicarTrigonometrica(posicionLargo1, radioEnY, time, alturaOlas);
+            posicionLargo2 = centroBase + new Vector3(-largo / 2, 0, 0);
+            puntoLargo2 = aplicarTrigonometrica(posicionLargo2, radioEnY, time, alturaOlas);
+
+            posicionAncho1 = centroBase + new Vector3(0, 0, ancho / 2);
+            puntoAncho1 = aplicarTrigonometrica(posicionAncho1, radioEnY, time, alturaOlas);
+            posicionAncho2 = centroBase + new Vector3(0, 0, -ancho / 2);
+            puntoAncho2 = aplicarTrigonometrica(posicionAncho2, radioEnY, time, alturaOlas);
+
+            vector1 = puntoLargo1 - puntoLargo2;
+            vector2 = puntoAncho1 - puntoAncho2;
+            normalPlano = Vector3.Cross(vector1, vector2);
+
+            return new Plano(normalPlano, puntoBase);
+
+        }
+
+        public void setearVariablesBarcoShader(Plano plano, Vector3 posicionBarco, Microsoft.DirectX.Direct3D.Effect efecto)
+        {
+            efecto.SetValue("A", plano.normal.X);
+            efecto.SetValue("B", plano.normal.Y);
+            efecto.SetValue("C", plano.normal.Z);
+
+            efecto.SetValue("xEnElPlano", plano.punto.X);
+            efecto.SetValue("yEnElPlano", plano.punto.Y);
+            efecto.SetValue("zEnElPlano", plano.punto.Z);
+
+            efecto.SetValue("offsetX", posicionBarco.X);
+            efecto.SetValue("offsetZ", posicionBarco.Z);
+            efecto.SetValue("offsetY", posicionBarco.Y);
+        }
     }
 
 }
