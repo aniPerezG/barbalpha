@@ -46,10 +46,14 @@ namespace AlumnoEjemplos.BarbaAlpha
         Vector3 centroBase;
         Vector3 normalPlano;
         Vector3 punto1;
-        Vector3 posicion2;
-        Vector3 punto2;
-        Vector3 posicion3;
-        Vector3 punto3;
+        Vector3 posicionLargo1;
+        Vector3 posicionLargo2;
+        Vector3 puntoLargo1;
+        Vector3 puntoLargo2;
+        Vector3 posicionAncho1;
+        Vector3 puntoAncho1;
+        Vector3 posicionAncho2;
+        Vector3 puntoAncho2;
         Vector3 vector1;
         Vector3 vector2;
 
@@ -172,13 +176,20 @@ namespace AlumnoEjemplos.BarbaAlpha
             largo = barcoJugador.BoundingBox().calculateAxisRadius().X * 2;
             ancho = barcoJugador.BoundingBox().calculateAxisRadius().Z * 2;
             punto1 = aplicarTrigonometrica(centroBase, radioEnY, time, alturaOlas);
-            posicion2 = centroBase + new Vector3(largo/3, 0, 0);
-            punto2 = aplicarTrigonometrica(posicion2, radioEnY, time, alturaOlas);
-            posicion3 = centroBase + new Vector3(0, 0, ancho/3);
-            punto3 = aplicarTrigonometrica(posicion3, radioEnY, time, alturaOlas);
 
-            vector1 = punto2 - punto1;
-            vector2 = punto3 - punto1;
+
+            posicionLargo1 = centroBase + new Vector3(largo/2, 0, 0);
+            puntoLargo1 = aplicarTrigonometrica(posicionLargo1, radioEnY, time, alturaOlas);
+            posicionLargo2 = centroBase + new Vector3(-largo/2, 0, 0);
+            puntoLargo2 = aplicarTrigonometrica(posicionLargo2, radioEnY, time, alturaOlas);
+
+            posicionAncho1 = centroBase + new Vector3(0, 0, ancho/2);
+            puntoAncho1 = aplicarTrigonometrica(posicionAncho1, radioEnY, time, alturaOlas);
+            posicionAncho2 = centroBase + new Vector3(0, 0, -ancho/2);
+            puntoAncho2 = aplicarTrigonometrica(posicionAncho2, radioEnY, time, alturaOlas);
+
+            vector1 = puntoLargo1 - puntoLargo2;
+            vector2 = puntoAncho1 - puntoAncho2;
             normalPlano = Vector3.Cross(vector1, vector2);
 
 
@@ -207,13 +218,13 @@ namespace AlumnoEjemplos.BarbaAlpha
             largo = barcoIA.BoundingBox().calculateAxisRadius().X * 2;
             ancho = barcoIA.BoundingBox().calculateAxisRadius().Z * 2;
             punto1 = aplicarTrigonometrica(centroBase, radioEnY, time, alturaOlas);
-            posicion2 = centroBase + new Vector3(largo / 3, 0, 0);
-            punto2 = aplicarTrigonometrica(posicion2, radioEnY, time, alturaOlas);
-            posicion3 = centroBase + new Vector3(0, 0, ancho / 3);
-            punto3 = aplicarTrigonometrica(posicion3, radioEnY, time, alturaOlas);
+            posicionLargo1 = centroBase + new Vector3(largo / 3, 0, 0);
+            puntoLargo1 = aplicarTrigonometrica(posicionLargo1, radioEnY, time, alturaOlas);
+            posicionAncho1 = centroBase + new Vector3(0, 0, ancho / 3);
+            puntoAncho1 = aplicarTrigonometrica(posicionAncho1, radioEnY, time, alturaOlas);
 
-            vector1 = punto2 - punto1;
-            vector2 = punto3 - punto1;
+            vector1 = puntoLargo1 - punto1;
+            vector2 = puntoAncho1 - punto1;
             normalPlano = Vector3.Cross(vector1, vector2);
 
 
