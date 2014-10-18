@@ -51,9 +51,6 @@ namespace AlumnoEjemplos.BarbaAlpha
         float frecuenciaDeDisparo;
         float velocidadMaxima;
 
-        //variables necesarias para calculo del plano
-      
-        
 
         //variables necesarias para "Infinitud" del terreno
         Vector3 posicionAnterior;
