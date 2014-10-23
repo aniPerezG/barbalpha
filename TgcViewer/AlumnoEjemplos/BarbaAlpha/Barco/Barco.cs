@@ -16,10 +16,11 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 {
     public abstract class Barco {
 
+        public float rotacion_acumulada = 0;
+        public float aceleracion_por_inclinacion = 0;
         public float tiempo = 0;
         public float velocidad = 0;
         public float velocidad_maxima = 100;
-        public float rotacion_acumulada = 0;
         public Barco enemy { set; get; } // barco enemigo al que se ataca o del que se defiende
         public Direccion direccion = new Direccion();
         public TgcMesh barco; // malla del barco
@@ -43,6 +44,11 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         }
 
         protected abstract void moverYVirar(float elapsedTime);
+
+        public float getAceleracionPorInclinacion()
+        {
+            return aceleracion_por_inclinacion;
+        }
 
         public float getRotacionAcumulada()
         {
@@ -83,6 +89,16 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
             this.rotacion_acumulada += angulo;
             this.barco.rotateY(angulo);
+        }
+
+        public void aumentarAceleracionPorInclinacion(float aumento)
+        {
+            aceleracion_por_inclinacion += aumento;
+        }
+
+        public void setAceleracionPorInclinacion(float aceleracion)
+        {
+            aceleracion_por_inclinacion = aceleracion;
         }
 
         public void setAgua(marAbierto oceano)
@@ -175,6 +191,11 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             }
         }
 
+        public Vector3 calcularSentido(Vector3 posicionAnterior)
+        {
+            return Vector3.Normalize(this.posicion() - posicionAnterior);
+        }
+
         protected void leDisteA(Barco enemigo)  {
             if (++this.puntaje == 5) this.close();
         }
@@ -207,6 +228,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         public virtual void render(float elapsedTime)    
         {
             tiempo += elapsedTime;
+            this.acelerar(aceleracion_por_inclinacion);
             this.barco.render();
             this.aplicarFriccion(elapsedTime);
             this.moverYVirar(elapsedTime);
@@ -214,6 +236,8 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.verificarCanion(elapsedTime);
             this.verificarDisparos(elapsedTime); // evalúa el estado de los misiles disparados
             this.eliminarMisiles(); // elimina aquellos misiles que terminaron su trayectoria
+
+            
         }
 
         

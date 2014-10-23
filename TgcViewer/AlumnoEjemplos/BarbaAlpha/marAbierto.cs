@@ -51,6 +51,12 @@ namespace AlumnoEjemplos.BarbaAlpha
         float frecuenciaDeDisparo;
         float velocidadMaxima;
 
+        //variables inclinacion
+        float cosAngulo;
+        float prodInterno;
+        float prodModulos;
+        Vector3 sentidoBarco;
+
 
         //variables necesarias para "Infinitud" del terreno
         Vector3 posicionAnterior;
@@ -168,7 +174,12 @@ namespace AlumnoEjemplos.BarbaAlpha
             Plano planoBase = obtenerPlano(barcoJugador);
 
             setearVariablesBarcoShader(planoBase, barcoJugador.posicion(), effect);
-        
+
+            sentidoBarco = barcoJugador.calcularSentido(posicionAnterior);
+            prodInterno = Vector3.Dot(planoBase.normal, sentidoBarco);
+            cosAngulo = prodInterno;
+
+            barcoJugador.aumentarAceleracionPorInclinacion(cosAngulo);
             barcoJugador.setFrecuenciaDeDisparos(frecuenciaDeDisparo);
             barcoJugador.setVelocidadMaxima(velocidadMaxima);
             barcoJugador.render(elapsedTime);
@@ -178,9 +189,16 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             setearVariablesBarcoShader(planoBase, barcoIA.posicion(), effect);
 
+            sentidoBarco = barcoIA.calcularSentido(posicionAnterior);
+            prodInterno = Vector3.Dot(planoBase.normal, sentidoBarco);
+            cosAngulo = prodInterno;
+
+            barcoIA.aumentarAceleracionPorInclinacion(cosAngulo);
             barcoIA.setFrecuenciaDeDisparos(frecuenciaDeDisparo);
             barcoIA.setVelocidadMaxima(velocidadMaxima);
             barcoIA.render(elapsedTime);
+
+
 
 
             // muevo el SkyBox para simular espacio infinito
@@ -250,7 +268,7 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             vector1 = puntoLargo1 - puntoLargo2;
             vector2 = puntoAncho1 - puntoAncho2;
-            normalPlano = Vector3.Cross(vector1, vector2);
+            normalPlano = Vector3.Normalize(Vector3.Cross(vector1, vector2));
 
             return new Plano(normalPlano, puntoBase);
 
