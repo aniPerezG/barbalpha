@@ -20,6 +20,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private const int altura_canion = 5; // altura inicial desde donde se realiza el tiro oblicuo
         private const float gravedad = -1500f; // sólo afecta el desplazamiento respecto de Y
         private const float velocidad_inicial_horizontal = -600f; // Sobre X no hay gravedad, es constante
+        private Barco barco;
         private TgcMesh mesh; // malla del misil
 
 
@@ -27,17 +28,22 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
             TgcSceneLoader loader = new TgcSceneLoader();
             TgcScene escena = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Objetos\\BarrilPolvora\\BarrilPolvora-TgcScene.xml");
-            float angulo = FastMath.PI / 2 + barco.getRotacionAcumulada();
-            
             this.mesh = escena.Meshes[0];
-            this.mesh.Position = new Vector3(barco.posicion().X, barco.posicion().Y + altura_canion, barco.posicion().Z);
-            inicialY = anteriorY = this.mesh.Position.Y;
-            this.rotateY(angulo);
+            this.barco = barco;
+            this.setearMisil();
         }
 
         public TgcBoundingBox BoundingBox()
         {
             return this.mesh.BoundingBox;
+        }
+
+        public void setearMisil()
+        {
+            float angulo = FastMath.PI / 2 + barco.getRotacionAcumulada();
+            this.mesh.Position = new Vector3(barco.posicion().X, barco.posicion().Y + altura_canion, barco.posicion().Z);
+            this.inicialY = this.anteriorY = this.mesh.Position.Y;
+            this.rotateY(angulo);
         }
 
         public void rotateY(float angulo)

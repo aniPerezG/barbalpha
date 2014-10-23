@@ -11,6 +11,7 @@ using TgcViewer.Utils.Input;
 using TgcViewer.Utils.Sound;
 using TgcViewer.Utils.TgcGeometry;
 using TgcViewer.Utils.TgcSceneLoader;
+using System.Collections;
 
 namespace AlumnoEjemplos.BarbaAlpha.Barco
 {
@@ -26,11 +27,13 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         public TgcMesh barco; // malla del barco
         private bool canionListo;
         private int puntaje; // contador de disparos exitosos
+        private int canion_a_disparar = 0;
         private float tiempo_entre_disparos = 0;
         private float frecuencia_disparo = 2;
         private float friccion = 10000f;
         private float velocidadAbsolutaRotacion = 40f;
         private marAbierto agua; // terreno sobre el que se navega
+        private ArrayList balas = new ArrayList(10);
         private List<Misil> misilesAEliminar = new List<Misil>(); // misiles a remover de la escena
         private List<Misil> misilesDisparados = new List<Misil>(); // misiles ya en el aire
 
@@ -41,6 +44,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.barco = escenaCanion.Meshes[0];
             this.setPosicion(posicionInicial);
             this.setAgua(oceano);
+            this.cargarCaniones();
         }
 
         protected abstract void moverYVirar(float elapsedTime);
@@ -156,20 +160,45 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
                 this.prepararCanion(elapsedTime);
             }
         }
-        
+
+        private void cambiarCanion()
+        {
+            canion_a_disparar++;
+            if(canion_a_disparar == 10) 
+            {
+                canion_a_disparar = 0;
+            }
+        }
+
         protected void disparar() 
         {
             if (canionListo)
             {
-                Misil nuevoMisil = new Misil(this);
-                misilesDisparados.Add(nuevoMisil);
+                Misil bala = (Misil) balas[canion_a_disparar];
+                misilesDisparados.Add(bala);
+                this.cambiarCanion();
                 canionListo = false;
             }
         }
 
+        private void cargarCaniones()
+        {
+            int i;
+            for (i = 0; i < 10; i++) 
+            {
+               balas.Add(new Misil(this));
+            }
+        }
+
+        private void recargarMisil(Misil misil)
+        {
+            misilesAEliminar.Remove(misil);
+            misil.setearMisil();
+        }
+
         private void eliminarMisiles()
         {
-            misilesAEliminar.ForEach((misil) => misilesAEliminar.Remove(misil));
+            misilesAEliminar.ForEach((misil) => recargarMisil(misil));
         }
 
         private void verificarDisparos(float elapsedTime)
