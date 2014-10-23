@@ -175,9 +175,10 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             if (canionListo)
             {
                 Misil bala = (Misil) balas[canion_a_disparar];
+                bala.setearMisil();
                 misilesDisparados.Add(bala);
-                this.cambiarCanion();
                 canionListo = false;
+                this.cambiarCanion();
             }
         }
 
@@ -193,7 +194,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private void recargarMisil(Misil misil)
         {
             misilesAEliminar.Remove(misil);
-            misil.setearMisil();
+            misilesDisparados.Remove(misil);
         }
 
         private void eliminarMisiles()
@@ -210,7 +211,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
                     misilesAEliminar.Add(misil);
                     continue;
                 }
-                else if (misil.chocasteConBarco(this.getEnemy()))
+                if (misil.chocasteConBarco(this.getEnemy()))
                 {
                     misilesAEliminar.Add(misil);
                     leDisteA(this.enemy);

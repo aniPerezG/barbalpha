@@ -30,7 +30,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             TgcScene escena = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Objetos\\BarrilPolvora\\BarrilPolvora-TgcScene.xml");
             this.mesh = escena.Meshes[0];
             this.barco = barco;
-            this.setearMisil();
         }
 
         public TgcBoundingBox BoundingBox()
@@ -41,9 +40,13 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         public void setearMisil()
         {
             float angulo = FastMath.PI / 2 + barco.getRotacionAcumulada();
+            this.tiempoDeVuelo = 0;
             this.mesh.Position = new Vector3(barco.posicion().X, barco.posicion().Y + altura_canion, barco.posicion().Z);
             this.inicialY = this.anteriorY = this.mesh.Position.Y;
-            this.rotateY(angulo);
+            if (this.mesh.Rotation.Y != angulo )
+            {
+                this.rotateY(angulo - this.mesh.Rotation.Y);
+            }
         }
 
         public void rotateY(float angulo)

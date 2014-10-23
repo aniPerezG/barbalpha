@@ -6,6 +6,7 @@ using System.Text;
 namespace AlumnoEjemplos.BarbaAlpha.Barco
 {
     public class Direccion     {
+
         public bool derecha;
 
         public void haciaLaDerecha()
