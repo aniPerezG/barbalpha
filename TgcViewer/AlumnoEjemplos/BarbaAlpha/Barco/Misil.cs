@@ -14,10 +14,12 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
     {
 
         public float tiempoDeVuelo = 0;
-        private float velocidad_inicial_vertical = 10f; // Vo respecto de Y
+        private float inicialY;
+        private float anteriorY;
+        private float velocidad_inicial_vertical = 500f; // Vo respecto de Y
         private const int altura_canion = 5; // altura inicial desde donde se realiza el tiro oblicuo
-        private const float gravedad = -0.2f; // sólo afecta el desplazamiento respecto de Y
-        private const float velocidad_inicial_horizontal = -1500f; // Sobre X no hay gravedad, es constante
+        private const float gravedad = -1500f; // sólo afecta el desplazamiento respecto de Y
+        private const float velocidad_inicial_horizontal = -600f; // Sobre X no hay gravedad, es constante
         private TgcMesh mesh; // malla del misil
 
 
@@ -28,7 +30,8 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             float angulo = FastMath.PI / 2 + barco.getRotacionAcumulada();
             
             this.mesh = escena.Meshes[0];
-            this.mesh.Position = barco.posicion();
+            this.mesh.Position = new Vector3(barco.posicion().X, barco.posicion().Y + altura_canion, barco.posicion().Z);
+            inicialY = anteriorY = this.mesh.Position.Y;
             this.rotateY(angulo);
         }
 
@@ -59,16 +62,17 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         private void volarVertical()
         {
-            this.velocidad_inicial_vertical += gravedad * this.tiempoDeVuelo; // Vyi = g * (t-t0)
-            this.move(0, this.velocidad_inicial_vertical * this.tiempoDeVuelo + 0.5f * gravedad * this.tiempoDeVuelo * this.tiempoDeVuelo, 0); // y = Vyi * (t-t0) + g/2 * (t-t0)^2 ; g < 0
+            float y = inicialY + this.velocidad_inicial_vertical * this.tiempoDeVuelo + 0.5f * gravedad * this.tiempoDeVuelo * this.tiempoDeVuelo;
+            this.move(0, y - anteriorY, 0);
         }
 
         public void render(float elapsedTime)
         {
             this.tiempoDeVuelo += elapsedTime;
-            this.volarHorizontal(velocidad_inicial_horizontal * elapsedTime);
             this.volarVertical();
+            this.volarHorizontal(velocidad_inicial_horizontal * elapsedTime);
             this.mesh.render();
+            anteriorY = mesh.Position.Y;
         }
 
         public bool teHundisteEn(marAbierto oceano)
