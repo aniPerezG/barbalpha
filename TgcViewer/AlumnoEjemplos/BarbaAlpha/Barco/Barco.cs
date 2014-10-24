@@ -37,6 +37,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private List<Misil> misilesAEliminar = new List<Misil>(); // misiles a remover de la escena
         private List<Misil> misilesDisparados = new List<Misil>(); // misiles ya en el aire
 
+        private Vector3 posicionAnterior;
         
         public Barco(Vector3 posicionInicial, marAbierto oceano, string pathEscena) {
             TgcSceneLoader loader = new TgcSceneLoader();
@@ -45,9 +46,15 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.setPosicion(posicionInicial);
             this.setAgua(oceano);
             this.cargarCaniones();
+            posicionAnterior = posicionInicial;
         }
 
         protected abstract void moverYVirar(float elapsedTime);
+
+        public Vector3 getPosicionAnterior()
+        {
+            return this.posicionAnterior;
+        }
 
         public float getAceleracionPorInclinacion()
         {
@@ -221,9 +228,9 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             }
         }
 
-        public Vector3 calcularSentido(Vector3 posicionAnterior)
+        public Vector3 calcularSentido()
         {
-            return Vector3.Normalize(this.posicion() - posicionAnterior);
+            return Vector3.Normalize(this.posicion() - this.posicionAnterior);
         }
 
         protected void leDisteA(Barco enemigo)  {
@@ -266,7 +273,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.verificarCanion(elapsedTime);
             this.verificarDisparos(elapsedTime); // evalúa el estado de los misiles disparados
             this.eliminarMisiles(); // elimina aquellos misiles que terminaron su trayectoria
-
+            this.posicionAnterior = this.posicion();
             
         }
 
