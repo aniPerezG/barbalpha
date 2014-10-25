@@ -57,6 +57,8 @@ namespace AlumnoEjemplos.BarbaAlpha
         float prodModulos;
         Vector3 sentidoBarco;
 
+        Vector3 vecAux;
+        Vector3 ortogonal;
 
         // Buffers
         public static CustomVertex.PositionNormalTextured[] _vertices;
@@ -138,6 +140,9 @@ namespace AlumnoEjemplos.BarbaAlpha
             GuiController.Instance.Modifiers.addFloat("frecuenciaOlas", 50f, 300f, 100f);
             GuiController.Instance.Modifiers.addFloat("velocidadMaxima", 10f, 400f, 100f);
 
+            vecAux = new Vector3(0, 0, 0);
+            ortogonal = new Vector3(0, 0, 0);
+
         }
 
         public override void render(float elapsedTime)
@@ -165,6 +170,8 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             effect.Technique = "HeightScene";
 
+            barcoJugador.actualizarPosicionAnterior();
+
             //Render del barco del Jugador
             Plano planoBase = obtenerPlano(barcoJugador);
 
@@ -179,6 +186,8 @@ namespace AlumnoEjemplos.BarbaAlpha
             barcoJugador.setVelocidadMaxima(velocidadMaxima);
             barcoJugador.render(elapsedTime);
 
+
+            //GuiController.Instance.Logger.log(barcoJugador.calcularSentido().ToString());
             //Render del barco con IA
             planoBase = obtenerPlano(barcoIA);
 
@@ -243,6 +252,8 @@ namespace AlumnoEjemplos.BarbaAlpha
             Vector3 vector1;
             Vector3 vector2;
 
+            Vector3 sentidoAux;
+
             radioEnY = barco.BoundingBox().calculateAxisRadius().Y;
             centroBase = barco.posicion() - new Vector3(0, radioEnY, 0);
 
@@ -250,23 +261,29 @@ namespace AlumnoEjemplos.BarbaAlpha
             ancho = barco.BoundingBox().calculateAxisRadius().Z * 2;
 
             puntoBase = aplicarTrigonometrica(centroBase, radioEnY, time, alturaOlas);
-            
-            posicionLargo1 = centroBase + new Vector3(largo / 2, 0, 0);
-            puntoLargo1 = aplicarTrigonometrica(posicionLargo1, radioEnY, time, alturaOlas);
-            posicionLargo2 = centroBase + new Vector3(-largo / 2, 0, 0);
-            puntoLargo2 = aplicarTrigonometrica(posicionLargo2, radioEnY, time, alturaOlas);
 
-            posicionAncho1 = centroBase + new Vector3(0, 0, ancho / 2);
-            puntoAncho1 = aplicarTrigonometrica(posicionAncho1, radioEnY, time, alturaOlas);
-            posicionAncho2 = centroBase + new Vector3(0, 0, -ancho / 2);
-            puntoAncho2 = aplicarTrigonometrica(posicionAncho2, radioEnY, time, alturaOlas);
+            sentidoAux = barco.calcularSentido();
 
-            vector1 = puntoLargo1 - puntoLargo2;
-            vector2 = puntoAncho1 - puntoAncho2;
-            normalPlano = Vector3.Normalize(Vector3.Cross(vector1, vector2));
+                posicionLargo1 = centroBase + new Vector3(largo / 2, 0, 0);
+                //posicionLargo1 = centroBase + (largo / 2) * barco.calcularSentido();
+                puntoLargo1 = aplicarTrigonometrica(posicionLargo1, radioEnY, time, alturaOlas);
+                posicionLargo2 = centroBase + new Vector3(-largo / 2, 0, 0);
+                //posicionLargo2 = centroBase - (largo / 2) * barco.calcularSentido();
+                puntoLargo2 = aplicarTrigonometrica(posicionLargo2, radioEnY, time, alturaOlas);
 
-            return new Plano(normalPlano, puntoBase);
+                posicionAncho1 = centroBase + new Vector3(0, 0, ancho / 2);
+                //posicionAncho1 = centroBase + (ancho / 2) * setearOrtogonal(barco.calcularSentido(), ortogonal);
+                puntoAncho1 = aplicarTrigonometrica(posicionAncho1, radioEnY, time, alturaOlas);
+                posicionAncho2 = centroBase + new Vector3(0, 0, -ancho / 2);
+                //posicionAncho2 = centroBase - (ancho / 2) * setearOrtogonal(barco.calcularSentido(), ortogonal);
+                puntoAncho2 = aplicarTrigonometrica(posicionAncho2, radioEnY, time, alturaOlas);
 
+                vector1 = puntoLargo1 - puntoLargo2;
+                vector2 = puntoAncho1 - puntoAncho2;
+                normalPlano = Vector3.Normalize(Vector3.Cross(vector1, vector2));
+
+                return new Plano(normalPlano, puntoBase);
+          
         }
 
         public void setearVariablesBarcoShader(Plano plano, Vector3 posicionBarco, Microsoft.DirectX.Direct3D.Effect efecto)
@@ -283,6 +300,25 @@ namespace AlumnoEjemplos.BarbaAlpha
             efecto.SetValue("offsetZ", posicionBarco.Z);
             efecto.SetValue("offsetY", posicionBarco.Y);
         }
+
+
+        public Vector3 setearOrtogonal(Vector3 vector, Vector3 ortogonal)
+        {
+            if (vector == vecAux)
+            {
+                ortogonal.X = -1;
+                ortogonal.Y = 0;
+                ortogonal.Z = 0;
+                return Vector3.Normalize(ortogonal);
+            }
+
+            ortogonal.X = -vector.Z;
+            ortogonal.Y = 0;
+            ortogonal.Z = vector.X;
+            return Vector3.Normalize(ortogonal);
+
+        }
+
     }
 
 }

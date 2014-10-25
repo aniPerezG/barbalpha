@@ -55,6 +55,10 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
             return this.posicionAnterior;
         }
+        public void actualizarPosicionAnterior()
+        {
+            this.posicionAnterior = this.posicion();
+        }
 
         public float getAceleracionPorInclinacion()
         {
@@ -273,7 +277,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.verificarCanion(elapsedTime);
             this.verificarDisparos(elapsedTime); // evalúa el estado de los misiles disparados
             this.eliminarMisiles(); // elimina aquellos misiles que terminaron su trayectoria
-            this.posicionAnterior = this.posicion();
             
         }
 
