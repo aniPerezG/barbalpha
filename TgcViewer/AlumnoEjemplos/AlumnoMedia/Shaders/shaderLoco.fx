@@ -44,16 +44,49 @@ float screen_dx;					// tamaño de la pantalla en pixels
 float screen_dy;
 
 
+float3 posicionSol;
 float3 CameraPos;
 float3 LightPosition;
-float3 LightDiffuseColor; // intensity multiplier
-float3 LightSpecularColor; // intensity multiplier
-float LightDistanceSquared;
+float3 LightDiffuseColor;
+float3 LightSpecularColor;
 float3 DiffuseColor;
 float3 AmbientLightColor;
 float3 EmissiveColor;
 float3 SpecularColor;
+float LightDistanceSquared;
 float SpecularPower;
+
+float CameraPosX;
+float CameraPosY;
+float CameraPosZ;
+
+float LightPositionX;
+float LightPositionY;
+float LightPositionZ;
+
+float LightDiffuseColorX;
+float LightDiffuseColorY;
+float LightDiffuseColorZ; // intensity multiplier
+
+float LightSpecularColorX; // intensity multiplier
+float LightSpecularColorY;
+float LightSpecularColorZ;
+
+float DiffuseColorX;
+float DiffuseColorY;
+float DiffuseColorZ;
+
+float AmbientLightColorX;
+float AmbientLightColorY;
+float AmbientLightColorZ;
+
+float EmissiveColorX;
+float EmissiveColorY;
+float EmissiveColorZ;
+
+float SpecularColorX;
+float SpecularColorY;
+float SpecularColorZ;
 
 
 texture perlinNoise1;
@@ -156,15 +189,7 @@ float4 ps_main( float2 Texcoord: TEXCOORD0, float4 Color:COLOR0, float2 Heightco
 }
 
 
-// ------------------------------------------------------------------
-technique RenderScene
-{
-   pass Pass_0
-   {
-	  VertexShader = compile vs_3_0 vs_main();
-	  PixelShader = compile ps_2_0 ps_main();
-   }
-}
+
 
 //*************************************************************
 
@@ -235,21 +260,66 @@ VS_OUTPUT vs_alturaPlano(VS_INPUT Input)
 
 }
 
-technique HeightScene
+VS_OUTPUT vs_normal(VS_INPUT Input)
 {
-	pass Pass_0
-	{
-		VertexShader = compile vs_2_0 vs_alturaPlano();
-		PixelShader = compile ps_2_0 ps_main();
-	}
+	VS_OUTPUT Output;
+
+	Output.WorldPos = mul(Input.Position, matWorld);
+	Output.Normal = mul(Input.Normal, (float3x3)matWorld);
+
+	//Proyectar posicion
+	Output.Position = mul(Input.Position, matWorldViewProj);
+
+	//Propago las coordenadas de textura
+	Output.Texcoord = Input.Texcoord;
+
+	//Propago el color x vertice
+	Output.Color = Input.Color;
+
+	return(Output);
+
 }
 
-float4 PixelShaderFunctionWithoutTex(VS_OUTPUT input) : COLOR0
+
+float4 ps_light(VS_OUTPUT input) : COLOR0
 {
 	// Phong relfection is ambient + light-diffuse + spec highlights.
 	// I = Ia*ka*Oda + fatt*Ip[kd*Od(N.L) + ks(R.V)^n]
 	// Ref: http://brooknovak.wordpress.com/2008/11/13/hlsl-per-pixel-point-light-using-phong-blinn-lighting-model/
 	// Get light direction for this fragment
+
+	CameraPos.x = CameraPosX;
+	CameraPos.y = CameraPosY;
+	CameraPos.z = CameraPosZ;
+
+	LightPosition.x = LightPositionX;
+	LightPosition.y = LightPositionY;
+	LightPosition.z = LightPositionZ;
+
+	LightDiffuseColor.x = LightDiffuseColorX;
+	LightDiffuseColor.y = LightDiffuseColorY;
+	LightDiffuseColor.z = LightDiffuseColorZ;
+
+	LightSpecularColor.x = LightSpecularColorX;
+	LightSpecularColor.y = LightSpecularColorY;
+	LightSpecularColor.z = LightSpecularColorZ;
+
+	DiffuseColor.x = DiffuseColorX;
+	DiffuseColor.y = DiffuseColorY;
+	DiffuseColor.z = DiffuseColorZ;
+
+	AmbientLightColor.x = AmbientLightColorX;
+	AmbientLightColor.y = AmbientLightColorY;
+	AmbientLightColor.z = AmbientLightColorZ;
+
+	EmissiveColor.x = EmissiveColorX;
+	EmissiveColor.y = EmissiveColorY;
+	EmissiveColor.z = EmissiveColorZ;
+
+	SpecularColor.x = SpecularColorX;
+	SpecularColor.y = SpecularColorY;
+	SpecularColor.z = SpecularColorZ;
+
 	float3 lightDir = normalize(input.WorldPos - LightPosition);
 
 	// Note: Non-uniform scaling not supported
@@ -268,4 +338,32 @@ float4 PixelShaderFunctionWithoutTex(VS_OUTPUT input) : COLOR0
 		(DiffuseColor * LightDiffuseColor * diffuseLighting * 0.6) + // Use light diffuse vector as intensity multiplier
 		(SpecularColor * LightSpecularColor * specLighting * 0.5) // Use light specular vector as intensity multiplier
 		), 1);
+}
+
+// ------------------------------------------------------------------
+technique RenderScene
+{
+	pass Pass_0
+	{
+		VertexShader = compile vs_3_0 vs_main();
+		PixelShader = compile ps_2_0 ps_main();
+	}
+}
+
+technique HeightScene
+{
+	pass Pass_0
+	{
+		VertexShader = compile vs_2_0 vs_alturaPlano();
+		PixelShader = compile ps_2_0 ps_main();
+	}
+}
+
+technique LightTechnique
+{
+	pass Pass_0
+	{
+		VertexShader = compile vs_2_0 vs_normal();
+		PixelShader = compile ps_2_0 ps_light();
+	}
 }
