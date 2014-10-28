@@ -44,6 +44,7 @@ namespace AlumnoEjemplos.BarbaAlpha
         string textura;
         TgcSimpleTerrain terreno;
         TgcSkyBox skyBox;
+        TgcSphere sol;
 
         //variables necesarias para el render
         float frecuenciaOlas;
@@ -61,6 +62,17 @@ namespace AlumnoEjemplos.BarbaAlpha
         Vector3 ortogonal;
 
         Texture textPerlinNoise1, textPerlinNoise2;
+
+        //variables para la iluminacion
+        Vector3 LightPosition;
+        Vector3 LightDiffuseColor;
+        Vector3 LightSpecularColor; 
+        Vector3 DiffuseColor;
+        Vector3 AmbientLightColor;
+        Vector3 EmissiveColor;
+        Vector3 SpecularColor;
+        float LightDistanceSquared;
+        float SpecularPower;
 
         // Buffers
         public static CustomVertex.PositionNormalTextured[] _vertices;
@@ -129,7 +141,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             //Centrar camara rotacional respecto a la canoa
             GuiController.Instance.RotCamera.Enable = true;
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
-
+            
             barcoJugador.setEnemy(barcoIA);
             barcoJugador.setEffect(effect);
             barcoJugador.setTechnique("HeightScene");
@@ -155,6 +167,14 @@ namespace AlumnoEjemplos.BarbaAlpha
             vecAux = new Vector3(0, 0, 0);
             ortogonal = new Vector3(0, 0, 0);
 
+
+            sol = new TgcSphere();
+            sol.setColor(Color.Yellow);
+            sol.Radius = 100;
+            sol.BasePoly = TgcSphere.eBasePoly.CUBE;
+            sol.Position = new Vector3(0, 1500, 0);
+            sol.updateValues();
+
         }
 
         public override void render(float elapsedTime)
@@ -168,6 +188,9 @@ namespace AlumnoEjemplos.BarbaAlpha
             frecuenciaDeDisparo = (float)GuiController.Instance.Modifiers["frecuenciaDeDisparo"];
             frecuenciaOlas = (float)GuiController.Instance.Modifiers["frecuenciaOlas"];
             velocidadMaxima = (float)GuiController.Instance.Modifiers["velocidadMaxima"];
+
+
+            sol.render();
 
             // Cargar variables de shader, por ejemplo el tiempo transcurrido.
             effect.SetValue("time", time);
