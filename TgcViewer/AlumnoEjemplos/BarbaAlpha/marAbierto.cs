@@ -60,6 +60,8 @@ namespace AlumnoEjemplos.BarbaAlpha
         Vector3 vecAux;
         Vector3 ortogonal;
 
+        Texture textPerlinNoise1, textPerlinNoise2;
+
         // Buffers
         public static CustomVertex.PositionNormalTextured[] _vertices;
         public static VertexBuffer _vertexBuffer;
@@ -140,6 +142,15 @@ namespace AlumnoEjemplos.BarbaAlpha
             GuiController.Instance.Modifiers.addFloat("frecuenciaDeDisparo", 1f, 3f, 2f);
             GuiController.Instance.Modifiers.addFloat("frecuenciaOlas", 50f, 300f, 100f);
             GuiController.Instance.Modifiers.addFloat("velocidadMaxima", 10f, 400f, 100f);
+
+            textPerlinNoise1 = TextureLoader.FromFile(d3dDevice, GuiController.Instance.AlumnoEjemplosMediaDir + "Textures\\perlin1.jpg");
+            textPerlinNoise2 = TextureLoader.FromFile(d3dDevice, GuiController.Instance.AlumnoEjemplosMediaDir + "Textures\\perlin2.jpg");
+
+            effect.SetValue("perlinNoise1", textPerlinNoise1);
+            effect.SetValue("perlinNoise1", textPerlinNoise2);
+            effect.SetValue("alpha", 0.8f);
+            effect.SetValue("screen_dx", d3dDevice.PresentationParameters.BackBufferWidth);
+            effect.SetValue("screen_dy", d3dDevice.PresentationParameters.BackBufferHeight);
 
             vecAux = new Vector3(0, 0, 0);
             ortogonal = new Vector3(0, 0, 0);

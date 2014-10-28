@@ -38,6 +38,33 @@ float xEnElPlano;
 float yEnElPlano;
 float zEnElPlano;
 
+
+float alpha;
+float screen_dx;					// tamaño de la pantalla en pixels
+float screen_dy;
+
+texture perlinNoise1;
+sampler heightmap1 = sampler_state
+{
+	Texture = <perlinNoise1>;
+	MipFilter = Point;
+	MinFilter = Point;
+	MagFilter = Point;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
+
+texture perlinNoise2;
+sampler heightmap2 = sampler_state
+{
+	Texture = <perlinNoise2>;
+	MipFilter = Point;
+	MinFilter = Point;
+	MagFilter = Point;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
+
 /**************************************************************************************/
 /* RenderScene */
 /**************************************************************************************/
@@ -132,7 +159,14 @@ VS_OUTPUT vs_heightMap(VS_INPUT_BARCO Input)
 	//a cada vertice de la canoa le sumo la altura del agua, mas 10 que es el "fondo" de la canoa
 	Input.Position.y += 10 + (sin(X + time)*cos(Z + time) + sin(Z + time) + cos(X + time))*amplitud;
 
-	
+	float u = (Input.Position.x / screen_dx);
+	float v = (Input.Position.z / screen_dy);
+
+	float height1 = tex2Dlod(heightmap1, float4(u, v, 0, 0)).r;
+	float height2 = tex2Dlod(heightmap2, float4(u, v, 0, 0)).r;
+
+	Input.Position.y = Input.Position.y + lerp(height1, height2, alpha);
+
 	//Proyectar posicion
 	Output.Position = mul(Input.Position, matWorldViewProj);
 
