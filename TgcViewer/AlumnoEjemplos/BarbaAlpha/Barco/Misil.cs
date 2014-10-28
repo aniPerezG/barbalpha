@@ -24,9 +24,11 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private Barco barco;
         private TgcSphere mesh; // malla del misil
 
-
         public Misil(Barco barco)
         {
+            //habria que inyectarlo por parametro
+            Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
+
             TgcSceneLoader loader = new TgcSceneLoader();
             //TgcScene escena = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Objetos\\BarrilPolvora\\BarrilPolvora-TgcScene.xml");
             //this.mesh = escena.Meshes[0];
@@ -39,6 +41,10 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             mesh.Inflate = true;
             mesh.LevelOfDetail = 4;
             mesh.updateValues();
+
+            string texturePath = (string)GuiController.Instance.AlumnoEjemplosMediaDir + "\\Textures\\metalOscuro.jpg";
+            mesh.setTexture(TgcTexture.createTexture(d3dDevice, texturePath));
+
             this.barco = barco;
         }
 
