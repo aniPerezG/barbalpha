@@ -101,7 +101,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect = TgcShaders.loadEffect(shaderFolder + "\\shaderLoco.fx");
 
             heightmap = GuiController.Instance.AlumnoEjemplosMediaDir + "Heightmap\\" + "heightmap500.jpg";
-            textura = GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Textures\\Liquidos" + "\\WaterSurface.png";
+            textura = GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Textures\\Liquidos" + "\\water_flow.jpg";
 
             terreno = new TgcSimpleTerrain();
             terreno.loadHeightmap(heightmap, scaleXZ, scaleY, new Vector3(0, 0, 0));
