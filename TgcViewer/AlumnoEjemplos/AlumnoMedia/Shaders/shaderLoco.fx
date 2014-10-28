@@ -44,6 +44,7 @@ float screen_dx;					// tamaño de la pantalla en pixels
 float screen_dy;
 
 
+float3 CameraPos;
 float3 LightPosition;
 float3 LightDiffuseColor; // intensity multiplier
 float3 LightSpecularColor; // intensity multiplier
