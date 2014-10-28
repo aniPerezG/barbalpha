@@ -7,16 +7,18 @@ using Microsoft.DirectX.Direct3D;
 using Microsoft.DirectX.DirectInput;
 using TgcViewer.Utils.TgcSceneLoader;
 using TgcViewer.Utils.TgcGeometry;
-
+using Microsoft.DirectX.DirectInput;
+using TgcViewer;
 
 namespace AlumnoEjemplos.BarbaAlpha.Barco
 {
     class BarcoIA : Barco
     {
-        private const float distancia_minima = 500;
+        private const float distancia_maxima = 500;
         private const float frecuencia_disparo = 3;
         private Vector3 direccion_normal = new Vector3(0, 0, -1);
-        private bool estasMuyCerca = true;
+        private Vector3 posicionAnteriorEnemy;
+        private bool estasMuyLejos = true;
 
         public BarcoIA(Vector3 posicionInicial, marAbierto oceano, string pathEscena)
             : base(posicionInicial, oceano, pathEscena) { this.direccion.haciaLaDerecha(); }
@@ -50,9 +52,9 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private Vector3 obtenerDireccionAEnemigo()
         {   // Retorna el vector director de la recta que pasa por la posición de este barco y
             // por la posición del barco enemigo
-            return new Vector3(this.posicionEnemigo().X - this.posicion().X,
+            return (new Vector3(this.posicionEnemigo().X - this.posicion().X,
                                this.posicionEnemigo().Y - this.posicion().Y,
-                               this.posicionEnemigo().Z - this.posicion().Z);
+                               this.posicionEnemigo().Z - this.posicion().Z));
         }
 
         private Vector3 obtenerDestino()
@@ -72,8 +74,8 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         private void evaluarDistanciaDeEnemigo()
         {
-            if (Vector3.Length(obtenerDireccionAEnemigo()) > distancia_minima) estasMuyCerca = false;
-            else estasMuyCerca = true;
+            if (Vector3.Length(obtenerDireccionAEnemigo()) <= distancia_maxima) estasMuyLejos = false;
+            else estasMuyLejos = true;
         }
 
         private void apuntarAEnemigo()
@@ -87,7 +89,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         }
 
         private void navegar(float elapsedTime)
-        {   // El barco se desplaza formando una circunferencia cuyo centro es la posicion del enemigo.
+        {   
             // Siempre está apuntando al enemigo, salvo que esté muy cerca.
             Barco enemigo = this.getEnemy();
 
@@ -96,20 +98,42 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             //this.atacarA(enemigo, elapsedTime);
         }
 
+        private Vector3 obtenerDireccionNormal()
+        {
+            return this.posicion() - this.posicionAnterior;
+        }
+
+        private void recalcularDireccion(float elapsedTime)
+        {
+            double modDistActual = Vector3.Length(this.obtenerDireccionAEnemigo());
+            double modDistAnterior = Vector3.Length(this.posicion() - this.posicionAnteriorEnemy);
+
+            double alfa;
+
+            alfa = Geometry.DegreeToRadian((float) Math.Acos(Math.Round(Vector3.Dot(this.obtenerDireccionAEnemigo(),
+                                         this.posicion() - this.posicionAnteriorEnemy) / (modDistActual * modDistAnterior), 3)));
+
+            this.barco.rotateY((float) alfa);
+            GuiController.Instance.Logger.log(alfa.ToString());
+        }
+
+
         protected override void moverYVirar(float elapsedTime)
         {   // El barco se mueve manteniendo una mínima distancia 'd' respecto de la posición del barco enemigo
             this.evaluarDistanciaDeEnemigo();
-            if (estasMuyCerca)
+            this.recalcularDireccion(elapsedTime);
+            if (estasMuyLejos)
             {   // Debo virar en dirección al destino, moverme hacia esa posición y virar en posicion de disparo*/
                 this.acelerar(-1);
-                this.moveOrientedY(velocidad * elapsedTime);
             }
-            else this.navegar(elapsedTime);
+            else this.disparar();
         }
 
         public override void render(float elapsedTime)
         {
             base.render(elapsedTime);
+            posicionAnterior = this.posicion();
+            posicionAnteriorEnemy = this.posicionEnemigo();
         }
     }
 }

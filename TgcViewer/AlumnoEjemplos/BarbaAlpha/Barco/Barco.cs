@@ -36,8 +36,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private ArrayList balas = new ArrayList(10);
         private List<Misil> misilesAEliminar = new List<Misil>(); // misiles a remover de la escena
         private List<Misil> misilesDisparados = new List<Misil>(); // misiles ya en el aire
-
-        private Vector3 posicionAnterior;
+        protected Vector3 posicionAnterior;
         
         public Barco(Vector3 posicionInicial, marAbierto oceano, string pathEscena) {
             TgcSceneLoader loader = new TgcSceneLoader();
