@@ -107,16 +107,16 @@ VS_OUTPUT vs_main( VS_INPUT Input )
    float Y = Input.Position.y;
    float Z = Input.Position.z/frecuencia;
   
-   //Input.Position.y = (sin(X+time)*cos(Z+time) + sin(Z+time) + cos(X+time))*amplitud ;
-   float u = Input.Position.x;
-   float v = Input.Position.z;
+   Input.Position.y = (sin(X+time)*cos(Z+time) + sin(Z+time) + cos(X+time))*amplitud ;
+   //float u = Input.Position.x;
+   //float v = Input.Position.z;
 
-   float height1 = tex2Dlod(heightmap1, float4(u, v, 0, 0)).r;
+   //float height1 = tex2Dlod(heightmap1, float4(u, v, 0, 0)).r;
    //float height1 = tex2D(heightmap1, float2(u, v)).r;
    //float height2 = tex2Dlod(heightmap2, float4(u, v, 0, 0)).r;
 
    //Input.Position.y = Input.Position.y + lerp(height1, height2, alpha);
-   Input.Position.y = Input.Position.y + height1;
+   //Input.Position.y = Input.Position.y + height1;
 
 
    //Proyectar posicion
