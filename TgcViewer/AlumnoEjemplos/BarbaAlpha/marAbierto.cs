@@ -89,7 +89,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             TgcSceneLoader loader = new TgcSceneLoader();
 
             barcoJugador = new BarcoJugador(new Vector3(0, 0, 0), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
-            barcoIA = new BarcoIA(new Vector3(4, 0, 4), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
+            barcoIA = new BarcoIA(new Vector3(200, 0, 200), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
             //canoa = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
 
             string shaderFolder = GuiController.Instance.AlumnoEjemplosMediaDir +"\\shaders";
@@ -213,8 +213,6 @@ namespace AlumnoEjemplos.BarbaAlpha
             barcoIA.setFrecuenciaDeDisparos(frecuenciaDeDisparo);
             barcoIA.setVelocidadMaxima(velocidadMaxima);
             barcoIA.render(elapsedTime);
-
-
 
 
             // muevo el SkyBox para simular espacio infinito

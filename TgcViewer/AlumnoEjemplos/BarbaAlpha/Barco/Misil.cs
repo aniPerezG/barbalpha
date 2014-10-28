@@ -6,6 +6,7 @@ using TgcViewer;
 using TgcViewer.Utils.TgcGeometry;
 using TgcViewer.Utils.TgcSceneLoader;
 using Microsoft.DirectX;
+using System.Drawing;
 
 
 namespace AlumnoEjemplos.BarbaAlpha.Barco
@@ -21,20 +22,29 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private const float gravedad = -1500f; // sólo afecta el desplazamiento respecto de Y
         private const float velocidad_inicial_horizontal = -600f; // Sobre X no hay gravedad, es constante
         private Barco barco;
-        private TgcMesh mesh; // malla del misil
+        private TgcSphere mesh; // malla del misil
 
 
         public Misil(Barco barco)
         {
             TgcSceneLoader loader = new TgcSceneLoader();
-            TgcScene escena = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Objetos\\BarrilPolvora\\BarrilPolvora-TgcScene.xml");
-            this.mesh = escena.Meshes[0];
+            //TgcScene escena = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Objetos\\BarrilPolvora\\BarrilPolvora-TgcScene.xml");
+            //this.mesh = escena.Meshes[0];
+
+            mesh = new TgcSphere();
+            mesh.BasePoly = TgcSphere.eBasePoly.CUBE;
+            mesh.setColor(Color.Black);
+            mesh.Radius = 10;
+            mesh.Position = new Vector3(0, 2, 0);
+            mesh.Inflate = true;
+            mesh.LevelOfDetail = 4;
+            mesh.updateValues();
             this.barco = barco;
         }
 
-        public TgcBoundingBox BoundingBox()
+        public TgcBoundingSphere BoundingSphere()
         {
-            return this.mesh.BoundingBox;
+            return this.mesh.BoundingSphere;
         }
 
         public void setearMisil()
@@ -91,7 +101,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         public bool chocasteConBarco(Barco unBarco)
         {
-            return TgcCollisionUtils.testAABBAABB(unBarco.BoundingBox(), this.BoundingBox()); 
+            return TgcCollisionUtils.testSphereAABB(this.BoundingSphere(), unBarco.BoundingBox()); 
         }
 
         public void dispose()

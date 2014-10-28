@@ -114,7 +114,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
                                          this.posicion() - this.posicionAnteriorEnemy) / (modDistActual * modDistAnterior), 3)));
 
             this.barco.rotateY((float) alfa);
-            GuiController.Instance.Logger.log(alfa.ToString());
+            //GuiController.Instance.Logger.log(alfa.ToString());
         }
 
 
