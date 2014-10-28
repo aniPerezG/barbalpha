@@ -331,6 +331,28 @@ namespace AlumnoEjemplos.BarbaAlpha
 
         }
 
+        protected float[,] loadHeightMap(Microsoft.DirectX.Direct3D.Device d3dDevice, string path)
+        {
+            Bitmap bitmap = (Bitmap)Bitmap.FromFile(path);
+            int width = bitmap.Size.Width;
+            int length = bitmap.Size.Height;
+
+            float[,] heightmap = new float[length, width];
+
+            for (int i = 0; i < length; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    Color pixel = bitmap.GetPixel(j, i);
+                    float intensity = pixel.R * 0.299f + pixel.G * 0.587f + pixel.B * 0.114f;
+                    heightmap[i, j] = intensity;
+                }
+
+            }
+            bitmap.Dispose();
+            return heightmap;
+        }
+
     }
 
 }

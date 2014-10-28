@@ -47,23 +47,24 @@ texture perlinNoise1;
 sampler heightmap1 = sampler_state
 {
 	Texture = <perlinNoise1>;
-	MipFilter = Point;
-	MinFilter = Point;
-	MagFilter = Point;
-	AddressU = Clamp;
-	AddressV = Clamp;
+	ADDRESSU = CLAMP;
+	ADDRESSV = CLAMP;
+	MINFILTER = LINEAR;
+	MAGFILTER = LINEAR;
+	MIPFILTER = LINEAR;
 };
 
 texture perlinNoise2;
 sampler heightmap2 = sampler_state
 {
 	Texture = <perlinNoise2>;
-	MipFilter = Point;
-	MinFilter = Point;
-	MagFilter = Point;
-	AddressU = Clamp;
-	AddressV = Clamp;
+	ADDRESSU = CLAMP;
+	ADDRESSV = CLAMP;
+	MINFILTER = LINEAR;
+	MAGFILTER = LINEAR;
+	MIPFILTER = LINEAR;
 };
+
 
 /**************************************************************************************/
 /* RenderScene */
@@ -95,6 +96,7 @@ struct VS_OUTPUT
 };
 
 
+
 //Vertex Shader
 VS_OUTPUT vs_main( VS_INPUT Input )
 {
@@ -105,7 +107,16 @@ VS_OUTPUT vs_main( VS_INPUT Input )
    float Y = Input.Position.y;
    float Z = Input.Position.z/frecuencia;
   
-   Input.Position.y = (sin(X+time)*cos(Z+time) + sin(Z+time) + cos(X+time))*amplitud ;
+   //Input.Position.y = (sin(X+time)*cos(Z+time) + sin(Z+time) + cos(X+time))*amplitud ;
+   float u = Input.Position.x;
+   float v = Input.Position.z;
+
+   float height1 = tex2Dlod(heightmap1, float4(u, v, 0, 0)).r;
+   //float height1 = tex2D(heightmap1, float2(u, v)).r;
+   //float height2 = tex2Dlod(heightmap2, float4(u, v, 0, 0)).r;
+
+   //Input.Position.y = Input.Position.y + lerp(height1, height2, alpha);
+   Input.Position.y = Input.Position.y + height1;
 
 
    //Proyectar posicion
@@ -138,7 +149,7 @@ technique RenderScene
 {
    pass Pass_0
    {
-	  VertexShader = compile vs_2_0 vs_main();
+	  VertexShader = compile vs_3_0 vs_main();
 	  PixelShader = compile ps_2_0 ps_main();
    }
 }
@@ -158,14 +169,6 @@ VS_OUTPUT vs_heightMap(VS_INPUT_BARCO Input)
 
 	//a cada vertice de la canoa le sumo la altura del agua, mas 10 que es el "fondo" de la canoa
 	Input.Position.y += 10 + (sin(X + time)*cos(Z + time) + sin(Z + time) + cos(X + time))*amplitud;
-
-	float u = (Input.Position.x / screen_dx);
-	float v = (Input.Position.z / screen_dy);
-
-	float height1 = tex2Dlod(heightmap1, float4(u, v, 0, 0)).r;
-	float height2 = tex2Dlod(heightmap2, float4(u, v, 0, 0)).r;
-
-	Input.Position.y = Input.Position.y + lerp(height1, height2, alpha);
 
 	//Proyectar posicion
 	Output.Position = mul(Input.Position, matWorldViewProj);
