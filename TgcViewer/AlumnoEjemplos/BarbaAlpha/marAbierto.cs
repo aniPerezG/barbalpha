@@ -160,7 +160,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             ortogonal = new Vector3(0, 0, 0);
 
             sol = new Sol(effect); 
-            lluvia = new Lluvia();
+            //lluvia = new Lluvia();
 
         }
 
@@ -187,7 +187,7 @@ namespace AlumnoEjemplos.BarbaAlpha
 
 
 
-            lluvia.render();
+            //lluvia.render();
 
             effect.Technique = "RenderScene";
             
@@ -288,25 +288,30 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             sentidoAux = barco.calcularSentido();
 
-                posicionLargo1 = centroBase + new Vector3(largo / 2, 0, 0);
-                //posicionLargo1 = centroBase + (largo / 2) * barco.calcularSentido();
-                puntoLargo1 = aplicarTrigonometrica(posicionLargo1, radioEnY, time, alturaOlas);
-                posicionLargo2 = centroBase + new Vector3(-largo / 2, 0, 0);
-                //posicionLargo2 = centroBase - (largo / 2) * barco.calcularSentido();
-                puntoLargo2 = aplicarTrigonometrica(posicionLargo2, radioEnY, time, alturaOlas);
+            posicionLargo1 = centroBase + new Vector3(largo / 2, 0, 0);
+            //posicionLargo1 = centroBase + (largo / 2) * barco.calcularSentido();
+            puntoLargo1 = aplicarTrigonometrica(posicionLargo1, radioEnY, time, alturaOlas);
+            posicionLargo2 = centroBase + new Vector3(-largo / 2, 0, 0);
+            //posicionLargo2 = centroBase - (largo / 2) * barco.calcularSentido();
+            puntoLargo2 = aplicarTrigonometrica(posicionLargo2, radioEnY, time, alturaOlas);
 
-                posicionAncho1 = centroBase + new Vector3(0, 0, ancho / 2);
-                //posicionAncho1 = centroBase + (ancho / 2) * setearOrtogonal(barco.calcularSentido(), ortogonal);
-                puntoAncho1 = aplicarTrigonometrica(posicionAncho1, radioEnY, time, alturaOlas);
-                posicionAncho2 = centroBase + new Vector3(0, 0, -ancho / 2);
-                //posicionAncho2 = centroBase - (ancho / 2) * setearOrtogonal(barco.calcularSentido(), ortogonal);
-                puntoAncho2 = aplicarTrigonometrica(posicionAncho2, radioEnY, time, alturaOlas);
+            posicionAncho1 = centroBase + new Vector3(0, 0, ancho / 2);
+            //posicionAncho1 = centroBase + (ancho / 2) * setearOrtogonal(barco.calcularSentido(), ortogonal);
+            puntoAncho1 = aplicarTrigonometrica(posicionAncho1, radioEnY, time, alturaOlas);
+            posicionAncho2 = centroBase + new Vector3(0, 0, -ancho / 2);
+            //posicionAncho2 = centroBase - (ancho / 2) * setearOrtogonal(barco.calcularSentido(), ortogonal);
+            puntoAncho2 = aplicarTrigonometrica(posicionAncho2, radioEnY, time, alturaOlas);
 
-                vector1 = puntoLargo1 - puntoLargo2;
-                vector2 = puntoAncho1 - puntoAncho2;
-                normalPlano = Vector3.Normalize(Vector3.Cross(vector1, vector2));
+            vector1 = puntoLargo1 - puntoLargo2;
+            vector2 = puntoAncho1 - puntoAncho2;
+            normalPlano = Vector3.Normalize(Vector3.Cross(vector1, vector2));
 
-                return new Plano(normalPlano, puntoBase);
+            if (sentidoAux.Z > 0)
+            {
+                normalPlano.Y *= -1;
+            }
+
+            return new Plano(normalPlano, puntoBase);
           
         }
 
@@ -342,6 +347,8 @@ namespace AlumnoEjemplos.BarbaAlpha
             return Vector3.Normalize(ortogonal);
 
         }
+
+
 
         protected float[,] loadHeightMap(Microsoft.DirectX.Direct3D.Device d3dDevice, string path)
         {
