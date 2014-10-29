@@ -55,7 +55,6 @@ namespace AlumnoEjemplos.BarbaAlpha
         //variables inclinacion
         float cosAngulo;
         float prodInterno;
-        float prodModulos;
         Vector3 sentidoBarco;
 
         Vector3 vecAux;
@@ -63,6 +62,8 @@ namespace AlumnoEjemplos.BarbaAlpha
 
         Texture textPerlinNoise1, textPerlinNoise2;
 
+        Lluvia lluvia;
+        
         //variables para la iluminacion
         Vector3 posicionSol;
         Vector3 CameraPos;
@@ -169,7 +170,8 @@ namespace AlumnoEjemplos.BarbaAlpha
             sol.Effect = effect;
             sol.Technique = "LightTechnique";
             sol.updateValues();
-            
+
+            lluvia = new Lluvia();
 
         }
 
@@ -196,6 +198,8 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             //cargar variables para la iluminacion
             setearSol();
+
+            lluvia.render();
 
             effect.Technique = "RenderScene";
             
