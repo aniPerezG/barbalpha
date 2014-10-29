@@ -34,7 +34,7 @@ namespace AlumnoEjemplos.MiGrupo
         /// </summary>
         public override string getCategory()
         {
-            return "Pirate Ship";
+            return "AlumnoEjemplos";
         }
 
         /// <summary>
