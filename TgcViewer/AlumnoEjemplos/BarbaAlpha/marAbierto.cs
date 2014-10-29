@@ -253,12 +253,12 @@ namespace AlumnoEjemplos.BarbaAlpha
             
         }
 
-        public Vector3 aplicarTrigonometrica (Vector3 posicion, float radioY, float actualTime, float frecuencia){
+        public Vector3 aplicarTrigonometrica (Vector3 posicion, float radioY, float actualTime, float frecuencia, float alturaOlas){
 
             float X = posicion.X / frecuenciaOlas;
             float Z = posicion.Z / frecuenciaOlas;
 
-            posicion.Y += radioY + (float)(Math.Sin(X + actualTime) * Math.Cos(Z + actualTime) + Math.Sin(Z + actualTime) + Math.Cos(X + actualTime)) * frecuencia;
+            posicion.Y += radioY + (float)(Math.Sin(X + actualTime) * Math.Cos(Z + actualTime) + Math.Sin(Z + actualTime) + Math.Cos(X + actualTime)) * alturaOlas;
 
             return posicion;
         }
@@ -290,23 +290,23 @@ namespace AlumnoEjemplos.BarbaAlpha
             largo = barco.BoundingBox().calculateAxisRadius().X * 2;
             ancho = barco.BoundingBox().calculateAxisRadius().Z * 2;
 
-            puntoBase = aplicarTrigonometrica(centroBase, radioEnY, time, alturaOlas);
+            puntoBase = aplicarTrigonometrica(centroBase, radioEnY, time, frecuenciaOlas, alturaOlas);
 
             sentidoAux = barco.calcularSentido();
 
             posicionLargo1 = centroBase + new Vector3(largo / 2, 0, 0);
             //posicionLargo1 = centroBase + (largo / 2) * barco.calcularSentido();
-            puntoLargo1 = aplicarTrigonometrica(posicionLargo1, radioEnY, time, alturaOlas);
+            puntoLargo1 = aplicarTrigonometrica(posicionLargo1, radioEnY, time, frecuenciaOlas, alturaOlas);
             posicionLargo2 = centroBase + new Vector3(-largo / 2, 0, 0);
             //posicionLargo2 = centroBase - (largo / 2) * barco.calcularSentido();
-            puntoLargo2 = aplicarTrigonometrica(posicionLargo2, radioEnY, time, alturaOlas);
+            puntoLargo2 = aplicarTrigonometrica(posicionLargo2, radioEnY, time, frecuenciaOlas, alturaOlas);
 
             posicionAncho1 = centroBase + new Vector3(0, 0, ancho / 2);
             //posicionAncho1 = centroBase + (ancho / 2) * setearOrtogonal(barco.calcularSentido(), ortogonal);
-            puntoAncho1 = aplicarTrigonometrica(posicionAncho1, radioEnY, time, alturaOlas);
+            puntoAncho1 = aplicarTrigonometrica(posicionAncho1, radioEnY, time, frecuenciaOlas, alturaOlas);
             posicionAncho2 = centroBase + new Vector3(0, 0, -ancho / 2);
             //posicionAncho2 = centroBase - (ancho / 2) * setearOrtogonal(barco.calcularSentido(), ortogonal);
-            puntoAncho2 = aplicarTrigonometrica(posicionAncho2, radioEnY, time, alturaOlas);
+            puntoAncho2 = aplicarTrigonometrica(posicionAncho2, radioEnY, time, frecuenciaOlas, alturaOlas);
 
             vector1 = puntoLargo1 - puntoLargo2;
             vector2 = puntoAncho1 - puntoAncho2;
