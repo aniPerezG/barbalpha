@@ -73,17 +73,17 @@ namespace AlumnoEjemplos.BarbaAlpha
 
         public override string getCategory()
         {
-            return "Pirate Ship";
+            return "AlumnoEjemplos";
         }
 
         public override string getName()
         {
-            return "Mar Abierto";
+            return "BarbAlpha";
         }
 
         public override string getDescription()
         {
-            return "MiIdea - Descripcion de la idea";
+            return "Trata de derribar al otro barco antes de que el te derribe a vos! \n Te mueves con las flechas y disparas con la barra de Espacio";
         }
 
         public override void init()
@@ -245,6 +245,12 @@ namespace AlumnoEjemplos.BarbaAlpha
 
         public override void close(){
             effect.Dispose();
+            sol.dispose();
+            barcoIA.dispose();
+            barcoJugador.dispose();
+            effect.Dispose();
+            
+            
         }
 
         public Vector3 aplicarTrigonometrica (Vector3 posicion, float radioY, float actualTime, float frecuencia){

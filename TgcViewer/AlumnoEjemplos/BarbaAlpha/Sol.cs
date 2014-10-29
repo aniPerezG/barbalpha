@@ -80,5 +80,10 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect.SetValue("LightDistanceSquared", 10);
             effect.SetValue("SpecularPower", 10);
         }
+
+        public void dispose()
+        {
+            sol.dispose();
+        }
     }
 }

@@ -237,7 +237,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         }
 
         protected void leDisteA(Barco enemigo)  {
-            if (++this.puntaje == 5) this.close();
+            if (++this.puntaje == 5) this.dispose();
         }
 
         protected float calcularVelocidadDeRotacion(Direccion direccion){
@@ -280,9 +280,9 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         }
 
         
-        public virtual void close()
+        public virtual void dispose()
         {
-
+            this.barco.dispose();
         }
     }
 }
