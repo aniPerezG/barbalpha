@@ -44,7 +44,6 @@ namespace AlumnoEjemplos.BarbaAlpha
         string textura;
         TgcSimpleTerrain terreno;
         TgcSkyBox skyBox;
-        TgcSphere sol;
 
         //variables necesarias para el render
         float frecuenciaOlas;
@@ -63,10 +62,9 @@ namespace AlumnoEjemplos.BarbaAlpha
         Texture textPerlinNoise1, textPerlinNoise2;
 
         Lluvia lluvia;
+        Sol sol;
         
-        //variables para la iluminacion
-        Vector3 posicionSol;
-        Vector3 CameraPos;
+       
 
         // Buffers
         public static CustomVertex.PositionNormalTextured[] _vertices;
@@ -161,16 +159,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             vecAux = new Vector3(0, 0, 0);
             ortogonal = new Vector3(0, 0, 0);
 
-            posicionSol = new Vector3(0, 1500, 0);
-            sol = new TgcSphere();
-            sol.setColor(Color.Yellow);
-            sol.Radius = 100;
-            sol.BasePoly = TgcSphere.eBasePoly.CUBE;
-            sol.Position = posicionSol;
-            sol.Effect = effect;
-            sol.Technique = "LightTechnique";
-            sol.updateValues();
-
+            sol = new Sol(effect); 
             lluvia = new Lluvia();
 
         }
@@ -196,8 +185,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect.SetValue("amplitud", alturaOlas);
             effect.SetValue("frecuencia", frecuenciaOlas);
 
-            //cargar variables para la iluminacion
-            setearSol();
+
 
             lluvia.render();
 
@@ -251,7 +239,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             //Actualizar posicion de cámara
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
             GuiController.Instance.CurrentCamera.updateCamera();
-            CameraPos = GuiController.Instance.CurrentCamera.getPosition();
+            
 
         }
 
@@ -377,47 +365,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             return heightmap;
         }
 
-        private void setearSol()
-        {
-
-        CameraPos = GuiController.Instance.CurrentCamera.getPosition();
-
-        effect.SetValue("CameraPosX", CameraPos.X);
-        effect.SetValue("CameraPosY", CameraPos.Y);
-        effect.SetValue("CameraPosZ", CameraPos.Z);
-
-        effect.SetValue("LightPositionX", this.posicionSol.X);
-        effect.SetValue("LightPositionY", this.posicionSol.Y);
-        effect.SetValue("LightPositionZ", this.posicionSol.Z);
-
-        effect.SetValue("LightDiffuseColorX", Color.White.R);
-        effect.SetValue("LightDiffuseColorY",  Color.White.G);
-        effect.SetValue("LightDiffuseColorZ", Color.White.B);
-
-        effect.SetValue("LightSpecularColorX", Color.White.R);
-        effect.SetValue("LightSpecularColorY", Color.White.G);
-        effect.SetValue("LightSpecularColorZ", Color.White.B); 
-
-        effect.SetValue("DiffuseColorX", Color.White.R);
-        effect.SetValue("DiffuseColorY", Color.White.G);
-        effect.SetValue("DiffuseColorZ", Color.White.B);
-
-        effect.SetValue("AmbientLightColorX" , Color.White.R);
-        effect.SetValue("AmbientLightColorY" , Color.White.G);
-        effect.SetValue("AmbientLightColorZ" , Color.White.B);
-
-        effect.SetValue("EmissiveColorX" , Color.White.R);
-        effect.SetValue("EmissiveColorY" , Color.White.G);
-        effect.SetValue("EmissiveColorZ" , Color.White.B);
- 
-        effect.SetValue("SpecularColorX" , Color.Yellow.R);
-        effect.SetValue("SpecularColorY" , Color.Yellow.G);
-        effect.SetValue("SpecularColorZ" , Color.Yellow.B);
-
-        effect.SetValue("LightDistanceSquared", 10);
-        effect.SetValue("SpecularPower", 10);
-        }
-
+        
     }
 
 }
