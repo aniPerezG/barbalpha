@@ -202,13 +202,13 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             setearVariablesBarcoShader(planoBase, barcoJugador.posicion(), effect);
 
-            sentidoBarco = barcoJugador.calcularSentido();
-            prodInterno = Vector3.Dot(planoBase.normal, sentidoBarco);
-            cosAngulo = prodInterno;
+            //sentidoBarco = barcoJugador.calcularSentido();
+            //prodInterno = Vector3.Dot(planoBase.normal, sentidoBarco);
+            //cosAngulo = prodInterno;
 
-            barcoJugador.aumentarAceleracionPorInclinacion(cosAngulo);
-            barcoJugador.setFrecuenciaDeDisparos(frecuenciaDeDisparo);
-            barcoJugador.setVelocidadMaxima(velocidadMaxima);
+            //barcoJugador.aumentarAceleracionPorInclinacion(cosAngulo);
+            //barcoJugador.setFrecuenciaDeDisparos(frecuenciaDeDisparo);
+            //barcoJugador.setVelocidadMaxima(velocidadMaxima);
             barcoJugador.render(elapsedTime);
 
 
@@ -218,13 +218,13 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             setearVariablesBarcoShader(planoBase, barcoIA.posicion(), effect);
 
-            sentidoBarco = barcoIA.calcularSentido();
-            prodInterno = Vector3.Dot(planoBase.normal, sentidoBarco);
-            cosAngulo = prodInterno;
+            //sentidoBarco = barcoIA.calcularSentido();
+            //prodInterno = Vector3.Dot(planoBase.normal, sentidoBarco);
+            //cosAngulo = prodInterno;
 
-            barcoIA.aumentarAceleracionPorInclinacion(cosAngulo);
-            barcoIA.setFrecuenciaDeDisparos(frecuenciaDeDisparo);
-            barcoIA.setVelocidadMaxima(velocidadMaxima);
+            //barcoIA.aumentarAceleracionPorInclinacion(cosAngulo);
+            //barcoIA.setFrecuenciaDeDisparos(frecuenciaDeDisparo);
+            //barcoIA.setVelocidadMaxima(velocidadMaxima);
             barcoIA.render(elapsedTime);
 
 

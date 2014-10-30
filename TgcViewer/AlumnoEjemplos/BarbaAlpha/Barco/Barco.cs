@@ -47,6 +47,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.setAgua(oceano);
             this.cargarCaniones();
             posicionAnterior = posicionInicial;
+            sentido = new Vector3(0, 0, -1);
         }
 
         protected abstract void moverYVirar(float elapsedTime);
