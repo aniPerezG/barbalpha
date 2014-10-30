@@ -100,6 +100,11 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
             this.barco.move(v);
         }
+
+        protected void invertirSentido()
+        {
+            this.sentido = Vector3.Multiply(sentido, (-1));
+        }
         
         public void rotarSobreY(float angulo)
         {
@@ -108,7 +113,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.cambiarSentido(rotacion_acumulada);
         }
 
-        public void cambiarSentido(float angulo)
+        protected void cambiarSentido(float angulo)
         {
             sentido.X = FastMath.Sin(angulo);
             sentido.Z = -FastMath.Cos(angulo);

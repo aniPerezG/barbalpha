@@ -22,7 +22,11 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             TgcD3dInput input = GuiController.Instance.D3dInput;
 
             if (input.keyDown(Key.Up)) this.acelerar(-1);
-            if (input.keyDown(Key.Down)) this.acelerar(1);
+            if (input.keyDown(Key.Down))
+            {
+                this.acelerar(1);
+                this.invertirSentido();
+            }
             if (input.keyDown(Key.Space)) this.disparar();
             if (input.keyDown(Key.Right))
             {

@@ -93,7 +93,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             TgcSceneLoader loader = new TgcSceneLoader();
 
             barcoJugador = new BarcoJugador(new Vector3(0, 0, 0), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
-            barcoIA = new BarcoIA(new Vector3(200, 0, 200), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
+            barcoIA = new BarcoIA(new Vector3(200, 0, 0), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
             //canoa = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
 
             string shaderFolder = GuiController.Instance.AlumnoEjemplosMediaDir +"\\shaders";
@@ -312,10 +312,10 @@ namespace AlumnoEjemplos.BarbaAlpha
             vector2 = puntoAncho1 - puntoAncho2;
             normalPlano = Vector3.Normalize(Vector3.Cross(vector1, vector2));
 
-            if (sentidoAux.Z > 0)
-            {
-                normalPlano.Y *= -1;
-            }
+            //if (sentidoAux.Z > 0)
+            //{
+            //    normalPlano.Y *= -1;
+            //}
 
             return new Plano(normalPlano, puntoBase);
           

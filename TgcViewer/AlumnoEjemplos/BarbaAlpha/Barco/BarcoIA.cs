@@ -17,7 +17,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private const float distancia_maxima = 500;
         private const float frecuencia_disparo = 3;
         private Vector3 direccion_normal = new Vector3(0, 0, -1);
-        private Vector3 posicionAnteriorEnemy;
         private bool estasMuyLejos = true;
 
         public BarcoIA(Vector3 posicionInicial, marAbierto oceano, string pathEscena)
@@ -26,13 +25,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         public Vector3 posicionEnemigo()
         {
             return getEnemy().posicion();
-        }
-
-        public void rotate(Vector3 rotacion)
-        {
-            this.barco.rotateX(rotacion.X);
-            this.barco.rotateY(rotacion.Y);
-            this.barco.rotateZ(rotacion.Z);
         }
 
         private Vector3 obtenerDireccionAEnemigo()
@@ -64,6 +56,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         private void apuntarEnemigo()
         {
+            GuiController.Instance.Logger.log(this.getSentido().ToString());
             if (!estoyApuntandoAEnemigo())
             {
                 this.rotarSobreY(radianesARotar());
@@ -71,11 +64,11 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         }
 
         protected override void moverYVirar(float elapsedTime)
-        {   // El barco se mueve manteniendo una mínima distancia 'd' respecto de la posición del barco enemigo
+        {
             this.evaluarDistanciaDeEnemigo();
             this.apuntarEnemigo();
             if (estasMuyLejos)
-            {   // Debo virar en dirección al destino, moverme hacia esa posición y virar en posicion de disparo*/
+            {
                 this.acelerar(-1);
             }
             else this.disparar();
@@ -84,8 +77,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         public override void render(float elapsedTime)
         {
             base.render(elapsedTime);
-            posicionAnterior = this.posicion();
-            posicionAnteriorEnemy = this.posicionEnemigo();
         }
     }
 }
