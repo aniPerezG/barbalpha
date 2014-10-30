@@ -37,7 +37,8 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private List<Misil> misilesAEliminar = new List<Misil>(); // misiles a remover de la escena
         private List<Misil> misilesDisparados = new List<Misil>(); // misiles ya en el aire
         protected Vector3 posicionAnterior;
-        
+        protected Vector3 sentido;
+
         public Barco(Vector3 posicionInicial, marAbierto oceano, string pathEscena) {
             TgcSceneLoader loader = new TgcSceneLoader();
             TgcScene escenaCanion = loader.loadSceneFromFile(pathEscena); // escena del cañon
@@ -103,6 +104,13 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
             this.rotacion_acumulada += angulo;
             this.barco.rotateY(angulo);
+            this.cambiarSentido(rotacion_acumulada);
+        }
+
+        public void cambiarSentido(float angulo)
+        {
+            sentido.X = FastMath.Sin(angulo);
+            sentido.Z = -FastMath.Cos(angulo);
         }
 
         public void aumentarAceleracionPorInclinacion(float aumento)
@@ -233,7 +241,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         public Vector3 calcularSentido()
         {
-            return Vector3.Normalize(this.posicion() - this.posicionAnterior);
+            return sentido;
         }
 
         protected void leDisteA(Barco enemigo)  {
