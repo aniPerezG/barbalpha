@@ -56,7 +56,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         private void apuntarEnemigo()
         {
-            GuiController.Instance.Logger.log(this.getSentido().ToString());
+            //GuiController.Instance.Logger.log(this.getSentido().ToString());
             if (!estoyApuntandoAEnemigo())
             {
                 this.rotarSobreY(radianesARotar());
