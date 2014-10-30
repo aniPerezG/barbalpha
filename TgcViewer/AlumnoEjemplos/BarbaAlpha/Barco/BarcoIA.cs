@@ -38,9 +38,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private Vector3 obtenerDireccionAEnemigo()
         {   // Retorna el vector director de la recta que pasa por la posición de este barco y
             // por la posición del barco enemigo
-            return (new Vector3(this.posicionEnemigo().X - this.posicion().X,
-                               this.posicionEnemigo().Y - this.posicion().Y,
-                               this.posicionEnemigo().Z - this.posicion().Z));
+            return Vector3.Normalize(this.posicionEnemigo() - this.posicion());
         }
 
         private void evaluarDistanciaDeEnemigo()
@@ -49,14 +47,33 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             else estasMuyLejos = true;
         }
 
-        private void apuntarEnemigo(float elapsedTime)
+        private Boolean estoyApuntandoAEnemigo()
         {
+            return obtenerDireccionAEnemigo() == getSentido();
+        }
+
+        private float gradosARotar()
+        {
+            return FastMath.Acos(Vector3.Dot(this.obtenerDireccionAEnemigo(), this.getSentido()));
+        }
+
+        private float radianesARotar()
+        {
+            return Geometry.DegreeToRadian(this.gradosARotar());
+        }
+
+        private void apuntarEnemigo()
+        {
+            if (!estoyApuntandoAEnemigo())
+            {
+                this.rotarSobreY(radianesARotar());
+            }
         }
 
         protected override void moverYVirar(float elapsedTime)
         {   // El barco se mueve manteniendo una mínima distancia 'd' respecto de la posición del barco enemigo
             this.evaluarDistanciaDeEnemigo();
-            this.apuntarEnemigo(elapsedTime);
+            this.apuntarEnemigo();
             if (estasMuyLejos)
             {   // Debo virar en dirección al destino, moverme hacia esa posición y virar en posicion de disparo*/
                 this.acelerar(-1);

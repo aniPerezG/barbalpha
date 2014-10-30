@@ -240,7 +240,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             }
         }
 
-        public Vector3 calcularSentido()
+        public Vector3 getSentido()
         {
             return sentido;
         }

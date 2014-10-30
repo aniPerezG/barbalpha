@@ -292,7 +292,7 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             puntoBase = aplicarTrigonometrica(centroBase, radioEnY, time, frecuenciaOlas, alturaOlas);
 
-            sentidoAux = barco.calcularSentido();
+            sentidoAux = barco.getSentido();
 
             posicionLargo1 = centroBase + new Vector3(largo / 2, 0, 0);
             //posicionLargo1 = centroBase + (largo / 2) * barco.calcularSentido();
