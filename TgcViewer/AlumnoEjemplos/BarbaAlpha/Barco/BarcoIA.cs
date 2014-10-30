@@ -35,20 +35,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.barco.rotateZ(rotacion.Z);
         }
 
-        private void virarHaciaDestino() 
-        {   // Debería virar el barco hasta alinearse en la direccion propuesta
-            direccion_normal.Normalize();
-            obtenerDireccionAEnemigo().Normalize();
-
-            double angOrg = Math.Atan2(direccion_normal.Z, direccion_normal.X) + 2 * Math.PI;
-            double angDst = Math.Atan2(obtenerDireccionAEnemigo().Z, obtenerDireccionAEnemigo().X) + 2 * Math.PI;
-            double distLeft = angOrg > angDst ? 2 * Math.PI - angOrg + angDst : angDst - angOrg;
-            double distRight = angOrg < angDst ? 2 * Math.PI - angDst + angOrg : angOrg - angDst;
-
-            if (distLeft < distRight) this.rotate(new Vector3(1, 0, 0));
-            else this.rotate(new Vector3(-1, 0, 0));
-        }
-
         private Vector3 obtenerDireccionAEnemigo()
         {   // Retorna el vector director de la recta que pasa por la posición de este barco y
             // por la posición del barco enemigo
