@@ -36,11 +36,11 @@ namespace AlumnoEjemplos.BarbaAlpha
         public void render()
         {
             //cargar variables para la iluminacion
-            this.setearEfecto();
+            //this.setearEfecto();
 
             sol.render();
         }
-
+        /*
         public void setearEfecto()
         {
             CameraPos = GuiController.Instance.CurrentCamera.getPosition();
@@ -79,7 +79,7 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             effect.SetValue("LightDistanceSquared", 10);
             effect.SetValue("SpecularPower", 10);
-        }
+        }*/
 
         public void dispose()
         {

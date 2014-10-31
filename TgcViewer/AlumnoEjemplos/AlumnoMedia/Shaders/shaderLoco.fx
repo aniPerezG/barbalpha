@@ -19,6 +19,14 @@ sampler2D diffuseMap = sampler_state
 	MIPFILTER = LINEAR;
 };
 
+float3 fvLightPosition = float3(-100.00, 100.00, -100.00);
+float3 fvEyePosition = float3(0.00, 0.00, -100.00);
+float k_la = 0.3;							// luz ambiente global
+float k_ld = 0.9;							// luz difusa
+float k_ls = 0.4;							// luz specular
+float fSpecularPower = 16.84;				// exponente de la luz specular
+
+
 
 float time = 0;
 
@@ -43,73 +51,6 @@ float alpha;
 float screen_dx;					// tamaño de la pantalla en pixels
 float screen_dy;
 
-
-float3 posicionSol;
-float3 CameraPos;
-float3 LightPosition;
-float3 LightDiffuseColor;
-float3 LightSpecularColor;
-float3 DiffuseColor;
-float3 AmbientLightColor;
-float3 EmissiveColor;
-float3 SpecularColor;
-float LightDistanceSquared;
-float SpecularPower;
-
-float CameraPosX;
-float CameraPosY;
-float CameraPosZ;
-
-float LightPositionX;
-float LightPositionY;
-float LightPositionZ;
-
-float LightDiffuseColorX;
-float LightDiffuseColorY;
-float LightDiffuseColorZ; // intensity multiplier
-
-float LightSpecularColorX; // intensity multiplier
-float LightSpecularColorY;
-float LightSpecularColorZ;
-
-float DiffuseColorX;
-float DiffuseColorY;
-float DiffuseColorZ;
-
-float AmbientLightColorX;
-float AmbientLightColorY;
-float AmbientLightColorZ;
-
-float EmissiveColorX;
-float EmissiveColorY;
-float EmissiveColorZ;
-
-float SpecularColorX;
-float SpecularColorY;
-float SpecularColorZ;
-
-
-texture perlinNoise1;
-sampler heightmap1 = sampler_state
-{
-	Texture = <perlinNoise1>;
-	ADDRESSU = CLAMP;
-	ADDRESSV = CLAMP;
-	MINFILTER = LINEAR;
-	MAGFILTER = LINEAR;
-	MIPFILTER = LINEAR;
-};
-
-texture perlinNoise2;
-sampler heightmap2 = sampler_state
-{
-	Texture = <perlinNoise2>;
-	ADDRESSU = CLAMP;
-	ADDRESSV = CLAMP;
-	MINFILTER = LINEAR;
-	MAGFILTER = LINEAR;
-	MIPFILTER = LINEAR;
-};
 
 
 /**************************************************************************************/
@@ -188,42 +129,6 @@ float4 ps_main( float2 Texcoord: TEXCOORD0, float4 Color:COLOR0, float2 Heightco
 	return texColor;
 }
 
-
-
-
-//*************************************************************
-
-VS_OUTPUT vs_heightMap(VS_INPUT Input)
-{
-	VS_OUTPUT Output;
-
-	
-	//Animar Posicion
-	float X = (Input.Position.x + offsetX) / frecuencia;
-	float Z = (Input.Position.z + offsetZ) / frecuencia;
-	Input.Position.y += offsetY;
-
-
-	Output.WorldPos = mul(Input.Position, matWorld);
-	Output.Normal = mul(Input.Normal, (float3x3)matWorld);
-
-
-	//a cada vertice de la canoa le sumo la altura del agua, mas 10 que es el "fondo" de la canoa
-	Input.Position.y += 10 + (sin(X + time)*cos(Z + time) + sin(Z + time) + cos(X + time))*amplitud;
-
-	//Proyectar posicion
-	Output.Position = mul(Input.Position, matWorldViewProj);
-
-	//Propago las coordenadas de textura
-	Output.Texcoord = Input.Texcoord;
-
-	//Propago el color x vertice
-	Output.Color = Input.Color;
-
-	return(Output);
-
-}
-
 VS_OUTPUT vs_alturaPlano(VS_INPUT Input)
 {
 	VS_OUTPUT Output;
@@ -279,66 +184,51 @@ VS_OUTPUT vs_normal(VS_INPUT Input)
 	return(Output);
 
 }
-
-
-float4 ps_light(VS_OUTPUT input) : COLOR0
+/*
+float4 ps_light(float3 Texcoord: TEXCOORD0, float3 N : TEXCOORD1,
+float3 Pos : TEXCOORD2) : COLOR0
 {
-	// Phong relfection is ambient + light-diffuse + spec highlights.
-	// I = Ia*ka*Oda + fatt*Ip[kd*Od(N.L) + ks(R.V)^n]
-	// Ref: http://brooknovak.wordpress.com/2008/11/13/hlsl-per-pixel-point-light-using-phong-blinn-lighting-model/
-	// Get light direction for this fragment
+	float ld = 0;		// luz difusa
+	float le = 0;		// luz specular
 
-	CameraPos.x = CameraPosX;
-	CameraPos.y = CameraPosY;
-	CameraPos.z = CameraPosZ;
+	N = normalize(N);
 
-	LightPosition.x = LightPositionX;
-	LightPosition.y = LightPositionY;
-	LightPosition.z = LightPositionZ;
+	// si hubiera varias luces, se podria iterar por c/u. 
+	// Pero hay que tener en cuenta que este algoritmo es bastante pesado
+	// ya que todas estas formulas se calculan x cada pixel. 
+	// En la practica no es usual tomar mas de 2 o 3 luces. Generalmente 
+	// se determina las luces que mas contribucion a la escena tienen, y 
+	// el resto se aproxima con luz ambiente. 
+	// for(int =0;i<cant_ligths;++i)
+	// 1- calculo la luz diffusa
+	float3 LD = normalize(fvLightPosition - float3(Pos.x, Pos.y, Pos.z));
+		ld += saturate(dot(N, LD))*k_ld;
 
-	LightDiffuseColor.x = LightDiffuseColorX;
-	LightDiffuseColor.y = LightDiffuseColorY;
-	LightDiffuseColor.z = LightDiffuseColorZ;
+	// 2- calcula la reflexion specular
+	float3 D = normalize(float3(Pos.x, Pos.y, Pos.z) - fvEyePosition);
+		float ks = saturate(dot(reflect(LD, N), D));
+	ks = pow(ks, fSpecularPower);
+	le += ks*k_ls;
 
-	LightSpecularColor.x = LightSpecularColorX;
-	LightSpecularColor.y = LightSpecularColorY;
-	LightSpecularColor.z = LightSpecularColorZ;
+	//Obtener el texel de textura
+	float4 fvBaseColor = tex2D(diffuseMap, Texcoord);
+		//float4 fvBaseColor      = float4(1,0.5,0.5,1);
 
-	DiffuseColor.x = DiffuseColorX;
-	DiffuseColor.y = DiffuseColorY;
-	DiffuseColor.z = DiffuseColorZ;
+		// suma luz diffusa, ambiente y especular
+		float4 RGBColor = 0;
+		RGBColor.rgb = saturate(fvBaseColor*(saturate(k_la + ld)) + le);
 
-	AmbientLightColor.x = AmbientLightColorX;
-	AmbientLightColor.y = AmbientLightColorY;
-	AmbientLightColor.z = AmbientLightColorZ;
+	// saturate deja los valores entre [0,1]. Una tecnica muy usada en motores modernos
+	// es usar floating point textures auxialres, para almacenar mucho mas que 256 valores posibles 
+	// de iluminiacion. En esos casos, el valor del rgb podria ser mucho mas que 1. 
+	// Imaginen una excena outdoor, a la luz de sol, hay mucha diferencia de iluminacion
+	// entre los distintos puntos, que no se pueden almacenar usando solo 8bits por canal.
+	// Estas tecnicas se llaman HDRLighting (High Dynamic Range Lighting). 
+	// Muchas inclusive simulan el efecto de la pupila que se contrae o dilata para 
+	// adaptarse a la nueva cantidad de luz ambiente. 
 
-	EmissiveColor.x = EmissiveColorX;
-	EmissiveColor.y = EmissiveColorY;
-	EmissiveColor.z = EmissiveColorZ;
-
-	SpecularColor.x = SpecularColorX;
-	SpecularColor.y = SpecularColorY;
-	SpecularColor.z = SpecularColorZ;
-
-	float3 lightDir = normalize(input.WorldPos - LightPosition);
-
-	// Note: Non-uniform scaling not supported
-	float diffuseLighting = saturate(dot(input.Normal, -lightDir)); // per pixel diffuse lighting
-
-	// Introduce fall-off of light intensity
-	diffuseLighting *= (LightDistanceSquared / dot(LightPosition - input.WorldPos, LightPosition - input.WorldPos));
-
-	// Using Blinn half angle modification for perofrmance over correctness
-	float3 h = normalize(normalize(CameraPos - input.WorldPos) - lightDir);
-
-	float specLighting = pow(saturate(dot(h, input.Normal)), SpecularPower);
-
-	return float4(saturate(
-		AmbientLightColor +
-		(DiffuseColor * LightDiffuseColor * diffuseLighting * 0.6) + // Use light diffuse vector as intensity multiplier
-		(SpecularColor * LightSpecularColor * specLighting * 0.5) // Use light specular vector as intensity multiplier
-		), 1);
-}
+	return RGBColor;
+}*/
 
 // ------------------------------------------------------------------
 technique RenderScene
@@ -358,7 +248,7 @@ technique HeightScene
 		PixelShader = compile ps_2_0 ps_main();
 	}
 }
-
+/*
 technique LightTechnique
 {
 	pass Pass_0
@@ -366,4 +256,4 @@ technique LightTechnique
 		VertexShader = compile vs_2_0 vs_normal();
 		PixelShader = compile ps_2_0 ps_light();
 	}
-}
+}*/

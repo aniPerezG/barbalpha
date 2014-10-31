@@ -59,10 +59,10 @@ namespace AlumnoEjemplos.BarbaAlpha
         Vector3 vecAux;
         Vector3 ortogonal;
 
-        Texture textPerlinNoise1, textPerlinNoise2;
 
-        Lluvia lluvia;
+        //Lluvia lluvia;
         Sol sol;
+
         
        
 
@@ -147,15 +147,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             GuiController.Instance.Modifiers.addFloat("frecuenciaOlas", 50f, 300f, 100f);
             GuiController.Instance.Modifiers.addFloat("velocidadMaxima", 10f, 400f, 100f);
 
-            textPerlinNoise1 = TextureLoader.FromFile(d3dDevice, GuiController.Instance.AlumnoEjemplosMediaDir + "Textures\\perlin1.jpg");
-            textPerlinNoise2 = TextureLoader.FromFile(d3dDevice, GuiController.Instance.AlumnoEjemplosMediaDir + "Textures\\perlin2.jpg");
-
-            effect.SetValue("perlinNoise1", textPerlinNoise1);
-            effect.SetValue("perlinNoise1", textPerlinNoise2);
-            effect.SetValue("alpha", 0.8f);
-            effect.SetValue("screen_dx", d3dDevice.PresentationParameters.BackBufferWidth);
-            effect.SetValue("screen_dy", d3dDevice.PresentationParameters.BackBufferHeight);
-
+       
             vecAux = new Vector3(0, 0, 0);
             ortogonal = new Vector3(0, 0, 0);
 
@@ -201,14 +193,14 @@ namespace AlumnoEjemplos.BarbaAlpha
             Plano planoBase = obtenerPlano(barcoJugador);
 
             setearVariablesBarcoShader(planoBase, barcoJugador.posicion(), effect);
+            /*
+            sentidoBarco = barcoJugador.getSentido();
+            prodInterno = Vector3.Dot(planoBase.normal, sentidoBarco);
+            cosAngulo = prodInterno;
 
-            //sentidoBarco = barcoJugador.calcularSentido();
-            //prodInterno = Vector3.Dot(planoBase.normal, sentidoBarco);
-            //cosAngulo = prodInterno;
-
-            //barcoJugador.aumentarAceleracionPorInclinacion(cosAngulo);
-            //barcoJugador.setFrecuenciaDeDisparos(frecuenciaDeDisparo);
-            //barcoJugador.setVelocidadMaxima(velocidadMaxima);
+            barcoJugador.aumentarAceleracionPorInclinacion(cosAngulo);
+            barcoJugador.setFrecuenciaDeDisparos(frecuenciaDeDisparo);*/
+            barcoJugador.setVelocidadMaxima(velocidadMaxima);
             barcoJugador.render(elapsedTime);
 
 
@@ -250,8 +242,6 @@ namespace AlumnoEjemplos.BarbaAlpha
             barcoIA.dispose();
             barcoJugador.dispose();
             effect.Dispose();
-            
-            
         }
 
         public Vector3 aplicarTrigonometrica (Vector3 posicion, float radioY, float actualTime, float frecuencia, float alturaOlas){
