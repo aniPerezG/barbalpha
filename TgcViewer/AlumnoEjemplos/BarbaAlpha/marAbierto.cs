@@ -284,6 +284,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             Vector3 vector2;
 
             Vector3 sentidoAux;
+            Vector3 normalNoNormalizada;
 
             radioEnY = barco.BoundingBox().calculateAxisRadius().Y;
             centroBase = barco.posicion() - new Vector3(0, radioEnY, 0);
@@ -312,17 +313,22 @@ namespace AlumnoEjemplos.BarbaAlpha
             vector1 = puntoAncho1 - puntoAncho2;
             vector2 = puntoLargo1 - puntoLargo2;
 
-            normalPlano = Vector3.Normalize(Vector3.Cross(vector1, vector2));
-
-            AbsNormal(normalPlano);
+            normalNoNormalizada = Vector3.Cross(vector1, vector2);
+            if (sentidoAux.Z != 0)
+            {
+                normalNoNormalizada.Z *= -FastMath.Sin(sentidoAux.Z);
+            }
+            normalPlano = Vector3.Normalize(normalNoNormalizada);
 
             return new Plano(normalPlano, puntoBase);
 
         }
 
-        public void AbsNormal(Vector3 normal)
+        public void AbsVector(Vector3 normal)
         {
+            normal.X = FastMath.Abs(normal.X);
             normal.Y = FastMath.Abs(normal.Y);
+            normal.Z = FastMath.Abs(normal.Z);
         }
 
         public void setearVariablesBarcoShader(Plano plano, Vector3 posicionBarco, Microsoft.DirectX.Direct3D.Effect efecto)

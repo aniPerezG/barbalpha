@@ -38,6 +38,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private List<Misil> misilesDisparados = new List<Misil>(); // misiles ya en el aire
         protected Vector3 posicionAnterior;
         protected Vector3 sentido;
+        protected Boolean estoyYendoParaAtras;
 
         public Barco(Vector3 posicionInicial, marAbierto oceano, string pathEscena) {
             TgcSceneLoader loader = new TgcSceneLoader();
@@ -48,9 +49,16 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.cargarCaniones();
             posicionAnterior = posicionInicial;
             sentido = new Vector3(0, 0, -1);
+            estoyYendoParaAtras = false;
         }
 
         protected abstract void moverYVirar(float elapsedTime);
+
+        public Boolean estaEnReversa()
+        {
+            return estoyYendoParaAtras;
+        }
+
 
         public Vector3 getPosicionAnterior()
         {
