@@ -72,9 +72,8 @@ struct VS_OUTPUT
 {
    float4 Position : POSITION0;
    float2 Texcoord : TEXCOORD0;
-   float4 Color : COLOR0;
+   float3 Normal :   TEXCOORD1;			// Normales
    float3 WorldPos : TEXCOORD2;
-   float3 Normal : TEXCOORD1;
    
 };
 
@@ -112,7 +111,7 @@ VS_OUTPUT vs_main( VS_INPUT Input )
    Output.Texcoord = Input.Texcoord;
 
    //Propago el color x vertice
-   Output.Color = Input.Color;
+   //Output.Color = Input.Color;
    
    return( Output );
    
@@ -159,7 +158,7 @@ VS_OUTPUT vs_alturaPlano(VS_INPUT Input)
 	Output.Texcoord = Input.Texcoord;
 
 	//Propago el color x vertice
-	Output.Color = Input.Color;
+	//Output.Color = Input.Color;
 
 	return(Output);
 
@@ -179,18 +178,44 @@ VS_OUTPUT vs_normal(VS_INPUT Input)
 	Output.Texcoord = Input.Texcoord;
 
 	//Propago el color x vertice
-	Output.Color = Input.Color;
+	//Output.Color = Input.Color;
 
 	return(Output);
 
 }
-/*
-float4 ps_light(float3 Texcoord: TEXCOORD0, float3 N : TEXCOORD1,
-float3 Pos : TEXCOORD2) : COLOR0
+
+float4 ps_light(float3 Texcoord: TEXCOORD0,  float3 Pos : TEXCOORD2) : COLOR0
 {
 	float ld = 0;		// luz difusa
 	float le = 0;		// luz specular
 
+	float3 N;
+
+	float X = Pos.x;
+	float Z = Pos.z;
+
+	float primaX;
+	float primaZ;
+
+	//formula del plano normal
+	// Y = f(a,b) + f'x(a,b)*(x-a) + f'z(a,b)(z-b)
+	//Despejando
+	//f'x(a,b)*(x-a) -Y + f'z(a,b)(z-b) + f(a,b) = 0
+	//Entonces podemos deducir al vector normal al punto como
+	//N = (f'x(a,b), -1, f'z)
+	//como a nosotros nos interesa que la normal apunte para arriba, 
+	//multiplicamos a N por (-1)
+	//Por lo que nuestro vector normal final seria
+	//N = (-f'x(a,b), 1, -f'z)
+
+	//f'x , siendo f(x,z) la funcion trigonometrica aplicada en el VS
+	primaX = amplitud*(cos(time + X) * cos(time + Z) - sin(time + X));
+
+	//f'z 
+	primaZ = amplitud*(cos(time + Z) - sin(time + X) * sin(time + Z));
+		
+	N = float3(-primaX, 1, -primaZ);
+	 
 	N = normalize(N);
 
 	// si hubiera varias luces, se podria iterar por c/u. 
@@ -205,7 +230,7 @@ float3 Pos : TEXCOORD2) : COLOR0
 		ld += saturate(dot(N, LD))*k_ld;
 
 	// 2- calcula la reflexion specular
-	float3 D = normalize(float3(Pos.x, Pos.y, Pos.z) - fvEyePosition);
+	float3 D = -normalize(float3(Pos.x, Pos.y, Pos.z) - fvEyePosition);
 		float ks = saturate(dot(reflect(LD, N), D));
 	ks = pow(ks, fSpecularPower);
 	le += ks*k_ls;
@@ -228,7 +253,7 @@ float3 Pos : TEXCOORD2) : COLOR0
 	// adaptarse a la nueva cantidad de luz ambiente. 
 
 	return RGBColor;
-}*/
+}
 
 // ------------------------------------------------------------------
 technique RenderScene
@@ -236,7 +261,7 @@ technique RenderScene
 	pass Pass_0
 	{
 		VertexShader = compile vs_3_0 vs_main();
-		PixelShader = compile ps_2_0 ps_main();
+		PixelShader = compile ps_2_0 ps_light();
 	}
 }
 

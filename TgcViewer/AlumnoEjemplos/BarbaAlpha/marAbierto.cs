@@ -58,7 +58,7 @@ namespace AlumnoEjemplos.BarbaAlpha
 
         Vector3 vecAux;
         Vector3 ortogonal;
-
+        Microsoft.DirectX.Direct3D.Device d3dDevice;
 
         //Lluvia lluvia;
         Sol sol;
@@ -89,7 +89,7 @@ namespace AlumnoEjemplos.BarbaAlpha
         public override void init()
         {
             //Device de DirectX para crear primitivas
-            Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
+            d3dDevice = GuiController.Instance.D3dDevice;
             TgcSceneLoader loader = new TgcSceneLoader();
 
             barcoJugador = new BarcoJugador(new Vector3(0, 0, 0), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
@@ -193,6 +193,9 @@ namespace AlumnoEjemplos.BarbaAlpha
             Plano planoBase = obtenerPlano(barcoJugador);
 
             setearVariablesBarcoShader(planoBase, barcoJugador.posicion(), effect);
+
+            setearVariablesLuzShader();
+
             /*
             sentidoBarco = barcoJugador.getSentido();
             prodInterno = Vector3.Dot(planoBase.normal, sentidoBarco);
@@ -354,29 +357,27 @@ namespace AlumnoEjemplos.BarbaAlpha
 
         }
 
-
-
-        protected float[,] loadHeightMap(Microsoft.DirectX.Direct3D.Device d3dDevice, string path)
+        public void setearVariablesLuzShader()
         {
-            Bitmap bitmap = (Bitmap)Bitmap.FromFile(path);
-            int width = bitmap.Size.Width;
-            int length = bitmap.Size.Height;
+            // Creo la luz para el fixed pipeline
+            /*d3dDevice.Lights[0].Type = LightType.Point;
+            d3dDevice.Lights[0].Diffuse = Color.FromArgb(255, 255, 255, 255);
+            d3dDevice.Lights[0].Specular = Color.FromArgb(255, 255, 255, 255);
+            d3dDevice.Lights[0].Attenuation0 = 0.0f;
+            d3dDevice.Lights[0].Range = 50000.0f;
+            d3dDevice.Lights[0].Enabled = true;
+            d3dDevice.Lights[0].Position = sol.getPosition();
+            d3dDevice.Lights[0].Update();*/
 
-            float[,] heightmap = new float[length, width];
-
-            for (int i = 0; i < length; i++)
-            {
-                for (int j = 0; j < width; j++)
-                {
-                    Color pixel = bitmap.GetPixel(j, i);
-                    float intensity = pixel.R * 0.299f + pixel.G * 0.587f + pixel.B * 0.114f;
-                    heightmap[i, j] = intensity;
-                }
-
-            }
-            bitmap.Dispose();
-            return heightmap;
+            effect.SetValue("fvLightPosition", TgcParserUtils.vector3ToFloat3Array(sol.getPosition()));
+            effect.SetValue("fvEyePosition", TgcParserUtils.vector3ToFloat3Array(GuiController.Instance.RotCamera.getPosition()));
+            effect.SetValue("k_la", 0.5f);
+            effect.SetValue("k_ld", 0.6f);
+            effect.SetValue("k_ls", 0.5f);
+            effect.SetValue("fSpecularPower", 20);
         }
+
+        
 
         
     }
