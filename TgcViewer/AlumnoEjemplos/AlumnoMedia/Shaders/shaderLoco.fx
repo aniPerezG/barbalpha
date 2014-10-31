@@ -22,9 +22,9 @@ sampler2D diffuseMap = sampler_state
 float3 fvLightPosition = float3(-100.00, 100.00, -100.00);
 float3 fvEyePosition = float3(0.00, 0.00, -100.00);
 float k_la = 0.3;							// luz ambiente global
-float k_ld = 0.9;							// luz difusa
+float k_ld = 0.2;							// luz difusa
 float k_ls = 0.4;							// luz specular
-float fSpecularPower = 16.84;				// exponente de la luz specular
+float fSpecularPower = 4;				// exponente de la luz specular
 
 
 
@@ -237,11 +237,9 @@ float4 ps_light(float3 Texcoord: TEXCOORD0,  float3 Pos : TEXCOORD2) : COLOR0
 
 	//Obtener el texel de textura
 	float4 fvBaseColor = tex2D(diffuseMap, Texcoord);
-		//float4 fvBaseColor      = float4(1,0.5,0.5,1);
 
-		// suma luz diffusa, ambiente y especular
-		float4 RGBColor = 0;
-		RGBColor.rgb = saturate(fvBaseColor*(saturate(k_la + ld)) + le);
+	float4 RGBColor = 0;
+	RGBColor.rgb = saturate(fvBaseColor*(saturate(k_la + ld)) + le);
 
 	// saturate deja los valores entre [0,1]. Una tecnica muy usada en motores modernos
 	// es usar floating point textures auxialres, para almacenar mucho mas que 256 valores posibles 

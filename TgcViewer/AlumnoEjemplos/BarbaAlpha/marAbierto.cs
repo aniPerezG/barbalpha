@@ -62,9 +62,8 @@ namespace AlumnoEjemplos.BarbaAlpha
 
         //Lluvia lluvia;
         Sol sol;
-
-        
-       
+        Plano planoSubyacente;
+        Vector3 normalPlano;
 
         // Buffers
         public static CustomVertex.PositionNormalTextured[] _vertices;
@@ -153,6 +152,8 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             sol = new Sol(effect); 
             //lluvia = new Lluvia();
+            planoSubyacente = new Plano();
+            normalPlano = new Vector3(0, 0, 0);
 
         }
 
@@ -259,12 +260,16 @@ namespace AlumnoEjemplos.BarbaAlpha
 
         public Plano obtenerPlano (AlumnoEjemplos.BarbaAlpha.Barco.Barco barco)
         {
+            Vector3 centroBase;
+            Vector3 puntoBase;
+            float radioEnY;
+            /*
+            float primaX;
+            float primaZ;*/
+
+            
             float largo;
             float ancho;
-            float radioEnY;
-            Vector3 centroBase;
-            Vector3 normalPlano;
-            Vector3 puntoBase;
             Vector3 posicionAncho1;
             Vector3 posicionAncho2;
             Vector3 puntoAncho1;
@@ -278,7 +283,7 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             Vector3 sentidoAux;
             Vector3 normalNoNormalizada;
-
+            
             radioEnY = barco.BoundingBox().calculateAxisRadius().Y;
             centroBase = barco.posicion() - new Vector3(0, radioEnY, 0);
 
@@ -311,7 +316,21 @@ namespace AlumnoEjemplos.BarbaAlpha
             {
                 normalNoNormalizada.Z *= -FastMath.Sin(sentidoAux.Z);
             }
+
             normalPlano = Vector3.Normalize(normalNoNormalizada);
+            /*
+            radioEnY = barco.BoundingBox().calculateAxisRadius().Y;
+            centroBase = barco.posicion() - new Vector3(0, radioEnY, 0);
+            puntoBase = aplicarTrigonometrica(centroBase, radioEnY, time, frecuenciaOlas, alturaOlas);
+
+            primaX = alturaOlas * (FastMath.Cos(time + puntoBase.X) * FastMath.Cos(time + puntoBase.Z) - FastMath.Sin(time + puntoBase.X));
+            primaZ = alturaOlas * (FastMath.Cos(time + puntoBase.Z) - FastMath.Sin(time + puntoBase.X) * FastMath.Sin(time + puntoBase.Z));
+		
+            normalPlano.X = -primaX;
+            normalPlano.Y = 1;
+            normalPlano.Z = -primaZ;
+
+            Vector3.Normalize(normalPlano);*/
 
             return new Plano(normalPlano, puntoBase);
 
@@ -359,16 +378,6 @@ namespace AlumnoEjemplos.BarbaAlpha
 
         public void setearVariablesLuzShader()
         {
-            // Creo la luz para el fixed pipeline
-            /*d3dDevice.Lights[0].Type = LightType.Point;
-            d3dDevice.Lights[0].Diffuse = Color.FromArgb(255, 255, 255, 255);
-            d3dDevice.Lights[0].Specular = Color.FromArgb(255, 255, 255, 255);
-            d3dDevice.Lights[0].Attenuation0 = 0.0f;
-            d3dDevice.Lights[0].Range = 50000.0f;
-            d3dDevice.Lights[0].Enabled = true;
-            d3dDevice.Lights[0].Position = sol.getPosition();
-            d3dDevice.Lights[0].Update();*/
-
             effect.SetValue("fvLightPosition", TgcParserUtils.vector3ToFloat3Array(sol.getPosition()));
             effect.SetValue("fvEyePosition", TgcParserUtils.vector3ToFloat3Array(GuiController.Instance.RotCamera.getPosition()));
             effect.SetValue("k_la", 0.5f);
