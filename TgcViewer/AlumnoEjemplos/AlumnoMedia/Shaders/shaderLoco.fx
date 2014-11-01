@@ -209,12 +209,12 @@ float4 ps_light(float3 Texcoord: TEXCOORD0,  float3 Pos : TEXCOORD2) : COLOR0
 	//N = (-f'x(a,b), 1, -f'z)
 
 	//f'x , siendo f(x,z) la funcion trigonometrica aplicada en el VS
-	primaX = amplitud*(cos(time + X) * cos(time + Z) - sin(time + X));
+	primaX = (cos(time + X) * cos(time + Z) - sin(time + X));
 
 	//f'z 
-	primaZ = amplitud*(cos(time + Z) - sin(time + X) * sin(time + Z));
+	primaZ = (cos(time + Z) - sin(time + X) * sin(time + Z));
 		
-	N = float3(-primaX, 1, -primaZ);
+	N = float3(-primaX, amplitud, -primaZ);
 	 
 	N = normalize(N);
 
