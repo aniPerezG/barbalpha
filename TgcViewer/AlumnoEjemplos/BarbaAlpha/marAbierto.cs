@@ -319,15 +319,19 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             normalPlano = Vector3.Normalize(normalNoNormalizada);
             /*
+             * no sirve porque es muy sensible a las variaciones
+             * y se mueve muy espasticamente
+             * 
+             * 
             radioEnY = barco.BoundingBox().calculateAxisRadius().Y;
             centroBase = barco.posicion() - new Vector3(0, radioEnY, 0);
             puntoBase = aplicarTrigonometrica(centroBase, radioEnY, time, frecuenciaOlas, alturaOlas);
 
-            primaX = alturaOlas * (FastMath.Cos(time + puntoBase.X) * FastMath.Cos(time + puntoBase.Z) - FastMath.Sin(time + puntoBase.X));
-            primaZ = alturaOlas * (FastMath.Cos(time + puntoBase.Z) - FastMath.Sin(time + puntoBase.X) * FastMath.Sin(time + puntoBase.Z));
+            primaX = (FastMath.Cos(time + puntoBase.X) * FastMath.Cos(time + puntoBase.Z) - FastMath.Sin(time + puntoBase.X));
+            primaZ = (FastMath.Cos(time + puntoBase.Z) - FastMath.Sin(time + puntoBase.X) * FastMath.Sin(time + puntoBase.Z));
 		
             normalPlano.X = -primaX;
-            normalPlano.Y = 1;
+            normalPlano.Y = alturaOlas;
             normalPlano.Z = -primaZ;
 
             Vector3.Normalize(normalPlano);*/
