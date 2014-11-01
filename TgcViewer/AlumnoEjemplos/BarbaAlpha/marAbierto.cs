@@ -50,6 +50,7 @@ namespace AlumnoEjemplos.BarbaAlpha
         float alturaOlas;
         float frecuenciaDeDisparo;
         float velocidadMaxima;
+        //Boolean iluminar;
 
         //variables inclinacion
         float cosAngulo;
@@ -145,6 +146,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             GuiController.Instance.Modifiers.addFloat("frecuenciaDeDisparo", 1f, 3f, 2f);
             GuiController.Instance.Modifiers.addFloat("frecuenciaOlas", 50f, 300f, 100f);
             GuiController.Instance.Modifiers.addFloat("velocidadMaxima", 10f, 400f, 100f);
+            //GuiController.Instance.Modifiers.addBoolean("iluminacion", "activarIluminacion", true);
 
        
             vecAux = new Vector3(0, 0, 0);
@@ -168,7 +170,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             frecuenciaDeDisparo = (float)GuiController.Instance.Modifiers["frecuenciaDeDisparo"];
             frecuenciaOlas = (float)GuiController.Instance.Modifiers["frecuenciaOlas"];
             velocidadMaxima = (float)GuiController.Instance.Modifiers["velocidadMaxima"];
-
+            //iluminar = (Boolean)GuiController.Instance.Modifiers["iluminacion"];
 
             sol.render();
 
@@ -177,6 +179,8 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect.SetValue("matWorldViewProj", device.Transform.World * device.Transform.View * device.Transform.Projection);
             effect.SetValue("amplitud", alturaOlas);
             effect.SetValue("frecuencia", frecuenciaOlas);
+
+
 
 
 
@@ -194,8 +198,17 @@ namespace AlumnoEjemplos.BarbaAlpha
             Plano planoBase = obtenerPlano(barcoJugador);
 
             setearVariablesBarcoShader(planoBase, barcoJugador.posicion(), effect);
-
             setearVariablesLuzShader();
+            /*
+            if(iluminar)
+            {
+                terreno.Effect.Technique = "LightScene";
+                setearVariablesLuzShader();
+            }
+            else
+            {
+                terreno.Effect.Technique = "RenderScene";
+            }*/
 
             /*
             sentidoBarco = barcoJugador.getSentido();
@@ -229,13 +242,11 @@ namespace AlumnoEjemplos.BarbaAlpha
             {
                 cara.move(barcoJugador.posicion() - barcoJugador.getPosicionAnterior());
             }
-
+            
             skyBox.render();
-
             //Actualizar posicion de cámara
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
             GuiController.Instance.CurrentCamera.updateCamera();
-
             //GuiController.Instance.Logger.log(barcoJugador.getSentido().ToString());
 
         }
@@ -384,10 +395,10 @@ namespace AlumnoEjemplos.BarbaAlpha
         {
             effect.SetValue("fvLightPosition", TgcParserUtils.vector3ToFloat3Array(sol.getPosition()));
             effect.SetValue("fvEyePosition", TgcParserUtils.vector3ToFloat3Array(GuiController.Instance.RotCamera.getPosition()));
-            effect.SetValue("k_la", 0.5f);
-            effect.SetValue("k_ld", 0.6f);
-            effect.SetValue("k_ls", 0.5f);
-            effect.SetValue("fSpecularPower", 20);
+            effect.SetValue("k_la", 1);
+            effect.SetValue("k_ld", 1);
+            effect.SetValue("k_ls", 1);
+            effect.SetValue("fSpecularPower", 500);
         }
 
         

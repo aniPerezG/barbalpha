@@ -186,8 +186,8 @@ VS_OUTPUT vs_normal(VS_INPUT Input)
 
 float4 ps_light(float3 Texcoord: TEXCOORD0,  float3 Pos : TEXCOORD2) : COLOR0
 {
-	float ld = 0;		// luz difusa
-	float le = 0;		// luz specular
+	float ld = 1;		// luz difusa
+	float le = 0.05;		// luz specular
 
 	float3 N;
 
@@ -227,18 +227,19 @@ float4 ps_light(float3 Texcoord: TEXCOORD0,  float3 Pos : TEXCOORD2) : COLOR0
 	// for(int =0;i<cant_ligths;++i)
 	// 1- calculo la luz diffusa
 	float3 LD = normalize(fvLightPosition - float3(Pos.x, Pos.y, Pos.z));
-		ld += saturate(dot(N, LD))*k_ld;
+	ld += saturate(dot(N, LD))*k_ld;
 
 	// 2- calcula la reflexion specular
-	float3 D = -normalize(float3(Pos.x, Pos.y, Pos.z) - fvEyePosition);
-		float ks = saturate(dot(reflect(LD, N), D));
+	//la componente z esta negada porque tenemos al reves el eje Z
+	float3 D = normalize(float3(Pos.x, Pos.y, Pos.z) - float3(fvEyePosition.x, fvEyePosition.y, -fvEyePosition.z));
+	float ks = saturate(dot(reflect(LD, N), D));
 	ks = pow(ks, fSpecularPower);
 	le += ks*k_ls;
 
 	//Obtener el texel de textura
 	float4 fvBaseColor = tex2D(diffuseMap, Texcoord);
 
-	float4 RGBColor = 0;
+	float4 RGBColor = (255,255,0,0);
 	RGBColor.rgb = saturate(fvBaseColor*(saturate(k_la + ld)) + le);
 
 	// saturate deja los valores entre [0,1]. Una tecnica muy usada en motores modernos
@@ -262,6 +263,7 @@ technique RenderScene
 		PixelShader = compile ps_2_0 ps_light();
 	}
 }
+
 
 technique HeightScene
 {
