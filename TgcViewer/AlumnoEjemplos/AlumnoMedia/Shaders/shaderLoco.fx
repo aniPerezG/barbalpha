@@ -90,18 +90,39 @@ VS_OUTPUT vs_main( VS_INPUT Input )
    float Z = Input.Position.z/frecuencia;
   
    Input.Position.y = (sin(X+time)*cos(Z+time) + sin(Z+time) + cos(X+time))*amplitud ;
-   //float u = Input.Position.x;
-   //float v = Input.Position.z;
-
-   //float height1 = tex2Dlod(heightmap1, float4(u, v, 0, 0)).r;
-   //float height1 = tex2D(heightmap1, float2(u, v)).r;
-   //float height2 = tex2Dlod(heightmap2, float4(u, v, 0, 0)).r;
-
-   //Input.Position.y = Input.Position.y + lerp(height1, height2, alpha);
-   //Input.Position.y = Input.Position.y + height1;
-
-
+  
 	Output.WorldPos = mul(Input.Position, matWorld);
+
+	X = Input.Position.x;
+	Z = Input.Position.z;
+
+	float primaX;
+	float primaZ;
+	float3 N;
+
+	//formula del plano normal
+	// Y = f(a,b) + f'x(a,b)*(x-a) + f'z(a,b)(z-b)
+	//Despejando
+	//f'x(a,b)*(x-a) -Y + f'z(a,b)(z-b) + f(a,b) = 0
+	//Entonces podemos deducir al vector normal al punto como
+	//N = (f'x(a,b), -1, f'z)
+	//como a nosotros nos interesa que la normal apunte para arriba, 
+	//multiplicamos a N por (-1)
+	//Por lo que nuestro vector normal final seria
+	//N = (-f'x(a,b), 1, -f'z)
+
+	//f'x , siendo f(x,z) la funcion trigonometrica aplicada en el VS
+	primaX = (cos(time + X) * cos(time + Z) - sin(time + X));
+
+	//f'z 
+	primaZ = (cos(time + Z) - sin(time + X) * sin(time + Z));
+
+	N = float3(-primaX, amplitud, -primaZ);
+
+	N = normalize(N);
+
+	Output.Normal = N;
+
 	Output.Normal = mul(Input.Normal, (float3x3)matWorld);
 
    //Proyectar posicion
@@ -184,39 +205,11 @@ VS_OUTPUT vs_normal(VS_INPUT Input)
 
 }
 
-float4 ps_light(float3 Texcoord: TEXCOORD0,  float3 Pos : TEXCOORD2) : COLOR0
+float4 ps_light(float3 Texcoord: TEXCOORD0, float3 N : TEXCOORD1,  float3 Pos : TEXCOORD2 ) : COLOR0
 {
 	float ld = 1;		// luz difusa
 	float le = 0.05;		// luz specular
 
-	float3 N;
-
-	float X = Pos.x;
-	float Z = Pos.z;
-
-	float primaX;
-	float primaZ;
-
-	//formula del plano normal
-	// Y = f(a,b) + f'x(a,b)*(x-a) + f'z(a,b)(z-b)
-	//Despejando
-	//f'x(a,b)*(x-a) -Y + f'z(a,b)(z-b) + f(a,b) = 0
-	//Entonces podemos deducir al vector normal al punto como
-	//N = (f'x(a,b), -1, f'z)
-	//como a nosotros nos interesa que la normal apunte para arriba, 
-	//multiplicamos a N por (-1)
-	//Por lo que nuestro vector normal final seria
-	//N = (-f'x(a,b), 1, -f'z)
-
-	//f'x , siendo f(x,z) la funcion trigonometrica aplicada en el VS
-	primaX = (cos(time + X) * cos(time + Z) - sin(time + X));
-
-	//f'z 
-	primaZ = (cos(time + Z) - sin(time + X) * sin(time + Z));
-		
-	N = float3(-primaX, amplitud, -primaZ);
-	 
-	N = normalize(N);
 
 	// si hubiera varias luces, se podria iterar por c/u. 
 	// Pero hay que tener en cuenta que este algoritmo es bastante pesado
@@ -226,7 +219,7 @@ float4 ps_light(float3 Texcoord: TEXCOORD0,  float3 Pos : TEXCOORD2) : COLOR0
 	// el resto se aproxima con luz ambiente. 
 	// for(int =0;i<cant_ligths;++i)
 	// 1- calculo la luz diffusa
-	float3 LD = normalize(fvLightPosition - float3(Pos.x, Pos.y, Pos.z));
+	float3 LD = -normalize(fvLightPosition - float3(Pos.x, Pos.y, Pos.z));
 	ld += saturate(dot(N, LD))*k_ld;
 
 	// 2- calcula la reflexion specular
