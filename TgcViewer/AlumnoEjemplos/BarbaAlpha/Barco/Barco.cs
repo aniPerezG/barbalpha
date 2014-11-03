@@ -27,7 +27,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         public Direccion direccion = new Direccion();
         public TgcMesh barco; // malla del barco
         private bool canionListo;
-        private int puntaje; // contador de disparos exitosos
+        private int vidita; // contador de disparos exitosos
         private int canion_a_disparar = 0;
         private float tiempo_entre_disparos = 0;
         private float frecuencia_disparo = 2;
@@ -43,6 +43,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         protected TgcSprite sprite;
         protected Boolean meDieron;
         protected Boolean seAcabo;
+        protected Misil misilAnterior;
 
         public Barco(Vector3 posicionInicial, marAbierto oceano, string pathEscena)
         {
@@ -55,12 +56,14 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             posicionAnterior = posicionInicial;
             sentido = new Vector3(0, 0, -1);
             estoyYendoParaAtras = false;
-            puntaje = 0;
+            vidita = 5;
             seAcabo = false;
 
             sprite = new TgcSprite();
             sprite.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosMediaDir + "\\Textures\\boom.png");
             sprite.Position = new Vector2(0, 0);
+
+            misilAnterior = null;
 
            
         }
@@ -267,10 +270,17 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             return sentido;
         }
 
-        public void teDieron()  {
+        public void teDieron(Misil misil)  {
             meDieron = true;
-            puntaje += 1;
-            if (puntaje <= 5) seAcabo = true;
+            if(!(misil == misilAnterior))
+            {
+                vidita -= 1;
+                misilAnterior = misil;
+            }
+            if (vidita == 0)
+            {
+                seAcabo = true;
+            }
         }
 
         protected float calcularVelocidadDeRotacion(Direccion direccion){

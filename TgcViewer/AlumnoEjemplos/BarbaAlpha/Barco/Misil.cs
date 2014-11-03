@@ -100,7 +100,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.volarHorizontal(velocidad_inicial_horizontal * elapsedTime);
             if(TgcCollisionUtils.testSphereAABB(this.BoundingSphere(), enemigo.BoundingBox()))
             {
-                enemigo.teDieron();
+                enemigo.teDieron(this);
             }
             this.mesh.render();
             anteriorY = mesh.Position.Y;
