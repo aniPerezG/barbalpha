@@ -12,6 +12,7 @@ using TgcViewer.Utils.Sound;
 using TgcViewer.Utils.TgcGeometry;
 using TgcViewer.Utils.TgcSceneLoader;
 using System.Collections;
+using TgcViewer.Utils._2D;
 
 namespace AlumnoEjemplos.BarbaAlpha.Barco
 {
@@ -39,17 +40,24 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         protected Vector3 posicionAnterior;
         protected Vector3 sentido;
         protected Boolean estoyYendoParaAtras;
+        protected TgcSprite sprite;
+        protected Boolean meDieron;
 
-        public Barco(Vector3 posicionInicial, marAbierto oceano, string pathEscena) {
+        public Barco(Vector3 posicionInicial, marAbierto oceano, string pathEscena)
+        {
             TgcSceneLoader loader = new TgcSceneLoader();
             TgcScene escenaCanion = loader.loadSceneFromFile(pathEscena); // escena del cañon
             this.barco = escenaCanion.Meshes[0];
             this.setPosicion(posicionInicial);
             this.setAgua(oceano);
-            this.cargarCaniones();
+            //this.cargarCaniones();
             posicionAnterior = posicionInicial;
             sentido = new Vector3(0, 0, -1);
             estoyYendoParaAtras = false;
+
+            sprite = new TgcSprite();
+            sprite.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosMediaDir + "\\Textures\\boom.png");
+            sprite.Position = new Vector2(0, 0);
         }
 
         protected abstract void moverYVirar(float elapsedTime);
@@ -58,7 +66,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
             return estoyYendoParaAtras;
         }
-
 
         public Vector3 getPosicionAnterior()
         {
@@ -214,12 +221,13 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             }
         }
 
-        private void cargarCaniones()
+        public void cargarCaniones()
         {
             int i;
             for (i = 0; i < 10; i++) 
             {
-               balas.Add(new Misil(this));
+               balas.Add(new Misil(this, this.getEnemy()));
+                
             }
         }
 
@@ -238,17 +246,13 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
             foreach (Misil misil in misilesDisparados)
             {
-                if (misil.teHundisteEn(this.agua))
+                if (misil.teHundisteEn())
                 {
+                    misil.setearMisil();
                     misilesAEliminar.Add(misil);
                     continue;
                 }
-                if (misil.chocasteConBarco(this.getEnemy()))
-                {
-                    misilesAEliminar.Add(misil);
-                    leDisteA(this.enemy);
-                    continue;
-                }
+             
                 misil.render(elapsedTime);
             }
         }
@@ -258,8 +262,10 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             return sentido;
         }
 
-        protected void leDisteA(Barco enemigo)  {
-            if (++this.puntaje == 5) this.dispose();
+        public void teDieron()  {
+            meDieron = true;
+            this.puntaje += 1;
+            if (this.puntaje == 5) throw new NotImplementedException();
         }
 
         protected float calcularVelocidadDeRotacion(Direccion direccion){
@@ -287,10 +293,24 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             if (Math.Abs(velocidad) > velocidad_maxima) velocidad = velocidad_maxima * signo;
         }
        
+        
         public virtual void render(float elapsedTime)    
         {
+
             tiempo += elapsedTime;
             this.acelerar(aceleracion_por_inclinacion);
+            
+            if(meDieron)
+            {
+                //Iniciar dibujado de todos los Sprites de la escena (en este caso es solo uno)
+                GuiController.Instance.Drawer2D.beginDrawSprite();
+                //Dibujar sprite (si hubiese mas, deberian ir todos aquí)
+                sprite.render();
+                //Finalizar el dibujado de Sprites
+                GuiController.Instance.Drawer2D.endDrawSprite();
+                meDieron = false;
+            }
+
             this.barco.render();
             this.aplicarFriccion(elapsedTime);
             this.moverYVirar(elapsedTime);
@@ -302,7 +322,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             
         }
 
-        
         public virtual void dispose()
         {
             this.barco.dispose();

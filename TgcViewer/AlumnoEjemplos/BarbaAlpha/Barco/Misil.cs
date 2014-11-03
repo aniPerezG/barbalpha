@@ -23,8 +23,9 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private const float velocidad_inicial_horizontal = -600f; // Sobre X no hay gravedad, es constante
         private Barco barco;
         private TgcSphere mesh; // malla del misil
+        private Barco enemigo;
 
-        public Misil(Barco barco)
+        public Misil(Barco barcoDuenio, Barco barcoEnemigo)
         {
             //habria que inyectarlo por parametro
             Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
@@ -45,7 +46,8 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             string texturePath = (string)GuiController.Instance.AlumnoEjemplosMediaDir + "\\Textures\\metalOscuro.jpg";
             mesh.setTexture(TgcTexture.createTexture(d3dDevice, texturePath));
 
-            this.barco = barco;
+            this.barco = barcoDuenio;
+            this.enemigo = barcoEnemigo;
         }
 
         public TgcBoundingSphere BoundingSphere()
@@ -96,11 +98,15 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.tiempoDeVuelo += elapsedTime;
             this.volarVertical();
             this.volarHorizontal(velocidad_inicial_horizontal * elapsedTime);
+            if(TgcCollisionUtils.testSphereAABB(this.BoundingSphere(), enemigo.BoundingBox()))
+            {
+                enemigo.teDieron();
+            }
             this.mesh.render();
             anteriorY = mesh.Position.Y;
         }
 
-        public bool teHundisteEn(marAbierto oceano)
+        public bool teHundisteEn()
         {
             return this.mesh.Position.Y < 0;
         }

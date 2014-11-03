@@ -142,6 +142,9 @@ namespace AlumnoEjemplos.BarbaAlpha
             barcoIA.setEffect(effect);
             barcoIA.setTechnique("HeightScene");
 
+            barcoJugador.cargarCaniones();
+            barcoIA.cargarCaniones();
+
             GuiController.Instance.Modifiers.addFloat("alturaOlas", 5f, 30f, 10f);
             GuiController.Instance.Modifiers.addFloat("frecuenciaDeDisparo", 1f, 3f, 2f);
             GuiController.Instance.Modifiers.addFloat("frecuenciaOlas", 50f, 300f, 100f);
