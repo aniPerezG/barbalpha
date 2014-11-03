@@ -19,7 +19,7 @@ sampler2D diffuseMap = sampler_state
 	MIPFILTER = LINEAR;
 };
 
-float3 fvLightPosition = float3(0, 100.00, -500.00);
+float3 fvLightPosition = float3(-100, 100.00, -600.00);
 float3 fvEyePosition;// = float3(0.00, 0.00, -100.00);
 float k_la = 0.5;							// luz ambiente global
 float k_ld = 0.2;							// luz difusa
@@ -252,7 +252,7 @@ float4 ps_light(float3 Texcoord: TEXCOORD0, float3 N : TEXCOORD1,  float3 Pos : 
 }
 
 // ------------------------------------------------------------------
-technique RenderScene
+technique LightScene
 {
 	pass Pass_0
 	{
@@ -261,6 +261,14 @@ technique RenderScene
 	}
 }
 
+technique RenderScene
+{
+	pass Pass_0
+	{
+		VertexShader = compile vs_3_0 vs_main();
+		PixelShader = compile ps_2_0 ps_main();
+	}
+}
 
 technique HeightScene
 {

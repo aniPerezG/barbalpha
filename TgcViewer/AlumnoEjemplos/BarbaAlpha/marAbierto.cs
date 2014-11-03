@@ -50,7 +50,6 @@ namespace AlumnoEjemplos.BarbaAlpha
         float alturaOlas;
         float frecuenciaDeDisparo;
         float velocidadMaxima;
-        //Boolean iluminar;
 
         //variables inclinacion
         float cosAngulo;
@@ -111,7 +110,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             terreno.loadHeightmap(heightmap, scaleXZ, scaleY, new Vector3(0, 0, 0));
             terreno.loadTexture(textura);
             terreno.Effect = effect;
-            terreno.Technique = "RenderScene";
+            terreno.Technique = "LightScene";
 
             // Creo SkyBox
             string texturesPath = GuiController.Instance.ExamplesMediaDir + "Texturas\\Quake\\SkyBox LostAtSeaDay\\";
@@ -146,7 +145,6 @@ namespace AlumnoEjemplos.BarbaAlpha
             GuiController.Instance.Modifiers.addFloat("frecuenciaDeDisparo", 1f, 3f, 2f);
             GuiController.Instance.Modifiers.addFloat("frecuenciaOlas", 50f, 300f, 100f);
             GuiController.Instance.Modifiers.addFloat("velocidadMaxima", 10f, 400f, 100f);
-            //GuiController.Instance.Modifiers.addBoolean("iluminacion", "activarIluminacion", true);
 
        
             vecAux = new Vector3(0, 0, 0);
@@ -170,7 +168,6 @@ namespace AlumnoEjemplos.BarbaAlpha
             frecuenciaDeDisparo = (float)GuiController.Instance.Modifiers["frecuenciaDeDisparo"];
             frecuenciaOlas = (float)GuiController.Instance.Modifiers["frecuenciaOlas"];
             velocidadMaxima = (float)GuiController.Instance.Modifiers["velocidadMaxima"];
-            //iluminar = (Boolean)GuiController.Instance.Modifiers["iluminacion"];
 
             sol.render();
 
@@ -180,17 +177,11 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect.SetValue("amplitud", alturaOlas);
             effect.SetValue("frecuencia", frecuenciaOlas);
 
-
-
-
-
             //lluvia.render();
 
-            effect.Technique = "RenderScene";
             
             terreno.render();
 
-            effect.Technique = "HeightScene";
 
             barcoJugador.actualizarPosicionAnterior();
 
@@ -199,16 +190,7 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             setearVariablesBarcoShader(planoBase, barcoJugador.posicion(), effect);
             setearVariablesLuzShader();
-            /*
-            if(iluminar)
-            {
-                terreno.Effect.Technique = "LightScene";
-                setearVariablesLuzShader();
-            }
-            else
-            {
-                terreno.Effect.Technique = "RenderScene";
-            }*/
+            
 
             /*
             sentidoBarco = barcoJugador.getSentido();
