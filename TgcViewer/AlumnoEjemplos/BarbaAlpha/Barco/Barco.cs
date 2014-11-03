@@ -42,6 +42,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         protected Boolean estoyYendoParaAtras;
         protected TgcSprite sprite;
         protected Boolean meDieron;
+        protected Boolean seAcabo;
 
         public Barco(Vector3 posicionInicial, marAbierto oceano, string pathEscena)
         {
@@ -54,10 +55,14 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             posicionAnterior = posicionInicial;
             sentido = new Vector3(0, 0, -1);
             estoyYendoParaAtras = false;
+            puntaje = 0;
+            seAcabo = false;
 
             sprite = new TgcSprite();
             sprite.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosMediaDir + "\\Textures\\boom.png");
             sprite.Position = new Vector2(0, 0);
+
+           
         }
 
         protected abstract void moverYVirar(float elapsedTime);
@@ -264,8 +269,8 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         public void teDieron()  {
             meDieron = true;
-            this.puntaje += 1;
-            if (this.puntaje == 5) throw new NotImplementedException();
+            puntaje += 1;
+            if (puntaje <= 5) seAcabo = true;
         }
 
         protected float calcularVelocidadDeRotacion(Direccion direccion){
@@ -311,6 +316,11 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
                 meDieron = false;
             }
 
+            if(seAcabo)
+            {
+                agua.terminarJuego();
+            }
+
             this.barco.render();
             this.aplicarFriccion(elapsedTime);
             this.moverYVirar(elapsedTime);
@@ -326,6 +336,8 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
             this.barco.dispose();
         }
+
+      
     }
 }
 

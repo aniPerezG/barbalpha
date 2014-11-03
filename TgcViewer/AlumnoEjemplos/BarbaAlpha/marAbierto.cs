@@ -16,6 +16,7 @@ using Microsoft.DirectX.DirectInput;
 using TgcViewer.Utils.Input;
 using TgcViewer.Utils.Collision.ElipsoidCollision;
 using AlumnoEjemplos.BarbaAlpha.Barco;
+using TgcViewer.Utils._2D;
 
 namespace AlumnoEjemplos.BarbaAlpha
 {
@@ -35,6 +36,7 @@ namespace AlumnoEjemplos.BarbaAlpha
     {
 
         Microsoft.DirectX.Direct3D.Effect effect;
+        TgcScene barcote;
         BarcoIA barcoIA;
         BarcoJugador barcoJugador;
         float time;
@@ -66,6 +68,9 @@ namespace AlumnoEjemplos.BarbaAlpha
         Vector3 normalPlano;
         Plano plano;
 
+        private TgcSprite fin;
+        private Boolean terminar;
+
         // Buffers
         public static CustomVertex.PositionNormalTextured[] _vertices;
         public static VertexBuffer _vertexBuffer;
@@ -91,6 +96,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             //Device de DirectX para crear primitivas
             d3dDevice = GuiController.Instance.D3dDevice;
             TgcSceneLoader loader = new TgcSceneLoader();
+
 
             barcoJugador = new BarcoJugador(new Vector3(0, 0, 0), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
             barcoIA = new BarcoIA(new Vector3(200, 0, 0), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
@@ -159,10 +165,26 @@ namespace AlumnoEjemplos.BarbaAlpha
             planoSubyacente = new Plano();
             normalPlano = new Vector3(0, 0, 0);
 
+            fin = new TgcSprite();
+            fin.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosMediaDir + "\\Textures\\finDelJuego.png");
+            fin.Position = new Vector2(0, 0);
+
+            terminar = false;
         }
 
         public override void render(float elapsedTime)
         {
+
+            if (terminar)
+            {
+                GuiController.Instance.Drawer2D.beginDrawSprite();
+                fin.render();
+                GuiController.Instance.Drawer2D.endDrawSprite();
+
+            }
+            else
+            {
+
             TgcD3dInput input = GuiController.Instance.D3dInput;
             
             Microsoft.DirectX.Direct3D.Device device = GuiController.Instance.D3dDevice;
@@ -200,6 +222,9 @@ namespace AlumnoEjemplos.BarbaAlpha
             //Actualizar posicion de cámara
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
             GuiController.Instance.CurrentCamera.updateCamera();
+
+          }
+            
 
         }
 
@@ -369,6 +394,12 @@ namespace AlumnoEjemplos.BarbaAlpha
             //barcoJugador.setFrecuenciaDeDisparos(frecuenciaDeDisparo);
             //barcoJugador.setVelocidadMaxima(velocidadMaxima);
             barco.render(elapsedTime);
+        }
+
+        public void terminarJuego()
+        {
+            terminar = true;
+            
         }
         
 
