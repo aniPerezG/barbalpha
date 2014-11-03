@@ -294,6 +294,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.barco.render();
             this.aplicarFriccion(elapsedTime);
             this.moverYVirar(elapsedTime);
+            this.moveOrientedY(velocidad * elapsedTime);
             this.controlarVelocidadMaxima();
             this.verificarCanion(elapsedTime);
             this.verificarDisparos(elapsedTime); // evalúa el estado de los misiles disparados

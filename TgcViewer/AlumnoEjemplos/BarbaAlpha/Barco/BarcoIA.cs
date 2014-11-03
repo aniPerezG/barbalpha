@@ -72,6 +72,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
                 this.acelerar(-1);
             }
             else this.disparar();
+
         }
 
         public override void render(float elapsedTime)

@@ -51,7 +51,6 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
                 direccion.haciaLaIzquierda();
                 this.virar(direccion, elapsedTime);
             }
-            this.moveOrientedY(velocidad * elapsedTime);
         }
 
         public override void render(float elapsedTime)   {

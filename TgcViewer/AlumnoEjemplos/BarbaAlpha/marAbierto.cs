@@ -64,6 +64,7 @@ namespace AlumnoEjemplos.BarbaAlpha
         Sol sol;
         Plano planoSubyacente;
         Vector3 normalPlano;
+        Plano plano;
 
         // Buffers
         public static CustomVertex.PositionNormalTextured[] _vertices;
@@ -177,47 +178,14 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect.SetValue("amplitud", alturaOlas);
             effect.SetValue("frecuencia", frecuenciaOlas);
 
+            setearVariablesLuzShader();
+
             //lluvia.render();
 
-            
             terreno.render();
 
-
-            barcoJugador.actualizarPosicionAnterior();
-
-            //Render del barco del Jugador
-            Plano planoBase = obtenerPlano(barcoJugador);
-
-            setearVariablesBarcoShader(planoBase, barcoJugador.posicion(), effect);
-            setearVariablesLuzShader();
-            
-
-            /*
-            sentidoBarco = barcoJugador.getSentido();
-            prodInterno = Vector3.Dot(planoBase.normal, sentidoBarco);
-            cosAngulo = prodInterno;
-
-            barcoJugador.aumentarAceleracionPorInclinacion(cosAngulo);
-            barcoJugador.setFrecuenciaDeDisparos(frecuenciaDeDisparo);*/
-            barcoJugador.setVelocidadMaxima(velocidadMaxima);
-            barcoJugador.render(elapsedTime);
-
-
-            //GuiController.Instance.Logger.log(barcoJugador.calcularSentido().ToString());
-            //Render del barco con IA
-            planoBase = obtenerPlano(barcoIA);
-
-            setearVariablesBarcoShader(planoBase, barcoIA.posicion(), effect);
-
-            //sentidoBarco = barcoIA.calcularSentido();
-            //prodInterno = Vector3.Dot(planoBase.normal, sentidoBarco);
-            //cosAngulo = prodInterno;
-
-            //barcoIA.aumentarAceleracionPorInclinacion(cosAngulo);
-            //barcoIA.setFrecuenciaDeDisparos(frecuenciaDeDisparo);
-            //barcoIA.setVelocidadMaxima(velocidadMaxima);
-            barcoIA.render(elapsedTime);
-
+            renderizarBarco(barcoJugador, elapsedTime);
+            renderizarBarco(barcoIA, elapsedTime);
 
             // muevo el SkyBox para simular espacio infinito
             foreach (TgcMesh cara in skyBox.Faces)
@@ -229,7 +197,6 @@ namespace AlumnoEjemplos.BarbaAlpha
             //Actualizar posicion de cámara
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
             GuiController.Instance.CurrentCamera.updateCamera();
-            //GuiController.Instance.Logger.log(barcoJugador.getSentido().ToString());
 
         }
 
@@ -239,6 +206,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             barcoIA.dispose();
             barcoJugador.dispose();
             effect.Dispose();
+            terreno.dispose();
         }
 
         public Vector3 aplicarTrigonometrica (Vector3 posicion, float radioY, float actualTime, float frecuencia, float alturaOlas){
@@ -246,7 +214,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             float X = posicion.X / frecuenciaOlas;
             float Z = posicion.Z / frecuenciaOlas;
 
-            posicion.Y += radioY + (float)(Math.Sin(X + actualTime) * Math.Cos(Z + actualTime) + Math.Sin(Z + actualTime) + Math.Cos(X + actualTime)) * alturaOlas;
+            posicion.Y += radioY + (float)(FastMath.Sin(X + actualTime) * FastMath.Cos(Z + actualTime) + FastMath.Sin(Z + actualTime) + FastMath.Cos(X + actualTime)) * alturaOlas;
 
             return posicion;
         }
@@ -328,8 +296,9 @@ namespace AlumnoEjemplos.BarbaAlpha
             normalPlano.Z = -primaZ;
 
             Vector3.Normalize(normalPlano);*/
-
-            return new Plano(normalPlano, puntoBase);
+            planoSubyacente.normal = normalPlano;
+            planoSubyacente.punto = puntoBase;
+            return planoSubyacente;
 
         }
 
@@ -383,6 +352,21 @@ namespace AlumnoEjemplos.BarbaAlpha
             effect.SetValue("fSpecularPower", 500);
         }
 
+        public void renderizarBarco(AlumnoEjemplos.BarbaAlpha.Barco.Barco barco, float elapsedTime)
+        {
+            barco.actualizarPosicionAnterior();
+            plano = obtenerPlano(barco);
+            setearVariablesBarcoShader(plano, barco.posicion(), effect);
+
+            sentidoBarco = barco.getSentido();
+            prodInterno = Vector3.Dot(plano.normal, sentidoBarco);
+            cosAngulo = prodInterno;
+
+            //barco.aumentarAceleracionPorInclinacion(cosAngulo);
+            //barcoJugador.setFrecuenciaDeDisparos(frecuenciaDeDisparo);
+            //barcoJugador.setVelocidadMaxima(velocidadMaxima);
+            barco.render(elapsedTime);
+        }
         
 
         
