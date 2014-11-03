@@ -57,8 +57,9 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             base.render(elapsedTime);
         }
 
-        public void dispose()      {
-            this.barco.dispose();
+        override protected void finalizar()
+        {
+            agua.perdiste();
         }
     }
 }

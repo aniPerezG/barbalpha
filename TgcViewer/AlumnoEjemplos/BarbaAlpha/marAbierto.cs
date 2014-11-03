@@ -17,6 +17,7 @@ using TgcViewer.Utils.Input;
 using TgcViewer.Utils.Collision.ElipsoidCollision;
 using AlumnoEjemplos.BarbaAlpha.Barco;
 using TgcViewer.Utils._2D;
+using System.Windows.Forms;
 
 namespace AlumnoEjemplos.BarbaAlpha
 {
@@ -70,6 +71,8 @@ namespace AlumnoEjemplos.BarbaAlpha
 
         private TgcSprite fin;
         private Boolean terminar;
+
+        private string mensajeFinal;
 
         // Buffers
         public static CustomVertex.PositionNormalTextured[] _vertices;
@@ -152,7 +155,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             barcoIA.cargarCaniones();
 
             GuiController.Instance.Modifiers.addFloat("alturaOlas", 5f, 30f, 10f);
-            GuiController.Instance.Modifiers.addFloat("frecuenciaDeDisparo", 1f, 3f, 2f);
+            GuiController.Instance.Modifiers.addFloat("frecuenciaDeDisparo", 0.3f, 3f, 0.5f);
             GuiController.Instance.Modifiers.addFloat("frecuenciaOlas", 50f, 300f, 100f);
             GuiController.Instance.Modifiers.addFloat("velocidadMaxima", 10f, 400f, 100f);
 
@@ -170,6 +173,8 @@ namespace AlumnoEjemplos.BarbaAlpha
             fin.Position = new Vector2(0, 0);
 
             terminar = false;
+
+            
         }
 
         public override void render(float elapsedTime)
@@ -177,10 +182,11 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             if (terminar)
             {
-                GuiController.Instance.Drawer2D.beginDrawSprite();
+                /*GuiController.Instance.Drawer2D.beginDrawSprite();
                 fin.render();
-                GuiController.Instance.Drawer2D.endDrawSprite();
+                GuiController.Instance.Drawer2D.endDrawSprite();*/
 
+                this.cerrarYMostrar(mensajeFinal);
             }
             else
             {
@@ -233,7 +239,6 @@ namespace AlumnoEjemplos.BarbaAlpha
             sol.dispose();
             barcoIA.dispose();
             barcoJugador.dispose();
-            effect.Dispose();
             terreno.dispose();
         }
 
@@ -314,7 +319,7 @@ namespace AlumnoEjemplos.BarbaAlpha
              * 
             radioEnY = barco.BoundingBox().calculateAxisRadius().Y;
             centroBase = barco.posicion() - new Vector3(0, radioEnY, 0);
-            puntoBase = aplicarTrigonometrica(centroBase, radioEnY, time, frecuenciaOlas, alturaOlas);
+            puntoBase = aplicarTrigonometrica(centroBase, radioEnY,6 time, frecuenciaOlas, alturaOlas);
 
             primaX = (FastMath.Cos(time + puntoBase.X) * FastMath.Cos(time + puntoBase.Z) - FastMath.Sin(time + puntoBase.X));
             primaZ = (FastMath.Cos(time + puntoBase.Z) - FastMath.Sin(time + puntoBase.X) * FastMath.Sin(time + puntoBase.Z));
@@ -396,10 +401,22 @@ namespace AlumnoEjemplos.BarbaAlpha
             barco.render(elapsedTime);
         }
 
-        public void terminarJuego()
+        public void ganaste()
         {
             terminar = true;
-            
+            mensajeFinal = "GANSTE!!";
+        }
+
+        public void perdiste()
+        {
+            terminar = true;
+            mensajeFinal = "PERDISTE!!";
+        }
+
+        private void cerrarYMostrar(string text)
+        {
+            this.close();
+            MessageBox.Show(text);
         }
         
 

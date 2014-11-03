@@ -79,5 +79,10 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
             base.render(elapsedTime);
         }
+
+        override protected void finalizar()
+        {
+            agua.ganaste();
+        }
     }
 }

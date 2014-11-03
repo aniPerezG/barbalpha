@@ -33,7 +33,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private float frecuencia_disparo = 2;
         private float friccion = 10000f;
         private float velocidadAbsolutaRotacion = 40f;
-        private marAbierto agua; // terreno sobre el que se navega
+        protected marAbierto agua; // terreno sobre el que se navega
         private ArrayList balas = new ArrayList(10);
         private List<Misil> misilesAEliminar = new List<Misil>(); // misiles a remover de la escena
         private List<Misil> misilesDisparados = new List<Misil>(); // misiles ya en el aire
@@ -328,7 +328,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
             if(seAcabo)
             {
-                agua.terminarJuego();
+                this.finalizar();
             }
 
             this.barco.render();
@@ -341,6 +341,8 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             this.eliminarMisiles(); // elimina aquellos misiles que terminaron su trayectoria
             
         }
+
+        protected abstract void finalizar();
 
         public virtual void dispose()
         {
