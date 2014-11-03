@@ -7,7 +7,6 @@ using Microsoft.DirectX.Direct3D;
 using Microsoft.DirectX.DirectInput;
 using TgcViewer.Utils.TgcSceneLoader;
 using TgcViewer.Utils.TgcGeometry;
-using Microsoft.DirectX.DirectInput;
 using TgcViewer;
 
 namespace AlumnoEjemplos.BarbaAlpha.Barco
@@ -27,6 +26,11 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             return getEnemy().posicion();
         }
 
+        private Vector3 distanciaAEnemigo()
+        {
+            return this.posicionEnemigo() - this.posicion();
+        }
+
         private Vector3 obtenerDireccionAEnemigo()
         {   // Retorna el vector director de la recta que pasa por la posición de este barco y
             // por la posición del barco enemigo
@@ -35,7 +39,10 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         private void evaluarDistanciaDeEnemigo()
         {
-            if (Vector3.Length(obtenerDireccionAEnemigo()) <= distancia_maxima) estasMuyLejos = false;
+            if (Vector3.Length(this.distanciaAEnemigo()) <= distancia_maxima)
+            {
+                estasMuyLejos = false;
+            }
             else estasMuyLejos = true;
         }
 
@@ -66,18 +73,25 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         protected override void moverYVirar(float elapsedTime)
         {
             this.evaluarDistanciaDeEnemigo();
-            this.apuntarEnemigo();
             if (estasMuyLejos)
             {
+                this.apuntarEnemigo();
                 this.acelerar(-1);
             }
             else this.disparar();
 
         }
 
+        public override void teDieron(Misil misil)
+        {
+            base.teDieron(misil);
+            acelerar(-5);
+        }
+
         public override void render(float elapsedTime)
         {
             base.render(elapsedTime);
+            
         }
 
         override protected void finalizar()

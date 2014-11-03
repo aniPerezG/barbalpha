@@ -230,16 +230,15 @@ namespace AlumnoEjemplos.BarbaAlpha
             GuiController.Instance.CurrentCamera.updateCamera();
 
           }
-            
 
         }
 
         public override void close(){
-            effect.Dispose();
             sol.dispose();
             barcoIA.dispose();
             barcoJugador.dispose();
             terreno.dispose();
+            effect.Dispose();
         }
 
         public Vector3 aplicarTrigonometrica (Vector3 posicion, float radioY, float actualTime, float frecuencia, float alturaOlas){

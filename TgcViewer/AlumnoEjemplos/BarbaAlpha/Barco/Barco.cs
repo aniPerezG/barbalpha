@@ -270,7 +270,8 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             return sentido;
         }
 
-        public void teDieron(Misil misil)  {
+        public virtual void teDieron(Misil misil)
+        {
             meDieron = true;
             if(!(misil == misilAnterior))
             {
