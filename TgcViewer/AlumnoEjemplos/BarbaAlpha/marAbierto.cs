@@ -63,15 +63,9 @@ namespace AlumnoEjemplos.BarbaAlpha
         Vector3 ortogonal;
         Microsoft.DirectX.Direct3D.Device d3dDevice;
 
-        //Nube nube;
-        //Lluvia lluvia;
-        //Lluvia lluvia2;
-        //Lluvia lluvia3;
-        //Lluvia lluvia4;
-        //Lluvia lluvia5;
-        //Lluvia lluvia6;
-        //Lluvia lluvia7;
-        //Lluvia lluvia8;
+        Nube nube;
+        Nube nube2;
+        Nube nube3;
         Sol sol;
         Plano planoSubyacente;
         Vector3 normalPlano;
@@ -81,6 +75,8 @@ namespace AlumnoEjemplos.BarbaAlpha
         private Boolean terminar;
 
         private string mensajeFinal;
+
+        private List<Object> meshes = new List<Object>();
 
         // Buffers
         public static CustomVertex.PositionNormalTextured[] _vertices;
@@ -181,39 +177,16 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             terminar = false;
 
-            //Vector3 v1 = new Vector3(-50, 500, -50);
-            //Vector3 v2 = new Vector3(50, 500, 50);
-            //Vector3 v3 = new Vector3(50, 500, -50);
-            //Vector3 v4 = new Vector3(-50, 500, 50);
+            nube = new Nube(barcoJugador.posicion() + new Vector3(0, 500, 0), 1000, 50);
+            nube2 = new Nube(barcoJugador.posicion() + new Vector3(0, 400, 0), 500, 30);
+            nube3 = new Nube(barcoJugador.posicion() + new Vector3(0, 300, 0), 200, 10);
 
+            nube.armarLimitesLluvia();
+            nube2.armarLimitesLluvia();
+            nube3.armarLimitesLluvia();
 
-
-            //nube = new Nube(v1, v2, v3, v4, 4);
-
-            //lluvia = new Lluvia(v1);
-            //lluvia2 = new Lluvia(v2);
-            //lluvia3 = new Lluvia(v3);
-            //lluvia4 = new Lluvia(v4);
-
-            //v1 = new Vector3(-50, 500, 0);
-            //v2 = new Vector3(50, 500, 0);
-            //v3 = new Vector3(0, 500, -50);
-            //v4 = new Vector3(0, 500, 50);
-
-            //lluvia5 = new Lluvia(v1);
-            //lluvia6 = new Lluvia(v2);
-            //lluvia7 = new Lluvia(v3);
-            //lluvia8 = new Lluvia(v4);
-
-            //lluvia.condensate(10);
-            //lluvia2.condensate(10);
-            //lluvia3.condensate(10);
-            //lluvia4.condensate(10);
-            //lluvia5.condensate(10);
-            //lluvia6.condensate(10);
-            //lluvia7.condensate(10);
-            //lluvia8.condensate(10);
-            
+            meshes.add
+                        
         }
 
         public override void render(float elapsedTime)
@@ -262,18 +235,9 @@ namespace AlumnoEjemplos.BarbaAlpha
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
             GuiController.Instance.CurrentCamera.updateCamera();
 
-            //lluvia.render(elapsedTime);
-            //lluvia2.render(elapsedTime);
-            //lluvia3.render(elapsedTime);
-            //lluvia4.render(elapsedTime);
-            //lluvia5.render(elapsedTime);
-            //lluvia6.render(elapsedTime);
-            //lluvia7.render(elapsedTime);
-            //lluvia8.render(elapsedTime);
-
-
-
-            //nube.render(elapsedTime); no funciona, si querés probar la lluvia no descomentes
+            nube.render(elapsedTime);
+            nube2.render(elapsedTime);
+            nube3.render(elapsedTime);
           }
 
         }

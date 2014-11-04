@@ -23,6 +23,11 @@ namespace AlumnoEjemplos.BarbaAlpha
             return this.posicion_lluvia;
         }
 
+        public void mover(Vector3 v)
+        {
+            posicion_lluvia += v;
+        }
+
         public void condensate(int cantidadGotas)
         {
             for (int i = 0; i < cantidadGotas; i++)
