@@ -10,35 +10,40 @@ namespace AlumnoEjemplos.BarbaAlpha
 {
     class Lluvia
     {
-  
-        public List<ParticleEmitter> Emisores = new List<ParticleEmitter>();
-        public Lluvia()
+        private Vector3 posicion_lluvia;
+        public List<Gota> gotas = new List<Gota>();
+
+
+        public Lluvia(Vector3 posicion)
         {
-            for (int i = 0; i < 70; i++)
+            posicion_lluvia = posicion;
+        }
+
+        public Vector3 getPosicion()
+        {
+            return this.posicion_lluvia;
+        }
+
+        public void condensate(int cantidadGotas)
+        {
+            for (int i = 0; i < cantidadGotas; i++)
             {
-                ParticleEmitter Emisor = new ParticleEmitter(GuiController.Instance.AlumnoEjemplosMediaDir + "Textures\\gotaSola.png", 100);
-                Emisor.Speed = new Vector3(0, -150, 0);
-                Emisor.Dispersion = 100;
-                Emisor.MinSizeParticle = 5;
-                Emisor.MaxSizeParticle = 10;
-                Emisor.CreationFrecuency = 0.3f;
-                Emisor.ParticleTimeToLive = 6;
-                Emisores.Add(Emisor);
+                Gota gota = new Gota(posicion_lluvia, 5, 10, this);
+                gotas.Add(gota);
             }
         }
 
-        public void render()
+        public static void controlarGota(Gota gotita) 
         {
+            if (gotita.getPositionY() <= 0) gotita.subiteDeNuevo();
+        }
 
-            Vector3 Posicion = GuiController.Instance.CurrentCamera.getPosition();
-            Vector3 LookAt = GuiController.Instance.CurrentCamera.getLookAt();
-            Posicion.Y += 90;
-            foreach (var Emisor in Emisores)
+        public void render(float elapsedTime)
+        {
+            foreach (Gota gota in gotas)
             {
-                Posicion.X = LookAt.X ;
-                Posicion.Z = LookAt.Z ;
-                Emisor.Position = Posicion;
-                Emisor.render();
+                controlarGota(gota);
+                gota.render(elapsedTime);
             }
         }
     }

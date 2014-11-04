@@ -63,7 +63,7 @@ namespace AlumnoEjemplos.BarbaAlpha
         Vector3 ortogonal;
         Microsoft.DirectX.Direct3D.Device d3dDevice;
 
-        //Lluvia lluvia;
+        Lluvia lluvia;
         Sol sol;
         Plano planoSubyacente;
         Vector3 normalPlano;
@@ -164,7 +164,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             ortogonal = new Vector3(0, 0, 0);
 
             sol = new Sol(effect); 
-            //lluvia = new Lluvia();
+            lluvia = new Lluvia(new Vector3(0, 300, 0));
             planoSubyacente = new Plano();
             normalPlano = new Vector3(0, 0, 0);
 
@@ -174,6 +174,7 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             terminar = false;
 
+            lluvia.condensate(100);
             
         }
 
@@ -224,6 +225,8 @@ namespace AlumnoEjemplos.BarbaAlpha
             //Actualizar posicion de cámara
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
             GuiController.Instance.CurrentCamera.updateCamera();
+
+            lluvia.render(elapsedTime);
 
           }
 
