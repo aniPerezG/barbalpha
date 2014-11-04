@@ -235,7 +235,7 @@ namespace AlumnoEjemplos.BarbaAlpha
 
         public override void close(){
             sol.dispose();
-            barcoIA.dispose();
+            //barcoIA.dispose();
             barcoJugador.dispose();
             terreno.dispose();
             effect.Dispose();

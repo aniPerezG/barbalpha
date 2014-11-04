@@ -14,9 +14,11 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
     class BarcoIA : Barco
     {
         private const float distancia_maxima = 500;
+        private const float distancia_minima = 200;
         private const float frecuencia_disparo = 3;
         private Vector3 direccion_normal = new Vector3(0, 0, -1);
         private bool estasMuyLejos = true;
+        private bool estasMuyCerca = false;
 
         public BarcoIA(Vector3 posicionInicial, marAbierto oceano, string pathEscena)
             : base(posicionInicial, oceano, pathEscena) { this.direccion.haciaLaDerecha(); }
@@ -44,6 +46,11 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
                 estasMuyLejos = false;
             }
             else estasMuyLejos = true;
+            if (Vector3.Length(this.distanciaAEnemigo()) < distancia_minima)
+            {
+                estasMuyCerca = true;
+            }
+            else estasMuyCerca = false;
         }
 
         private Boolean estoyApuntandoAEnemigo()
@@ -66,7 +73,12 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             //GuiController.Instance.Logger.log(this.getSentido().ToString());
             if (!estoyApuntandoAEnemigo())
             {
-                this.rotarSobreY(radianesARotar());
+                float angulo = radianesARotar();
+                this.rotarSobreY(angulo);
+                if(!estoyApuntandoAEnemigo())
+                {
+                    this.rotarSobreY(-2 * angulo);
+                }
             }
         }
 
@@ -77,6 +89,11 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             {
                 this.apuntarEnemigo();
                 this.acelerar(-1);
+            }
+            if (estasMuyCerca)
+            {
+                this.apuntarEnemigo();
+                this.acelerar(1);
             }
             else this.disparar();
 
