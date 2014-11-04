@@ -423,7 +423,7 @@ namespace AlumnoEjemplos.BarbaAlpha
 
         public void setearVariablesLuzShader()
         {
-            //effect.SetValue("fvLightPosition", TgcParserUtils.vector3ToFloat3Array(sol.getPosition()));
+            effect.SetValue("fvLightPosition", TgcParserUtils.vector3ToFloat3Array(sol.getPosition()));
             effect.SetValue("fvEyePosition", TgcParserUtils.vector3ToFloat3Array(GuiController.Instance.RotCamera.getPosition()));
             /*effect.SetValue("k_la", 1);
             effect.SetValue("k_ld", 1);
