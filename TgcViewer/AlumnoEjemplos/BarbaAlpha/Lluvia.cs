@@ -32,7 +32,7 @@ namespace AlumnoEjemplos.BarbaAlpha
         {
             for (int i = 0; i < cantidadGotas; i++)
             {
-                Gota gota = new Gota(posicion_lluvia, 2, 4, this);
+                Gota gota = new Gota(posicion_lluvia, 0.5f, 1f, this);
                 gotas.Add(gota);
             }
         }

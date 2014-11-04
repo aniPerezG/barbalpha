@@ -34,6 +34,11 @@ namespace AlumnoEjemplos.BarbaAlpha
             }
         }
 
+        public void setCentro(Vector3 v)
+        {
+            centro_nube = v;
+        }
+
         public void armarLimitesLluvia()
         {
             vertice_uno = centro_nube + new Vector3(-longitud / 2, 0, -longitud / 2);

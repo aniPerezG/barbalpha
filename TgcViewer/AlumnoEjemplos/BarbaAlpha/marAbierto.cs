@@ -70,6 +70,7 @@ namespace AlumnoEjemplos.BarbaAlpha
         Plano planoSubyacente;
         Vector3 normalPlano;
         Plano plano;
+        bool mostrar_lluvia;
 
         private TgcSprite fin;
         private Boolean terminar;
@@ -126,6 +127,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             terreno.Effect = effect;
             terreno.Technique = "LightScene";
 
+
             // Creo SkyBox
             string texturesPath = GuiController.Instance.ExamplesMediaDir + "Texturas\\Quake\\SkyBox LostAtSeaDay\\";
             string skyboxFolder = GuiController.Instance.AlumnoEjemplosMediaDir + "skybox\\";
@@ -159,9 +161,8 @@ namespace AlumnoEjemplos.BarbaAlpha
             barcoIA.cargarCaniones();
 
             GuiController.Instance.Modifiers.addFloat("alturaOlas", 5f, 30f, 10f);
-            GuiController.Instance.Modifiers.addFloat("frecuenciaDeDisparo", 0.3f, 3f, 0.5f);
             GuiController.Instance.Modifiers.addFloat("frecuenciaOlas", 50f, 300f, 100f);
-            GuiController.Instance.Modifiers.addFloat("velocidadMaxima", 10f, 400f, 100f);
+            GuiController.Instance.Modifiers.addBoolean("mostrar_lluvia", "Mostrar Lluvia", false);
 
        
             vecAux = new Vector3(0, 0, 0);
@@ -177,15 +178,17 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             terminar = false;
 
-            nube = new Nube(barcoJugador.posicion() + new Vector3(0, 500, 0), 1000, 50);
-            nube2 = new Nube(barcoJugador.posicion() + new Vector3(0, 400, 0), 500, 30);
-            nube3 = new Nube(barcoJugador.posicion() + new Vector3(0, 300, 0), 200, 10);
+            nube = new Nube(barcoJugador.posicion() + new Vector3(0, 400, 0), 400, 50);
+            nube2 = new Nube(barcoJugador.posicion() + new Vector3(0, 300, 0), 300, 30);
+            nube3 = new Nube(barcoJugador.posicion() + new Vector3(0, 200, 0), 200, 10);
 
             nube.armarLimitesLluvia();
             nube2.armarLimitesLluvia();
             nube3.armarLimitesLluvia();
 
-            meshes.add
+            meshes.Add(barcoIA);
+            meshes.Add(barcoJugador);
+            meshes.Add(nube);
                         
         }
 
@@ -205,9 +208,8 @@ namespace AlumnoEjemplos.BarbaAlpha
             time += elapsedTime;
 
             alturaOlas = (float)GuiController.Instance.Modifiers["alturaOlas"];
-            frecuenciaDeDisparo = (float)GuiController.Instance.Modifiers["frecuenciaDeDisparo"];
             frecuenciaOlas = (float)GuiController.Instance.Modifiers["frecuenciaOlas"];
-            velocidadMaxima = (float)GuiController.Instance.Modifiers["velocidadMaxima"];
+            mostrar_lluvia = (bool)GuiController.Instance.Modifiers["mostrar_lluvia"];
 
             sol.render();
 
@@ -235,9 +237,21 @@ namespace AlumnoEjemplos.BarbaAlpha
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
             GuiController.Instance.CurrentCamera.updateCamera();
 
-            nube.render(elapsedTime);
-            nube2.render(elapsedTime);
-            nube3.render(elapsedTime);
+
+            nube.setCentro(barcoJugador.posicion());
+            nube2.setCentro(barcoJugador.posicion());
+            nube3.setCentro(barcoJugador.posicion());
+
+            if (mostrar_lluvia)
+            {
+                nube.render(elapsedTime);
+                nube2.render(elapsedTime);
+                nube3.render(elapsedTime);
+            }
+
+            
+
+
           }
 
         }
