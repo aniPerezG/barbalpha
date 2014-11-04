@@ -70,15 +70,9 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         private void apuntarEnemigo()
         {
-            //GuiController.Instance.Logger.log(this.getSentido().ToString());
             if (!estoyApuntandoAEnemigo())
             {
-                float angulo = radianesARotar();
-                this.rotarSobreY(angulo);
-                if(!estoyApuntandoAEnemigo())
-                {
-                    this.rotarSobreY(-2 * angulo);
-                }
+                this.rotarSobreY(radianesARotar());
             }
         }
 
@@ -90,19 +84,20 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
                 this.apuntarEnemigo();
                 this.acelerar(-1);
             }
+            else this.disparar();
+
             if (estasMuyCerca)
             {
                 this.apuntarEnemigo();
                 this.acelerar(1);
             }
-            else this.disparar();
 
         }
 
         public override void teDieron(Misil misil)
         {
-            base.teDieron(misil);
             acelerar(-5);
+            base.teDieron(misil);
         }
 
         public override void render(float elapsedTime)

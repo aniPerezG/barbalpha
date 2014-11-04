@@ -182,10 +182,6 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             if (terminar)
             {
-                /*GuiController.Instance.Drawer2D.beginDrawSprite();
-                fin.render();
-                GuiController.Instance.Drawer2D.endDrawSprite();*/
-
                 this.cerrarYMostrar(mensajeFinal);
             }
             else
@@ -234,11 +230,13 @@ namespace AlumnoEjemplos.BarbaAlpha
         }
 
         public override void close(){
-            sol.dispose();
-            //barcoIA.dispose();
-            barcoJugador.dispose();
-            terreno.dispose();
-            effect.Dispose();
+           
+           sol.dispose();
+           barcoIA.dispose();
+           barcoJugador.dispose();
+           terreno.dispose();
+           effect.Dispose();
+           
         }
 
         public Vector3 aplicarTrigonometrica (Vector3 posicion, float radioY, float actualTime, float frecuencia, float alturaOlas){
@@ -414,8 +412,8 @@ namespace AlumnoEjemplos.BarbaAlpha
 
         private void cerrarYMostrar(string text)
         {
-            this.close();
             MessageBox.Show(text);
+            this.close();
         }
         
 
