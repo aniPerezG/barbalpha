@@ -63,7 +63,15 @@ namespace AlumnoEjemplos.BarbaAlpha
         Vector3 ortogonal;
         Microsoft.DirectX.Direct3D.Device d3dDevice;
 
-        Lluvia lluvia;
+        //Nube nube;
+        //Lluvia lluvia;
+        //Lluvia lluvia2;
+        //Lluvia lluvia3;
+        //Lluvia lluvia4;
+        //Lluvia lluvia5;
+        //Lluvia lluvia6;
+        //Lluvia lluvia7;
+        //Lluvia lluvia8;
         Sol sol;
         Plano planoSubyacente;
         Vector3 normalPlano;
@@ -164,7 +172,6 @@ namespace AlumnoEjemplos.BarbaAlpha
             ortogonal = new Vector3(0, 0, 0);
 
             sol = new Sol(effect); 
-            lluvia = new Lluvia(new Vector3(0, 300, 0));
             planoSubyacente = new Plano();
             normalPlano = new Vector3(0, 0, 0);
 
@@ -174,7 +181,38 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             terminar = false;
 
-            lluvia.condensate(100);
+            //Vector3 v1 = new Vector3(-50, 500, -50);
+            //Vector3 v2 = new Vector3(50, 500, 50);
+            //Vector3 v3 = new Vector3(50, 500, -50);
+            //Vector3 v4 = new Vector3(-50, 500, 50);
+
+
+
+            //nube = new Nube(v1, v2, v3, v4, 4);
+
+            //lluvia = new Lluvia(v1);
+            //lluvia2 = new Lluvia(v2);
+            //lluvia3 = new Lluvia(v3);
+            //lluvia4 = new Lluvia(v4);
+
+            //v1 = new Vector3(-50, 500, 0);
+            //v2 = new Vector3(50, 500, 0);
+            //v3 = new Vector3(0, 500, -50);
+            //v4 = new Vector3(0, 500, 50);
+
+            //lluvia5 = new Lluvia(v1);
+            //lluvia6 = new Lluvia(v2);
+            //lluvia7 = new Lluvia(v3);
+            //lluvia8 = new Lluvia(v4);
+
+            //lluvia.condensate(10);
+            //lluvia2.condensate(10);
+            //lluvia3.condensate(10);
+            //lluvia4.condensate(10);
+            //lluvia5.condensate(10);
+            //lluvia6.condensate(10);
+            //lluvia7.condensate(10);
+            //lluvia8.condensate(10);
             
         }
 
@@ -208,8 +246,6 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             setearVariablesLuzShader();
 
-            //lluvia.render();
-
             terreno.render();
 
             renderizarBarco(barcoJugador, elapsedTime);
@@ -226,8 +262,18 @@ namespace AlumnoEjemplos.BarbaAlpha
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
             GuiController.Instance.CurrentCamera.updateCamera();
 
-            lluvia.render(elapsedTime);
+            //lluvia.render(elapsedTime);
+            //lluvia2.render(elapsedTime);
+            //lluvia3.render(elapsedTime);
+            //lluvia4.render(elapsedTime);
+            //lluvia5.render(elapsedTime);
+            //lluvia6.render(elapsedTime);
+            //lluvia7.render(elapsedTime);
+            //lluvia8.render(elapsedTime);
 
+
+
+            //nube.render(elapsedTime); no funciona, si querés probar la lluvia no descomentes
           }
 
         }

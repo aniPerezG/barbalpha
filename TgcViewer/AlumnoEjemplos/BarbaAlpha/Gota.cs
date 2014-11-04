@@ -12,7 +12,7 @@ namespace AlumnoEjemplos.BarbaAlpha
 {
     class Gota
     {
-        private Vector3 velocidad_caida = new Vector3(0, -2f, 0);
+        private Vector3 velocidad_caida = new Vector3(0, -10f, 0);
         private Vector3 velocidad_aux = new Vector3(0, 0, 0);
         private Vector3 posicion_inicial;
         private TgcCylinder gotita;

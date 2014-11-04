@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Microsoft.DirectX;
 using TgcViewer;
-using TgcViewer.Utils.Particles;
 
 namespace AlumnoEjemplos.BarbaAlpha
 {
@@ -28,7 +27,7 @@ namespace AlumnoEjemplos.BarbaAlpha
         {
             for (int i = 0; i < cantidadGotas; i++)
             {
-                Gota gota = new Gota(posicion_lluvia, 5, 10, this);
+                Gota gota = new Gota(posicion_lluvia, 2, 4, this);
                 gotas.Add(gota);
             }
         }
