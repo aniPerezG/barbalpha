@@ -376,10 +376,10 @@ namespace AlumnoEjemplos.BarbaAlpha
         {
             //effect.SetValue("fvLightPosition", TgcParserUtils.vector3ToFloat3Array(sol.getPosition()));
             effect.SetValue("fvEyePosition", TgcParserUtils.vector3ToFloat3Array(GuiController.Instance.RotCamera.getPosition()));
-            effect.SetValue("k_la", 1);
+            /*effect.SetValue("k_la", 1);
             effect.SetValue("k_ld", 1);
             effect.SetValue("k_ls", 1);
-            effect.SetValue("fSpecularPower", 500);
+            effect.SetValue("fSpecularPower", 500);*/
         }
 
         public void renderizarBarco(AlumnoEjemplos.BarbaAlpha.Barco.Barco barco, float elapsedTime)

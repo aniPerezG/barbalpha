@@ -21,10 +21,10 @@ sampler2D diffuseMap = sampler_state
 
 float3 fvLightPosition = float3(-100, 100.00, -600.00);
 float3 fvEyePosition;// = float3(0.00, 0.00, -100.00);
-float k_la = 0.5;							// luz ambiente global
-float k_ld = 0.2;							// luz difusa
-float k_ls = 0.4;							// luz specular
-float fSpecularPower = 4;				// exponente de la luz specular
+float k_la = 5;							// luz ambiente global
+float k_ld = 0.5;							// luz difusa
+float k_ls = 1;							// luz specular
+//float fSpecularPower = 4;				// exponente de la luz specular
 float LightIntensity = 0.05;
 float3 lightColor = float3(255, 255, 0);
 
@@ -208,8 +208,26 @@ VS_OUTPUT vs_normal(VS_INPUT Input)
 
 float4 ps_light(float3 Texcoord: TEXCOORD0, float3 N : TEXCOORD1,  float3 Pos : TEXCOORD2 ) : COLOR0
 {
-	float ld = 1;		// luz difusa
-	float le = 0.05;		// luz specular
+	float4 RGBColor = 0;
+	float shininess = -2;
+
+	float3 ambientColor = float3(0, 100, 255);
+	float3 diffuseColor = float3(255, 255, 255);
+	float3 specularColor = float3(20, 20, 20);
+	float4 fvBaseColor = tex2D(diffuseMap, Texcoord);
+
+	float3 L = normalize(float3(fvLightPosition.x, fvLightPosition.y, fvLightPosition.z) - float3(Pos.x, Pos.y, Pos.z));
+	float NdotL = dot(N, L);
+
+	float V = normalize(float3(fvEyePosition.x, fvEyePosition.y, fvEyePosition.z) - float3(Pos.x, Pos.y, Pos.z));
+	float R = normalize(float3(-L.x, L.y, -L.z));
+	float RdotV = dot(R, V);
+
+	RGBColor.rgb = saturate(fvBaseColor * (saturate(k_la * ambientColor + k_ld*diffuseColor*NdotL+ k_ls) + pow(k_ls*specularColor*RdotV, shininess)));
+
+	//Color = Ka*ambientColor + Kd*diffuseColor*(N dot L) + Ks*specularColor*(R dot V)^shininess
+
+
 
 
 	// si hubiera varias luces, se podria iterar por c/u. 
@@ -220,6 +238,12 @@ float4 ps_light(float3 Texcoord: TEXCOORD0, float3 N : TEXCOORD1,  float3 Pos : 
 	// el resto se aproxima con luz ambiente. 
 	// for(int =0;i<cant_ligths;++i)
 	// 1- calculo la luz diffusa
+	
+	/*
+	float ld = 1;		// luz difusa
+	float le = 0.05;		// luz specular
+	
+
 	float3 LD = -normalize(fvLightPosition - float3(Pos.x, Pos.y, Pos.z));
 	ld += saturate(dot(N, LD))*k_ld;
 
@@ -237,7 +261,9 @@ float4 ps_light(float3 Texcoord: TEXCOORD0, float3 N : TEXCOORD1,  float3 Pos : 
 
 	float3 amarillo = float3(2, 2, 0);
 	float4 RGBColor = 0;
-	RGBColor.rgb = saturate(fvBaseColor*(saturate(k_la + ld + 10*ambientLight)) + le );
+	RGBColor.rgb = saturate(fvBaseColor*(saturate(k_la + ld + 10*ambientLight)) + le );*/
+
+
 
 	// saturate deja los valores entre [0,1]. Una tecnica muy usada en motores modernos
 	// es usar floating point textures auxialres, para almacenar mucho mas que 256 valores posibles 
