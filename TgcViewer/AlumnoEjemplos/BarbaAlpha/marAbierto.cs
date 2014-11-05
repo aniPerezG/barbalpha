@@ -186,9 +186,13 @@ namespace AlumnoEjemplos.BarbaAlpha
             nube2.armarLimitesLluvia();
             nube3.armarLimitesLluvia();
 
-            meshes.Add(barcoIA);
-            meshes.Add(barcoJugador);
-            meshes.Add(nube);
+            GuiController.Instance.RotCamera.CameraDistance += 100;
+            GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
+            GuiController.Instance.RotCamera.RotationSpeed = 6f;
+            //GuiController.Instance.Fog.resetValues();
+            //GuiController.Instance.Fog.Enabled = true;
+            //GuiController.Instance.Fog.Density = 0;
+            //GuiController.Instance.Fog.updateValues();
                         
         }
 
@@ -234,7 +238,6 @@ namespace AlumnoEjemplos.BarbaAlpha
             
             skyBox.render();
             //Actualizar posicion de cámara
-            GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
             GuiController.Instance.CurrentCamera.updateCamera();
 
 
