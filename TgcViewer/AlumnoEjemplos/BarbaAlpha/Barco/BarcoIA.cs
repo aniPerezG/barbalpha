@@ -20,6 +20,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private Vector3 direccion_normal = new Vector3(0, 0, -1);
         private bool estasMuyLejos = true;
         private bool estasMuyCerca = false;
+        private bool tengoQueEscaparme = false;
 
         public BarcoIA(Vector3 posicionInicial, marAbierto oceano, string pathEscena)
             : base(posicionInicial, oceano, pathEscena) { this.direccion.haciaLaDerecha(); }
@@ -97,12 +98,22 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         public override void teDieron(Misil misil)
         {
-            acelerar(-5);
+            this.escaparme();
             base.teDieron(misil);
         }
 
         public override void render(float elapsedTime)
         {
+            //en caso de que lo bombardeen se mueve asi se aleja
+            if (tengoQueEscaparme && !estasMuyLejos)
+            {
+                acelerar(1);
+            }
+            else
+            {
+                tengoQueEscaparme = false;
+            }
+            
             base.render(elapsedTime);
             
         }
@@ -110,6 +121,11 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         override protected void finalizar()
         {
             agua.ganaste();
+        }
+
+        private void escaparme()
+        {
+            tengoQueEscaparme = true;
         }
     }
 }
