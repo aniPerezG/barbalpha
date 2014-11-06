@@ -12,10 +12,10 @@ namespace AlumnoEjemplos.BarbaAlpha
 {
     class Gota
     {
-        private Vector3 velocidad_caida = new Vector3(0, -10f, 0);
+        private Vector3 velocidad_caida = new Vector3(0, -5f, 0);
         private Vector3 velocidad_aux = new Vector3(0, 0, 0);
         private Vector3 posicion_inicial;
-        private TgcCylinder gotita;
+        private TgcSphere gotita;
         private Lluvia lluvia;
 
 
@@ -23,12 +23,19 @@ namespace AlumnoEjemplos.BarbaAlpha
         {
             posicion_inicial = posicion;
 
-            gotita = new TgcCylinder(posicion_inicial, anchoGota, altoGota / 2);
-            gotita.AlphaBlendEnable = true;
-            gotita.Color = Color.Gray;
+            gotita = new TgcSphere();
+            gotita.BasePoly = TgcSphere.eBasePoly.CUBE;
+            gotita.Radius =  anchoGota / 2;
+            gotita.Inflate = true;
+            gotita.setColor(Color.Gray);
             gotita.updateValues();
             
             lluvia = tremendaLluvia;
+        }
+
+        public TgcSphere getGotita()
+        {
+            return gotita;
         }
 
         public float getPositionY()

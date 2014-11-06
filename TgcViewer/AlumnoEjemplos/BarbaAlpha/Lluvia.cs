@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.DirectX;
 using TgcViewer;
+using TgcViewer.Utils.TgcGeometry;
 
 namespace AlumnoEjemplos.BarbaAlpha
 {
@@ -16,6 +17,10 @@ namespace AlumnoEjemplos.BarbaAlpha
         public Lluvia(Vector3 posicion)
         {
             posicion_lluvia = posicion;
+        }
+        public void setPosicion(Vector3 v)
+        {
+            this.posicion_lluvia = v;
         }
 
         public Vector3 getPosicion()
@@ -32,12 +37,12 @@ namespace AlumnoEjemplos.BarbaAlpha
         {
             for (int i = 0; i < cantidadGotas; i++)
             {
-                Gota gota = new Gota(posicion_lluvia, 0.5f, 1f, this);
+                Gota gota = new Gota(posicion_lluvia, 1f, 3f, this);
                 gotas.Add(gota);
             }
         }
 
-        public static void controlarGota(Gota gotita) 
+        public static void controlarGota(Gota gotita)
         {
             if (gotita.getPositionY() <= 0) gotita.subiteDeNuevo();
         }
@@ -47,7 +52,11 @@ namespace AlumnoEjemplos.BarbaAlpha
             foreach (Gota gota in gotas)
             {
                 controlarGota(gota);
-                gota.render(elapsedTime);
+                TgcCollisionUtils.FrustumResult resultado = TgcCollisionUtils.classifyFrustumSphere(GuiController.Instance.Frustum, gota.getGotita().BoundingSphere);
+                if (resultado == TgcCollisionUtils.FrustumResult.INSIDE || resultado == TgcCollisionUtils.FrustumResult.INTERSECT)
+                {
+                    gota.render(elapsedTime);
+                }
             }
         }
     }

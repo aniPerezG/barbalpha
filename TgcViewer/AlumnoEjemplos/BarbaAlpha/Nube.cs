@@ -67,6 +67,15 @@ namespace AlumnoEjemplos.BarbaAlpha
             crearLluvias(vertice_cuatro, vertice_uno, true);
         }
 
+        public Vector3 obtenerVecRandom(Vector3 v)
+        {
+            Random generador = new Random();
+            v.X += generador.Next(50);
+            v.Z += generador.Next(50);
+
+            return v;
+        }
+
         public void crearLluvias(Vector3 p1, Vector3 p2, Boolean hack)
         {
             Vector3 vecAux = p2 - p1;
@@ -81,7 +90,7 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             for (int i = 0; i < cantidad_lluvias; i++)
             {
-                Lluvia nuevaLluvia = new Lluvia(p1 + vecAux);
+                Lluvia nuevaLluvia = new Lluvia(obtenerVecRandom(p1 + vecAux));
                 nuevaLluvia.condensate(1);
                 lluvias.Add(nuevaLluvia);
                 if (vecAux.X == 0) vecAux.Z += distanciaEntreLluvias;

@@ -176,9 +176,9 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             terminar = false;
 
-            nube = new Nube(barcoJugador.posicion() + new Vector3(0, 400, 0), 400, 50);
-            nube2 = new Nube(barcoJugador.posicion() + new Vector3(0, 300, 0), 300, 30);
-            nube3 = new Nube(barcoJugador.posicion() + new Vector3(0, 200, 0), 200, 10);
+            nube = new Nube(barcoJugador.posicion() + new Vector3(0, 400, 0), 800, 150);
+            nube2 = new Nube(barcoJugador.posicion() + new Vector3(0, 300, 0), 600, 50);
+            nube3 = new Nube(barcoJugador.posicion() + new Vector3(0, 200, 0), 300, 10);
 
             nube.armarLimitesLluvia();
             nube2.armarLimitesLluvia();
