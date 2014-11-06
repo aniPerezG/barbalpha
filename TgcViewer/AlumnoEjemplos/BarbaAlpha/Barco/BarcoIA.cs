@@ -53,6 +53,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
                 estasMuyCerca = true;
             }
             else estasMuyCerca = false;
+
         }
 
         private Boolean estoyApuntandoAEnemigo()
@@ -116,6 +117,8 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             base.render(elapsedTime);
             
         }
+
+
 
         override protected void finalizar()
         {

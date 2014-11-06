@@ -46,7 +46,6 @@ namespace AlumnoEjemplos.BarbaAlpha
         string textura;
         TgcSimpleTerrain terreno;
         TgcSkyBox skyBox;
-
         //variables necesarias para el render
         float frecuenciaOlas;
         float alturaOlas;
@@ -96,7 +95,7 @@ namespace AlumnoEjemplos.BarbaAlpha
 
         public override string getDescription()
         {
-            return "Trata de derribar al otro barco antes de que el te derribe a vos! \n Te mueves con las flechas y disparas con la barra de Espacio";
+            return "Trata de derribar al otro barco antes de que el te derribe a vos! \n Te moves con las flechas y disparas con la barra de Espacio";
         }
 
         public override void init()
@@ -144,11 +143,6 @@ namespace AlumnoEjemplos.BarbaAlpha
             skyBox.setFaceTexture(TgcSkyBox.SkyFaces.Back, skyboxFolder + "skybox2.jpg");
             skyBox.SkyEpsilon = 50f;
             skyBox.updateValues();
-
-
-            //Centrar camara rotacional respecto a la canoa
-            GuiController.Instance.RotCamera.Enable = true;
-            GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
             
             barcoJugador.setEnemy(barcoIA);
             barcoJugador.setEffect(effect);
@@ -190,9 +184,23 @@ namespace AlumnoEjemplos.BarbaAlpha
             nube2.armarLimitesLluvia();
             nube3.armarLimitesLluvia();
 
+            /*
             GuiController.Instance.RotCamera.CameraDistance += 100;
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
-            GuiController.Instance.RotCamera.RotationSpeed = 6f;
+            GuiController.Instance.RotCamera.RotationSpeed = 6f;*/
+
+            //Centrar camara rotacional respecto a la canoa
+           // GuiController.Instance.RotCamera.Enable = true;
+            GuiController.Instance.ThirdPersonCamera.Enable = true;
+            GuiController.Instance.ThirdPersonCamera.setCamera(barcoJugador.posicion(), 500, 1000);
+            GuiController.Instance.ThirdPersonCamera.updateCamera();
+
+            //GuiController.Instance.RotCamera.Enable = false;
+            //camara = new TgcFpsCamera();
+            //camara.Enable = true;
+            //camara.setCamera(this.posicionCamara(), barcoJugador.posicion());
+            //camara.updateCamera();
+            
             //GuiController.Instance.Fog.resetValues();
             //GuiController.Instance.Fog.Enabled = true;
             //GuiController.Instance.Fog.Density = 0;
@@ -242,7 +250,8 @@ namespace AlumnoEjemplos.BarbaAlpha
             
             skyBox.render();
             //Actualizar posicion de cámara
-            GuiController.Instance.CurrentCamera.updateCamera();
+            GuiController.Instance.ThirdPersonCamera.setCamera(barcoJugador.posicion(), 500, 500);
+            GuiController.Instance.ThirdPersonCamera.updateCamera();
 
 
             nube.setCentro(barcoJugador.posicion());
@@ -255,9 +264,6 @@ namespace AlumnoEjemplos.BarbaAlpha
                 nube2.render(elapsedTime);
                 nube3.render(elapsedTime);
             }
-
-            
-
 
           }
 
@@ -407,7 +413,7 @@ namespace AlumnoEjemplos.BarbaAlpha
         public void setearVariablesLuzShader()
         {
             effect.SetValue("fvLightPosition", TgcParserUtils.vector3ToFloat3Array(sol.getPosition()));
-            effect.SetValue("fvEyePosition", TgcParserUtils.vector3ToFloat3Array(GuiController.Instance.RotCamera.getPosition()));
+            effect.SetValue("fvEyePosition", TgcParserUtils.vector3ToFloat3Array(GuiController.Instance.ThirdPersonCamera.getPosition()));
         }
 
         public void renderizarBarco(AlumnoEjemplos.BarbaAlpha.Barco.Barco barco, float elapsedTime)
