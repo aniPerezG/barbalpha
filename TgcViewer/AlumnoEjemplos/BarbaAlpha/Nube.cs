@@ -11,90 +11,28 @@ namespace AlumnoEjemplos.BarbaAlpha
     {
         private List<Lluvia> lluvias = new List<Lluvia>();
         private int cantidad_lluvias;
-        private float longitud;
-        private Vector3 centro_nube;
-        private static Vector3 vertice_uno;
-        private static Vector3 vertice_dos;
-        private static Vector3 vertice_tres;
-        private static Vector3 vertice_cuatro;
 
-
-        public Nube(Vector3 centroNube, float longitudPlano, int cantidadLluvias)
+        public Nube(int cantidadLluvias)
         {
-            centro_nube = centroNube;
-            longitud = longitudPlano;
             cantidad_lluvias = cantidadLluvias;
+            crearLluvias();
         }
 
-        public void mover(Vector3 v) 
+        public void crearLluvias()
         {
-            foreach (Lluvia lluvia in lluvias)
-            {
-                lluvia.mover(v);
-            }
-        }
-
-        public void setCentro(Vector3 v)
-        {
-            centro_nube = v;
-        }
-
-        public void armarLimitesLluvia()
-        {
-            vertice_uno = centro_nube + new Vector3(-longitud / 2, 0, -longitud / 2);
-            vertice_dos = centro_nube + new Vector3(longitud / 2, 0, -longitud / 2);
-            vertice_tres = centro_nube + new Vector3(longitud / 2, 0, longitud / 2);
-            vertice_cuatro = centro_nube + new Vector3(-longitud / 2, 0, longitud / 2);
-
-            Lluvia lluviaUno = new Lluvia(vertice_uno);
-            Lluvia lluviaDos = new Lluvia(vertice_dos);
-            Lluvia lluviaTres = new Lluvia(vertice_tres);
-            Lluvia lluviaCuatro = new Lluvia(vertice_cuatro);
-
-            lluviaUno.condensate(1);
-            lluviaDos.condensate(1);
-            lluviaTres.condensate(1);
-            lluviaCuatro.condensate(1);
-
-            lluvias.Add(lluviaUno);
-            lluvias.Add(lluviaDos);
-            lluvias.Add(lluviaTres);
-            lluvias.Add(lluviaCuatro);
-
-            crearLluvias(vertice_uno, vertice_dos, false);
-            crearLluvias(vertice_dos, vertice_tres, false);
-            crearLluvias(vertice_tres, vertice_cuatro, true);
-            crearLluvias(vertice_cuatro, vertice_uno, true);
-        }
-
-        public Vector3 obtenerVecRandom(Vector3 v)
-        {
-            Random generador = new Random();
-            v.X += generador.Next(50);
-            v.Z += generador.Next(50);
-
-            return v;
-        }
-
-        public void crearLluvias(Vector3 p1, Vector3 p2, Boolean hack)
-        {
-            Vector3 vecAux = p2 - p1;
-
-            float modulo = Vector3.Length(vecAux);
-            float distanciaEntreLluvias = modulo / (cantidad_lluvias + 1);
-
-            if (hack) distanciaEntreLluvias *= -1;
-
-            if (vecAux.X == 0) vecAux = new Vector3(0, 0, distanciaEntreLluvias); // los puntos están alineados en X, muevo en Z
-            else vecAux = new Vector3(distanciaEntreLluvias, 0, 0); // los puntos están alineados en Z, muevo en X
-
+            Lluvia nuevaLluvia;
             for (int i = 0; i < cantidad_lluvias; i++)
             {
-                Lluvia nuevaLluvia = new Lluvia(obtenerVecRandom(p1 + vecAux));
-                nuevaLluvia.condensate(1);
+                if (i % 2 == 0)
+                {
+                    nuevaLluvia = new Lluvia(true);
+                }
+                else
+                {
+                    nuevaLluvia = new Lluvia(false);
+                }
+                nuevaLluvia.condensate(3);
                 lluvias.Add(nuevaLluvia);
-                if (vecAux.X == 0) vecAux.Z += distanciaEntreLluvias;
-                else vecAux.X += distanciaEntreLluvias;
             }
         }
 

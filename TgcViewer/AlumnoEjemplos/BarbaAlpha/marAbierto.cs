@@ -176,13 +176,7 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             terminar = false;
 
-            nube = new Nube(barcoJugador.posicion() + new Vector3(0, 400, 0), 800, 150);
-            nube2 = new Nube(barcoJugador.posicion() + new Vector3(0, 300, 0), 600, 50);
-            nube3 = new Nube(barcoJugador.posicion() + new Vector3(0, 200, 0), 300, 10);
-
-            nube.armarLimitesLluvia();
-            nube2.armarLimitesLluvia();
-            nube3.armarLimitesLluvia();
+            nube = new Nube(500);
 
             /*
             GuiController.Instance.RotCamera.CameraDistance += 100;
@@ -205,6 +199,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             //GuiController.Instance.Fog.Enabled = true;
             //GuiController.Instance.Fog.Density = 0;
             //GuiController.Instance.Fog.updateValues();
+
                         
         }
 
@@ -254,16 +249,11 @@ namespace AlumnoEjemplos.BarbaAlpha
             GuiController.Instance.ThirdPersonCamera.setCamera(barcoJugador.posicion(), 500, 500);
             GuiController.Instance.ThirdPersonCamera.updateCamera();
 
-
-            nube.setCentro(barcoJugador.posicion());
-            nube2.setCentro(barcoJugador.posicion());
-            nube3.setCentro(barcoJugador.posicion());
-
             if (mostrar_lluvia)
             {
                 nube.render(elapsedTime);
-                nube2.render(elapsedTime);
-                nube3.render(elapsedTime);
+                //nube2.render(elapsedTime);
+                //nube3.render(elapsedTime);
             }
 
           }

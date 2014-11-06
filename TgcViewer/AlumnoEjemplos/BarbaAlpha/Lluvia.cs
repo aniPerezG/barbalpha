@@ -11,33 +11,32 @@ namespace AlumnoEjemplos.BarbaAlpha
     class Lluvia
     {
         private Vector3 posicion_lluvia;
+        private Random generador = new Random();
         public List<Gota> gotas = new List<Gota>();
 
 
-        public Lluvia(Vector3 posicion)
+        public Lluvia(Boolean hack)
         {
-            posicion_lluvia = posicion;
-        }
-        public void setPosicion(Vector3 v)
-        {
-            this.posicion_lluvia = v;
+            int aux = 1;
+            if (hack)
+            {
+                aux *= -1;
+            }
+            posicion_lluvia.X = generador.Next(1000) * aux;
+            posicion_lluvia.Y = 550;
+            posicion_lluvia.Z = generador.Next(1000) * aux;
         }
 
         public Vector3 getPosicion()
         {
-            return this.posicion_lluvia;
-        }
-
-        public void mover(Vector3 v)
-        {
-            posicion_lluvia += v;
+            return posicion_lluvia;
         }
 
         public void condensate(int cantidadGotas)
         {
             for (int i = 0; i < cantidadGotas; i++)
             {
-                Gota gota = new Gota(posicion_lluvia, 1f, 3f, this);
+                Gota gota = new Gota(posicion_lluvia, 2f, 3f, this);
                 gotas.Add(gota);
             }
         }
@@ -52,6 +51,8 @@ namespace AlumnoEjemplos.BarbaAlpha
             foreach (Gota gota in gotas)
             {
                 controlarGota(gota);
+                gota.llovete();
+                gota.getGotita().updateValues();
                 TgcCollisionUtils.FrustumResult resultado = TgcCollisionUtils.classifyFrustumSphere(GuiController.Instance.Frustum, gota.getGotita().BoundingSphere);
                 if (resultado == TgcCollisionUtils.FrustumResult.INSIDE || resultado == TgcCollisionUtils.FrustumResult.INTERSECT)
                 {
