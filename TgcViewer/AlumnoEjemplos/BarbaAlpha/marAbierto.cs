@@ -71,7 +71,6 @@ namespace AlumnoEjemplos.BarbaAlpha
         float mediaAlturaBarco;
         bool mostrar_lluvia;
 
-        private TgcSprite fin;
         private Boolean terminar;
 
         private string mensajeFinal;
@@ -170,24 +169,20 @@ namespace AlumnoEjemplos.BarbaAlpha
             planoSubyacente = new Plano();
             normalPlano = new Vector3(0, 0, 0);
 
-            fin = new TgcSprite();
-            fin.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosMediaDir + "\\Textures\\finDelJuego.png");
-            fin.Position = new Vector2(0, 0);
-
             terminar = false;
 
             nube = new Nube(500);
 
-            /*
+            
             GuiController.Instance.RotCamera.CameraDistance += 100;
             GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
-            GuiController.Instance.RotCamera.RotationSpeed = 6f;*/
+            GuiController.Instance.RotCamera.RotationSpeed = 6f;
 
             //Centrar camara rotacional respecto a la canoa
            // GuiController.Instance.RotCamera.Enable = true;
-            GuiController.Instance.ThirdPersonCamera.Enable = true;
+           /* GuiController.Instance.ThirdPersonCamera.Enable = true;
             GuiController.Instance.ThirdPersonCamera.setCamera(barcoJugador.posicion(), 500, 1000);
-            GuiController.Instance.ThirdPersonCamera.updateCamera();
+            GuiController.Instance.ThirdPersonCamera.updateCamera();*/
 
             //GuiController.Instance.RotCamera.Enable = false;
             //camara = new TgcFpsCamera();
@@ -246,8 +241,10 @@ namespace AlumnoEjemplos.BarbaAlpha
             
             skyBox.render();
             //Actualizar posicion de cámara
-            GuiController.Instance.ThirdPersonCamera.setCamera(barcoJugador.posicion(), 500, 500);
-            GuiController.Instance.ThirdPersonCamera.updateCamera();
+           /* GuiController.Instance.ThirdPersonCamera.setCamera(barcoJugador.posicion(), 500, 500);
+            GuiController.Instance.ThirdPersonCamera.updateCamera();*/
+            GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
+            GuiController.Instance.RotCamera.updateCamera();
 
             if (mostrar_lluvia)
             {
