@@ -81,16 +81,15 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         protected override void moverYVirar(float elapsedTime)
         {
             this.evaluarDistanciaDeEnemigo();
+            this.apuntarEnemigo();
             if (estasMuyLejos)
             {
-                this.apuntarEnemigo();
                 this.acelerar(-1);
             }
             else this.disparar();
 
             if (estasMuyCerca)
             {
-                this.apuntarEnemigo();
                 this.acelerar(1);
             }
 
@@ -107,7 +106,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             //en caso de que lo bombardeen se mueve asi se aleja
             if (tengoQueEscaparme && !estasMuyLejos)
             {
-                acelerar(1);
+                acelerar(-1);
             }
             else
             {

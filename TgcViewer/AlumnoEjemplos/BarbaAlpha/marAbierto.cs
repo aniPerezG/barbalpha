@@ -266,7 +266,7 @@ namespace AlumnoEjemplos.BarbaAlpha
         public override void close(){
            
            sol.dispose();
-           barcoIA.dispose();
+           //barcoIA.dispose();
            //barcoJugador.dispose();
            terreno.dispose();
            effect.Dispose();
@@ -288,11 +288,6 @@ namespace AlumnoEjemplos.BarbaAlpha
             Vector3 centroBase;
             Vector3 puntoBase;
             float radioEnY;
-            /*
-            float primaX;
-            float primaZ;*/
-
-            
             float largo;
             float ancho;
             Vector3 posicionAncho1;
@@ -348,6 +343,9 @@ namespace AlumnoEjemplos.BarbaAlpha
              * y se mueve muy espasticamente
              * 
              * 
+                   
+            float primaX;
+            float primaZ;
             radioEnY = barco.BoundingBox().calculateAxisRadius().Y;
             centroBase = barco.posicion() - new Vector3(0, radioEnY, 0);
             puntoBase = aplicarTrigonometrica(centroBase, radioEnY,6 time, frecuenciaOlas, alturaOlas);
@@ -410,10 +408,6 @@ namespace AlumnoEjemplos.BarbaAlpha
         {
             effect.SetValue("fvLightPosition", TgcParserUtils.vector3ToFloat3Array(sol.getPosition()));
             effect.SetValue("fvEyePosition", TgcParserUtils.vector3ToFloat3Array(GuiController.Instance.RotCamera.getPosition()));
-            /*effect.SetValue("k_la", 1);
-            effect.SetValue("k_ld", 1);
-            effect.SetValue("k_ls", 1);
-            effect.SetValue("fSpecularPower", 500);*/
         }
 
         public void renderizarBarco(AlumnoEjemplos.BarbaAlpha.Barco.Barco barco, float elapsedTime)
@@ -426,16 +420,14 @@ namespace AlumnoEjemplos.BarbaAlpha
             prodInterno = Vector3.Dot(plano.normal, sentidoBarco);
             cosAngulo = prodInterno;
 
-            //barco.aumentarAceleracionPorInclinacion(cosAngulo);
-            //barcoJugador.setFrecuenciaDeDisparos(frecuenciaDeDisparo);
-            //barcoJugador.setVelocidadMaxima(velocidadMaxima);
+            //barco.aumentarAceleracionPorInclinacion(cosAngulo/100);
             barco.render(elapsedTime);
         }
 
         public void ganaste()
         {
             terminar = true;
-            mensajeFinal = "GANSTE!!";
+            mensajeFinal = "GANASTE!!";
         }
 
         public void perdiste()
