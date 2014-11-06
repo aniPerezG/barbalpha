@@ -214,6 +214,7 @@ namespace AlumnoEjemplos.BarbaAlpha
             if (terminar)
             {
                 this.cerrarYMostrar(mensajeFinal);
+                Application.Exit();
             }
             else
             {
@@ -272,8 +273,8 @@ namespace AlumnoEjemplos.BarbaAlpha
         public override void close(){
            
            sol.dispose();
-           //barcoIA.dispose();
-           //barcoJugador.dispose();
+           barcoIA.dispose();
+           barcoJugador.dispose();
            terreno.dispose();
            effect.Dispose();
            
@@ -445,7 +446,6 @@ namespace AlumnoEjemplos.BarbaAlpha
         private void cerrarYMostrar(string text)
         {
             MessageBox.Show(text);
-            this.close();
         }
         
 
