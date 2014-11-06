@@ -37,7 +37,6 @@ namespace AlumnoEjemplos.BarbaAlpha
     {
 
         Microsoft.DirectX.Direct3D.Effect effect;
-        TgcScene barcote;
         BarcoIA barcoIA;
         BarcoJugador barcoJugador;
         float time;
@@ -70,6 +69,7 @@ namespace AlumnoEjemplos.BarbaAlpha
         Plano planoSubyacente;
         Vector3 normalPlano;
         Plano plano;
+        float mediaAlturaBarco;
         bool mostrar_lluvia;
 
         private TgcSprite fin;
@@ -104,11 +104,10 @@ namespace AlumnoEjemplos.BarbaAlpha
             //Device de DirectX para crear primitivas
             d3dDevice = GuiController.Instance.D3dDevice;
             TgcSceneLoader loader = new TgcSceneLoader();
-
-
+            
+            //cargamos los meshes de los barcos
             barcoJugador = new BarcoJugador(new Vector3(0, 0, 0), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
             barcoIA = new BarcoIA(new Vector3(200, 0, 0), this, GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml");
-            //canoa = loader.loadSceneFromFile(GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Meshes\\Vehiculos\\Canoa\\Canoa-TgcScene.xml").Meshes[0];
 
             string shaderFolder = GuiController.Instance.AlumnoEjemplosMediaDir +"\\shaders";
             time = 0;
@@ -116,11 +115,13 @@ namespace AlumnoEjemplos.BarbaAlpha
             scaleXZ = 20f;
             scaleY = 1.3f;
 
+            //cargamos el efecto que le vamos a aplicar a los meshes
             effect = TgcShaders.loadEffect(shaderFolder + "\\shaderLoco.fx");
 
             heightmap = GuiController.Instance.AlumnoEjemplosMediaDir + "Heightmap\\" + "heightmap500.jpg";
             textura = GuiController.Instance.ExamplesMediaDir + "MeshCreator\\Textures\\Liquidos" + "\\water_flow.jpg";
 
+            //cargamos el terreno
             terreno = new TgcSimpleTerrain();
             terreno.loadHeightmap(heightmap, scaleXZ, scaleY, new Vector3(0, 0, 0));
             terreno.loadTexture(textura);
@@ -159,6 +160,9 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             barcoJugador.cargarCaniones();
             barcoIA.cargarCaniones();
+
+            mediaAlturaBarco = barcoJugador.BoundingBox().calculateAxisRadius().Y;
+            effect.SetValue("mediaAlturaBarco", mediaAlturaBarco);
 
             GuiController.Instance.Modifiers.addFloat("alturaOlas", 5f, 30f, 10f);
             GuiController.Instance.Modifiers.addFloat("frecuenciaOlas", 50f, 300f, 100f);
@@ -263,7 +267,7 @@ namespace AlumnoEjemplos.BarbaAlpha
            
            sol.dispose();
            barcoIA.dispose();
-           barcoJugador.dispose();
+           //barcoJugador.dispose();
            terreno.dispose();
            effect.Dispose();
            

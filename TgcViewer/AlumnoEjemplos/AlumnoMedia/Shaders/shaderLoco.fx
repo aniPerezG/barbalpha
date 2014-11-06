@@ -32,6 +32,7 @@ float time = 0;
 
 float amplitud;
 float frecuencia;
+float mediaAlturaBarco;
 
 float offsetX;
 float offsetZ;
@@ -169,8 +170,7 @@ VS_OUTPUT vs_alturaPlano(VS_INPUT Input)
 
 
 	//Despejando y en la posicion del plano y = (-D -Cz -Ax)/B
-	//10 es el radio en Y, hay que abstraerlo
-	Input.Position.y += 10 + (-D - C*Z - A*X) / B;
+	Input.Position.y += mediaAlturaBarco + (-D - C*Z - A*X) / B;
 
 	//Proyectar posicion
 	Output.Position = mul(Input.Position, matWorldViewProj);
@@ -223,55 +223,6 @@ float4 ps_light(float3 Texcoord: TEXCOORD0, float3 N : TEXCOORD1,  float3 Pos : 
 	float RdotV = dot(R, V);
 
 	RGBColor.rgb = saturate(fvBaseColor * (saturate(k_la * ambientColor*0.3 + k_ld*diffuseColor*NdotL+ k_ls) + pow(k_ls*specularColor*RdotV, shininess)));
-
-	//Color = Ka*ambientColor + Kd*diffuseColor*(N dot L) + Ks*specularColor*(R dot V)^shininess
-
-
-
-
-	// si hubiera varias luces, se podria iterar por c/u. 
-	// Pero hay que tener en cuenta que este algoritmo es bastante pesado
-	// ya que todas estas formulas se calculan x cada pixel. 
-	// En la practica no es usual tomar mas de 2 o 3 luces. Generalmente 
-	// se determina las luces que mas contribucion a la escena tienen, y 
-	// el resto se aproxima con luz ambiente. 
-	// for(int =0;i<cant_ligths;++i)
-	// 1- calculo la luz diffusa
-	
-	/*
-	float ld = 1;		// luz difusa
-	float le = 0.05;		// luz specular
-	
-
-	float3 LD = -normalize(fvLightPosition - float3(Pos.x, Pos.y, Pos.z));
-	ld += saturate(dot(N, LD))*k_ld;
-
-	// 2- calcula la reflexion specular
-	//la componente z esta negada porque tenemos al reves el eje Z
-	float3 D = normalize(float3(Pos.x, Pos.y, Pos.z) - float3(fvEyePosition.x, fvEyePosition.y, -fvEyePosition.z));
-	float ks = saturate(dot(reflect(LD, N), D));
-	ks = pow(ks, fSpecularPower);
-	le += ks*k_ls;
-
-	//Obtener el texel de textura
-	float4 fvBaseColor = tex2D(diffuseMap, Texcoord);
-
-	float3 ambientLight = LightIntensity * lightColor;
-
-	float3 amarillo = float3(2, 2, 0);
-	float4 RGBColor = 0;
-	RGBColor.rgb = saturate(fvBaseColor*(saturate(k_la + ld + 10*ambientLight)) + le );*/
-
-
-
-	// saturate deja los valores entre [0,1]. Una tecnica muy usada en motores modernos
-	// es usar floating point textures auxialres, para almacenar mucho mas que 256 valores posibles 
-	// de iluminiacion. En esos casos, el valor del rgb podria ser mucho mas que 1. 
-	// Imaginen una excena outdoor, a la luz de sol, hay mucha diferencia de iluminacion
-	// entre los distintos puntos, que no se pueden almacenar usando solo 8bits por canal.
-	// Estas tecnicas se llaman HDRLighting (High Dynamic Range Lighting). 
-	// Muchas inclusive simulan el efecto de la pupila que se contrae o dilata para 
-	// adaptarse a la nueva cantidad de luz ambiente. 
 
 	return RGBColor;
 }

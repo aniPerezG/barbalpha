@@ -1,5 +1,4 @@
-﻿using AlumnoEjemplos.BarbaAlpha.Barco;
-using Microsoft.DirectX;
+﻿using Microsoft.DirectX;
 using Microsoft.DirectX.DirectInput;
 using Microsoft.DirectX.Direct3D;
 using System;
