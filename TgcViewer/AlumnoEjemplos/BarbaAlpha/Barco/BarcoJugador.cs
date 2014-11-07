@@ -14,7 +14,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 {
     class BarcoJugador : Barco  {
 
-        public BarcoJugador(Vector3 posicionInicial, marAbierto oceano, string pathEscena)
+        public BarcoJugador(Vector3 posicionInicial, EjemploAlumno oceano, string pathEscena)
             : base(posicionInicial, oceano, pathEscena) {}
 
         protected override void moverYVirar(float elapsedTime)

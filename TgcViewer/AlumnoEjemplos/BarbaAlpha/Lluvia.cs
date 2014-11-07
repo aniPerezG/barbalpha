@@ -22,9 +22,9 @@ namespace AlumnoEjemplos.BarbaAlpha
             {
                 aux *= -1;
             }
-            posicion_lluvia.X = generador.Next(1000) * aux;
-            posicion_lluvia.Y = 550;
-            posicion_lluvia.Z = generador.Next(1000) * aux;
+            posicion_lluvia.X = generador.Next(1500) * aux;
+            posicion_lluvia.Y = 700;
+            posicion_lluvia.Z = generador.Next(1500) * aux;
         }
 
         public Vector3 getPosicion()

@@ -22,7 +22,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private bool estasMuyCerca = false;
         private bool tengoQueEscaparme = false;
 
-        public BarcoIA(Vector3 posicionInicial, marAbierto oceano, string pathEscena)
+        public BarcoIA(Vector3 posicionInicial, EjemploAlumno oceano, string pathEscena)
             : base(posicionInicial, oceano, pathEscena) { this.direccion.haciaLaDerecha(); }
 
         public Vector3 posicionEnemigo()
@@ -56,42 +56,21 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
 
         }
 
-        private Boolean estoyApuntandoAEnemigo()
-        {
-            return obtenerDireccionAEnemigo() == getSentido();
-        }
-
-        private float gradosARotar()
-        {
-            return FastMath.Acos(Vector3.Dot(this.obtenerDireccionAEnemigo(), this.getSentido()));
-        }
-
-        private float radianesARotar()
-        {
-            return Geometry.DegreeToRadian(this.gradosARotar());
-        }
-
-        private void apuntarEnemigo()
-        {
-            if (!estoyApuntandoAEnemigo())
-            {
-                this.rotarSobreY(radianesARotar());
-            }
-        }
 
         protected override void moverYVirar(float elapsedTime)
         {
             this.evaluarDistanciaDeEnemigo();
-            this.apuntarEnemigo();
             if (estasMuyLejos)
             {
                 this.acelerar(-1);
+                this.rotarSobreY(FastMath.QUARTER_PI * elapsedTime);
             }
             else this.disparar();
 
             if (estasMuyCerca)
             {
                 this.acelerar(1);
+                this.rotarSobreY(- FastMath.QUARTER_PI * elapsedTime);
             }
 
         }

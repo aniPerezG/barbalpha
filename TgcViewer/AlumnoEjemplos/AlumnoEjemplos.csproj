@@ -92,10 +92,9 @@
     <Compile Include="BarbaAlpha\Barco\BarcoIA.cs" />
     <Compile Include="BarbaAlpha\Barco\Direccion.cs" />
     <Compile Include="BarbaAlpha\Barco\Misil.cs" />
-    <Compile Include="BarbaAlpha\EjemploAlumno.cs" />
     <Compile Include="BarbaAlpha\Gota.cs" />
     <Compile Include="BarbaAlpha\Lluvia.cs" />
-    <Compile Include="BarbaAlpha\marAbierto.cs" />
+    <Compile Include="BarbaAlpha\EjemploAlumno.cs" />
     <Compile Include="BarbaAlpha\Nube.cs" />
     <Compile Include="BarbaAlpha\Sol.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

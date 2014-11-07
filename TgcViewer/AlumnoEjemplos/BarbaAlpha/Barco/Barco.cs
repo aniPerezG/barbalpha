@@ -32,7 +32,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private float frecuencia_disparo = 2;
         private float friccion = 10000f;
         private float velocidadAbsolutaRotacion = 40f;
-        protected marAbierto agua; // terreno sobre el que se navega
+        protected EjemploAlumno agua; // terreno sobre el que se navega
         private ArrayList balas = new ArrayList(10);
         private List<Misil> misilesAEliminar = new List<Misil>(); // misiles a remover de la escena
         private List<Misil> misilesDisparados = new List<Misil>(); // misiles ya en el aire
@@ -44,7 +44,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         protected Boolean seAcabo;
         protected Misil misilAnterior;
 
-        public Barco(Vector3 posicionInicial, marAbierto oceano, string pathEscena)
+        public Barco(Vector3 posicionInicial, EjemploAlumno oceano, string pathEscena)
         {
             TgcSceneLoader loader = new TgcSceneLoader();
             TgcScene escenaCanion = loader.loadSceneFromFile(pathEscena); // escena del cañon
@@ -151,7 +151,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             aceleracion_por_inclinacion = aceleracion;
         }
 
-        public void setAgua(marAbierto oceano)
+        public void setAgua(EjemploAlumno oceano)
         {
             agua = oceano;
         }
