@@ -174,27 +174,10 @@ namespace AlumnoEjemplos.BarbaAlpha
             nube = new Nube(1000);
 
             
-            GuiController.Instance.RotCamera.CameraDistance += 100;
-            GuiController.Instance.RotCamera.targetObject(barcoJugador.BoundingBox());
-            GuiController.Instance.RotCamera.RotationSpeed = 6f;
-
             //Centrar camara rotacional respecto a la canoa
-           // GuiController.Instance.RotCamera.Enable = true;
             GuiController.Instance.ThirdPersonCamera.Enable = true;
             GuiController.Instance.ThirdPersonCamera.setCamera(barcoJugador.posicion(), 500, 600);
             GuiController.Instance.ThirdPersonCamera.updateCamera();
-
-            //GuiController.Instance.RotCamera.Enable = false;
-            //camara = new TgcFpsCamera();
-            //camara.Enable = true;
-            //camara.setCamera(this.posicionCamara(), barcoJugador.posicion());
-            //camara.updateCamera();
-            
-            //GuiController.Instance.Fog.resetValues();
-            //GuiController.Instance.Fog.Enabled = true;
-            //GuiController.Instance.Fog.Density = 0;
-            //GuiController.Instance.Fog.updateValues();
-
                         
         }
 
@@ -203,6 +186,7 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             if (terminar)
             {
+                //esto sucede cuando uno de los dos barcos se quedan sin vidita
                 this.cerrarYMostrar(mensajeFinal);
                 Application.Exit();
             }
@@ -240,6 +224,8 @@ namespace AlumnoEjemplos.BarbaAlpha
             }
             
             skyBox.render();
+
+
             //Actualizar posicion de cámara
             GuiController.Instance.ThirdPersonCamera.setCamera(barcoJugador.posicion(), 500, 500);
             GuiController.Instance.ThirdPersonCamera.updateCamera();
@@ -331,6 +317,8 @@ namespace AlumnoEjemplos.BarbaAlpha
 
             normalPlano = Vector3.Normalize(normalNoNormalizada);
             /*
+             * De esta forma se determina el vector normal 
+             * calculando el plano tangente a la superficie en un punto
              * no sirve porque es muy sensible a las variaciones
              * y se mueve muy espasticamente
              * 
@@ -408,11 +396,16 @@ namespace AlumnoEjemplos.BarbaAlpha
             plano = obtenerPlano(barco);
             setearVariablesBarcoShader(plano, barco.posicion(), effect);
 
-            sentidoBarco = barco.getSentido();
+            /*
+             * calculos para la aceeracion del barco segun la inclinacion
+             * de la ola.
+             * 
+             * sentidoBarco = barco.getSentido();
             prodInterno = Vector3.Dot(plano.normal, sentidoBarco);
             cosAngulo = prodInterno;
 
-            //barco.aumentarAceleracionPorInclinacion(cosAngulo/100);
+            barco.aumentarAceleracionPorInclinacion(cosAngulo);*/
+
             barco.render(elapsedTime);
         }
 
@@ -432,9 +425,7 @@ namespace AlumnoEjemplos.BarbaAlpha
         {
             MessageBox.Show(text);
         }
-        
 
-        
     }
 
 }

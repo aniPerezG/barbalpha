@@ -106,7 +106,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
             anteriorY = mesh.Position.Y;
         }
 
-        public bool teHundisteEn()
+        public bool teHundiste()
         {
             return this.mesh.Position.Y < 0;
         }

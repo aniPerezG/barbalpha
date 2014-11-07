@@ -31,7 +31,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         private float tiempo_entre_disparos = 0;
         private float frecuencia_disparo = 2;
         private float friccion = 10000f;
-        private float velocidadAbsolutaRotacion = 40f;
+        protected float velocidadAbsolutaRotacion = 40f;
         protected EjemploAlumno agua; // terreno sobre el que se navega
         private ArrayList balas = new ArrayList(10);
         private List<Misil> misilesAEliminar = new List<Misil>(); // misiles a remover de la escena
@@ -144,6 +144,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         public void aumentarAceleracionPorInclinacion(float aumento)
         {
             aceleracion_por_inclinacion += aumento;
+            aceleracion_por_inclinacion = FastMath.Min(aceleracion_por_inclinacion, 1);
         }
 
         public void setAceleracionPorInclinacion(float aceleracion)
@@ -253,7 +254,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
             foreach (Misil misil in misilesDisparados)
             {
-                if (misil.teHundisteEn())
+                if (misil.teHundiste())
                 {
                     misil.setearMisil();
                     misilesAEliminar.Add(misil);
@@ -313,7 +314,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
 
             tiempo += elapsedTime;
-            this.acelerar(aceleracion_por_inclinacion);
+            this.acelerar(aceleracion_por_inclinacion*elapsedTime);
             
             if(meDieron)
             {

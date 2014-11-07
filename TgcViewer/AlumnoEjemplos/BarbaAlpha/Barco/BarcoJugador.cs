@@ -15,7 +15,11 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
     class BarcoJugador : Barco  {
 
         public BarcoJugador(Vector3 posicionInicial, EjemploAlumno oceano, string pathEscena)
-            : base(posicionInicial, oceano, pathEscena) {}
+            : base(posicionInicial, oceano, pathEscena) 
+        {
+            this.setFrecuenciaDeDisparos(0.5f);
+            this.velocidadAbsolutaRotacion = 60;
+        }
 
         protected override void moverYVirar(float elapsedTime)
         {
@@ -61,5 +65,7 @@ namespace AlumnoEjemplos.BarbaAlpha.Barco
         {
             agua.perdiste();
         }
+
+        
     }
 }
